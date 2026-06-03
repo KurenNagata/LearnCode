@@ -6,6 +6,7 @@ export default function App() {
   const [problem, setProblem] = useState(null)
   const [code, setCode] = useState('')
   const [result, setResult] = useState(null)
+  const [error, setError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [showExplanation, setShowExplanation] = useState(false)
 
@@ -16,12 +17,14 @@ export default function App() {
         setProblems(data.problems)
         if (data.problems.length > 0) select(data.problems[0])
       })
+      .catch(e => setError('API サーバーに接続できません: ' + e.message))
   }, [])
 
   function select(p) {
     setProblem(p)
     setCode(p.starterCode ?? '')
     setResult(null)
+    setError(null)
     setShowExplanation(false)
   }
 
@@ -29,13 +32,21 @@ export default function App() {
     if (!problem || submitting) return
     setSubmitting(true)
     setResult(null)
+    setError(null)
     try {
       const res = await fetch(`/api/problems/${problem.id}/submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ language: 'python', code }),
       })
+      if (!res.ok) {
+        const text = await res.text()
+        setError(`サーバーエラー (${res.status}): ${text}`)
+        return
+      }
       setResult(await res.json())
+    } catch (e) {
+      setError('通信エラー: ' + e.message)
     } finally {
       setSubmitting(false)
     }
@@ -85,7 +96,11 @@ export default function App() {
             {submitting ? '採点中…' : '提出'}
           </button>
 
-          {result && (
+          {error && (
+            <span style={{ color: '#ef4444', fontSize: 13 }}>⚠ {error}</span>
+          )}
+
+          {result && !error && (
             <span style={{ fontWeight: 'bold', color: result.passed ? '#22c55e' : '#ef4444' }}>
               {result.passed ? '✓ 正解！' : '✗ 不正解'}
               　{result.passedTests} / {result.totalTests} テスト通過
@@ -121,7 +136,7 @@ const s = {
   problemTitle: { fontSize: 18, marginBottom: 8 },
   problemDesc: { fontSize: 14, lineHeight: 1.7, whiteSpace: 'pre-wrap' },
   editorArea: { flex: 1, overflow: 'hidden', minHeight: 0 },
-  bar: { padding: '10px 24px', borderTop: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: 16, background: '#fff' },
+  bar: { padding: '10px 24px', borderTop: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', gap: 16, background: '#fff', flexShrink: 0 },
   submitBtn: { padding: '8px 28px', background: '#0078d4', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 14, fontWeight: 'bold' },
   explanationBtn: { padding: '6px 16px', border: '1px solid #ccc', borderRadius: 4, cursor: 'pointer', fontSize: 13 },
   explanation: { padding: '16px 24px', background: '#f0f9ff', borderTop: '1px solid #bae6fd', maxHeight: '28vh', overflowY: 'auto', fontSize: 14, lineHeight: 1.7 },

@@ -77,16 +77,17 @@ tasks:
       - go build -o ../bin/server ./cmd/server
 
   run:
-    desc: Run the pre-built server binary
+    desc: Build and run the API server
     cmds:
+      - task: build
       - bin/server.exe
 
   stop:
-    desc: Stop the running server (kills process on PORT, default 8080)
-    vars:
-      PORT: '{{.PORT | default "8080"}}'
+    desc: Stop API server and Vite dev server
     cmds:
-      - powershell -NoProfile -File scripts/stop-server.ps1 -Port {{.PORT}}
+      - powershell -NoProfile -File scripts/stop-server.ps1 -Port 8080
+      - powershell -NoProfile -File scripts/stop-server.ps1 -Port 3000
+      - powershell -NoProfile -File scripts/stop-server.ps1 -Port 3001
 
   dev:
     desc: Run server in development mode (no build step)
