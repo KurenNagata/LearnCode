@@ -1,0 +1,97 @@
+version: '3'
+
+dotenv: ['.env']
+
+tasks:
+  install:
+    desc: Install Go modules and TypeSpec packages
+    cmds:
+      - task: install:go
+      - task: install:node
+
+  install:go:
+    dir: api
+    cmds:
+      - go mod download
+
+  install:node:
+    dir: typespec
+    cmds:
+      - npm ci
+
+  infra:up:
+    desc: Start PostgreSQL and Piston containers
+    cmds:
+      - docker compose -f infra/docker-compose.yml up -d
+
+  infra:down:
+    desc: Stop containers
+    cmds:
+      - docker compose -f infra/docker-compose.yml down
+
+  piston:install:
+    desc: Install Python runtime in Piston (run once after infra:up)
+    cmds:
+      - curl -s -X POST http://localhost:2000/api/v2/packages -H "Content-Type:application/json" -d "{\"language\":\"python\",\"version\":\"3.10.0\"}"
+
+  gen:
+    desc: TypeSpec -> OpenAPI -> Go codegen
+    cmds:
+      - task: gen:typespec
+      - task: gen:go
+
+  gen:typespec:
+    desc: Compile TypeSpec to OpenAPI YAML
+    dir: typespec
+    cmds:
+      - npx tsp compile .
+
+  gen:go:
+    desc: Generate Go code from OpenAPI YAML
+    dir: api
+    cmds:
+      - go generate ./internal/openapi/...
+
+  migrate:
+    desc: Run DB migrations
+    dir: api
+    cmds:
+      - go run ./cmd/migrate
+
+  seed:
+    desc: Seed problems into DB
+    dir: api
+    cmds:
+      - go run ./cmd/seed
+
+  build:
+    desc: Build API server binary to bin/server
+    dir: api
+    cmds:
+      - go build -o ../bin/server ./cmd/server
+
+  run:
+    desc: Run the pre-built server binary
+    cmds:
+      - bin/server.exe
+
+  stop:
+    desc: Stop the running server (kills process on PORT, default 8080)
+    vars:
+      PORT: '{{.PORT | default "8080"}}'
+    cmds:
+      - powershell -NoProfile -File scripts/stop-server.ps1 -Port {{.PORT}}
+
+  dev:
+    desc: Run server in development mode (no build step)
+    dir: api
+    cmds:
+      - go run ./cmd/server
+
+  check:
+    desc: Smoke test the API (server must be running in another terminal)
+    cmds:
+      - echo === 正解コード - passed=true を期待 ===
+      - 'curl -s -X POST http://localhost:8080/api/problems/1/submit -H "Content-Type:application/json" -d "{\"language\":\"python\",\"code\":\"print(''Hello, World!'')\"}"'
+      - echo === 不正解コード - passed=false を期待 ===
+      - 'curl -s -X POST http://localhost:8080/api/problems/1/submit -H "Content-Type:application/json" -d "{\"language\":\"python\",\"code\":\"print(''wrong'')\"}"'
