@@ -1,0 +1,10 @@
+bin/
+node_modules/
+typespec/node_modules/
+typespec/tsp-output/
+.env
+*.log
+*.test
+*.out
+.DS_Store
+Thumbs.db
