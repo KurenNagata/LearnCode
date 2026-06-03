@@ -1,0 +1,10 @@
+{
+  "name": "learning-language-typespec",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@typespec/compiler": "latest",
+    "@typespec/http": "latest",
+    "@typespec/openapi3": "latest"
+  }
+}

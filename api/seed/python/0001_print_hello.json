@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 1,
+  "title": "Hello, World!",
+  "description": "画面に `Hello, World!` と表示するプログラムを書いてください。\n\nPython では `print()` 関数を使って標準出力に文字列を出力します。",
+  "starter_code": "# ここにコードを書いてください\n",
+  "explanation": "## 解説\n\nPython では `print()` 関数で文字列を出力できます。\n\n```python\nprint(\"Hello, World!\")\n```\n\n`print()` は引数として渡した値を標準出力に出力し、末尾に改行を追加します。",
+  "answer_code": "print(\"Hello, World!\")",
+  "test_cases": [
+    {
+      "stdin": "",
+      "stdout": "Hello, World!"
+    }
+  ]
+}
