@@ -4,10 +4,11 @@ dotenv: ['.env']
 
 tasks:
   install:
-    desc: Install Go modules and TypeSpec packages
+    desc: Install all dependencies (Go, TypeSpec, Web)
     cmds:
       - task: install:go
       - task: install:node
+      - task: install:web
 
   install:go:
     dir: api
@@ -19,15 +20,20 @@ tasks:
     cmds:
       - npm ci
 
+  install:web:
+    dir: web
+    cmds:
+      - npm install
+
   infra:up:
     desc: Start PostgreSQL and Piston containers
     cmds:
-      - docker compose -f infra/docker-compose.yml up -d
+      - docker compose -f infra/docker-compose.yml --env-file .env up -d
 
   infra:down:
     desc: Stop containers
     cmds:
-      - docker compose -f infra/docker-compose.yml down
+      - docker compose -f infra/docker-compose.yml --env-file .env down
 
   piston:install:
     desc: Install Python runtime in Piston (run once after infra:up)
@@ -87,6 +93,12 @@ tasks:
     dir: api
     cmds:
       - go run ./cmd/server
+
+  web:
+    desc: Start frontend dev server (open http://localhost:3000)
+    dir: web
+    cmds:
+      - node node_modules/vite/bin/vite.js
 
   check:
     desc: Smoke test the API (server must be running in another terminal)
