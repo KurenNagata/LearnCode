@@ -15,18 +15,16 @@ type JudgeResult struct {
 }
 
 type JudgeService struct {
-	problemRepo   ProblemRepository
-	progressRepo  ProgressRepository
-	executor      CodeExecutor
-	defaultUserID string
+	problemRepo  ProblemRepository
+	progressRepo ProgressRepository
+	executor     CodeExecutor
 }
 
-func NewJudgeService(problemRepo ProblemRepository, progressRepo ProgressRepository, executor CodeExecutor, defaultUserID string) *JudgeService {
+func NewJudgeService(problemRepo ProblemRepository, progressRepo ProgressRepository, executor CodeExecutor) *JudgeService {
 	return &JudgeService{
-		problemRepo:   problemRepo,
-		progressRepo:  progressRepo,
-		executor:      executor,
-		defaultUserID: defaultUserID,
+		problemRepo:  problemRepo,
+		progressRepo: progressRepo,
+		executor:     executor,
 	}
 }
 
@@ -38,7 +36,7 @@ func normalizeOutput(s string) string {
 	return s
 }
 
-func (s *JudgeService) Judge(ctx context.Context, problemID int64, language, code string) (JudgeResult, error) {
+func (s *JudgeService) Judge(ctx context.Context, problemID int64, language, code, userID string) (JudgeResult, error) {
 	testCases, err := s.problemRepo.GetTestCasesByProblemID(ctx, problemID)
 	if err != nil {
 		return JudgeResult{}, err
@@ -69,7 +67,7 @@ func (s *JudgeService) Judge(ctx context.Context, problemID int64, language, cod
 	if allPassed {
 		now := time.Now()
 		_ = s.progressRepo.UpsertProgress(ctx, domain.Progress{
-			UserID:    s.defaultUserID,
+			UserID:    userID,
 			ProblemID: problemID,
 			Status:    domain.StatusCleared,
 			ClearedAt: &now,

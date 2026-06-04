@@ -293,6 +293,15 @@ const ACC_KEY = 'lc-cat-acc'
 // ── XP / レベル（初心者→玄人）。今はローカル保存（後で DB 化可） ──
 const XP_KEY = 'lc-cleared'        // 初クリア済み問題ID（XP付与は1回だけ）
 const MUTE_KEY = 'lc-muted'        // 効果音ミュート設定
+
+// ── 認証（JWT を localStorage に保持） ───────────────────────
+const TOKEN_KEY = 'lc-token'
+const USER_KEY = 'lc-user'
+function authHeaders(extra = {}) {
+  let t = null
+  try { t = localStorage.getItem(TOKEN_KEY) } catch { /* ignore */ }
+  return t ? { ...extra, Authorization: `Bearer ${t}` } : extra
+}
 const XP_PER_CLEAR = 50
 const XP_PER_LEVEL = 100
 const RANKS = [
@@ -455,7 +464,7 @@ function LevelBadge({ info, minWidth = 150 }) {
 }
 
 // ── トップページ（8bit アーケード風タイトル画面） ─────────────
-function Home({ onSelect, onOpenCloset, skin, accessory, xp, muted, onToggleMute }) {
+function Home({ onSelect, onOpenCloset, skin, accessory, xp, muted, onToggleMute, username, onLogout }) {
   const start = () => onSelect('python')
 
   return (
@@ -466,10 +475,12 @@ function Home({ onSelect, onOpenCloset, skin, accessory, xp, muted, onToggleMute
       <div className="lc-hud">
         <span className="lc-hud-left">■ LEARNCODE.EXE</span>
         <span className="lc-hud-right">
+          {username && <span className="lc-hud-user">👤 {username}</span>}
           <button type="button" className="lc-hud-btn" onClick={onToggleMute} aria-label={muted ? '効果音をオンにする' : '効果音をオフにする'}>
             {muted ? 'SE ✕' : 'SE ♪'}
           </button>
           <button type="button" className="lc-hud-btn" onClick={onOpenCloset}>きせかえ</button>
+          <button type="button" className="lc-hud-btn" onClick={onLogout}>ログアウト</button>
           <LevelBadge info={xp} minWidth={120} />
         </span>
       </div>
@@ -565,8 +576,9 @@ function HomeStyles() {
         font-family:'Press Start 2P', monospace; font-size:11px; letter-spacing:1px;
       }
       .lc-hud-left { color:var(--green); }
-      .lc-hud-right { display:flex; align-items:center; gap:14px; }
+      .lc-hud-right { display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:flex-end; }
       .lc-hud-lv { color:var(--yellow); }
+      .lc-hud-user { font-family:'DotGothic16', sans-serif; font-size:13px; color:var(--cyan); }
       .lc-hud-btn {
         font-family:'DotGothic16', sans-serif; font-size:13px; font-weight:bold; letter-spacing:1px;
         color:var(--cyan); background:var(--bev-l); cursor:pointer; padding:6px 12px; border-radius:0;
@@ -696,6 +708,87 @@ function HomeStyles() {
   )
 }
 
+// ── ログイン／新規登録画面（Start のゲート） ──────────────────
+function AuthScreen({ skin, onAuthed }) {
+  const [mode, setMode] = useState('login') // 'login' | 'signup'
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  async function submit(e) {
+    e.preventDefault()
+    if (busy) return
+    setBusy(true)
+    setError('')
+    try {
+      const res = await fetch(`/api/auth/${mode}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      })
+      if (!res.ok) {
+        const byStatus = {
+          400: 'ユーザー名は3文字以上、パスワードは4文字以上にしてください',
+          401: 'ユーザー名またはパスワードが違います',
+          409: 'そのユーザー名は既に使われています',
+        }
+        setError(byStatus[res.status] || `エラー (${res.status})`)
+        return
+      }
+      const data = await res.json()
+      onAuthed(data.token, data.username)
+    } catch (err) {
+      setError('通信エラー: ' + err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const tabStyle = (m) => ({
+    flex: 1, fontFamily: FONT_DOT, fontWeight: 'bold', fontSize: 14, padding: '9px', cursor: 'pointer',
+    background: mode === m ? c.bevL : c.panel, color: mode === m ? c.white : c.muted,
+    border: 0, borderRadius: 0, borderBottom: `3px solid ${mode === m ? c.green : c.bevD}`,
+  })
+
+  return (
+    <div style={s.authRoot}>
+      <form style={s.authBox} onSubmit={submit}>
+        <div style={s.authTitleWrap}>
+          <PixelCat size={52} color={skin.color} belly={skin.belly} />
+          <h1 style={s.authTitle}>
+            <span style={{ color: c.green }}>LEARN</span><span style={{ color: c.pink }}>CODE</span>
+          </h1>
+        </div>
+        <p style={s.authLead}>ログインしてスタート！</p>
+
+        <div style={s.authTabs}>
+          <button type="button" style={tabStyle('login')} onClick={() => { setMode('login'); setError('') }}>ログイン</button>
+          <button type="button" style={tabStyle('signup')} onClick={() => { setMode('signup'); setError('') }}>新規登録</button>
+        </div>
+
+        <input
+          style={s.authInput} placeholder="ユーザー名（3文字以上）" value={username}
+          onChange={e => setUsername(e.target.value)} autoFocus autoComplete="username"
+          aria-label="ユーザー名"
+        />
+        <input
+          style={s.authInput} type="password" placeholder="パスワード（4文字以上）" value={password}
+          onChange={e => setPassword(e.target.value)}
+          autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+          aria-label="パスワード"
+        />
+
+        {error && <div style={s.authError}>⚠ {error}</div>}
+
+        <button type="submit" disabled={busy} style={s.authSubmit}>
+          {busy ? '・・・' : (mode === 'login' ? '▶ ログイン' : '▶ 登録してスタート')}
+        </button>
+      </form>
+    </div>
+  )
+}
+
 // ── ルート：home / closet / course を切替 ─────────────────────
 export default function App() {
   const [language, setLanguage] = useState(null)
@@ -712,14 +805,19 @@ export default function App() {
   const [muted, setMuted] = useState(() => {
     try { return localStorage.getItem(MUTE_KEY) === '1' } catch { return false }
   })
+  const [auth, setAuth] = useState(() => {
+    try { return { token: localStorage.getItem(TOKEN_KEY), username: localStorage.getItem(USER_KEY) } }
+    catch { return { token: null, username: null } }
+  })
   const skin = CAT_SKINS.find(sk => sk.id === skinId) ?? CAT_SKINS[0]
   const xp = xpInfo(clearedIds.length * XP_PER_CLEAR)
 
   useEffect(() => { sfx.setEnabled(!muted) }, [muted])
 
-  // 起動時にサーバの進捗（クリア済み問題）を取得。失敗時は localStorage を使う。
+  // ログイン後にサーバの進捗（クリア済み問題）を取得。
   useEffect(() => {
-    fetch('/api/progress')
+    if (!auth.token) return
+    fetch('/api/progress', { headers: authHeaders() })
       .then(r => (r.ok ? r.json() : null))
       .then(data => {
         if (data && Array.isArray(data.clearedProblemIds)) {
@@ -728,7 +826,23 @@ export default function App() {
         }
       })
       .catch(() => { /* オフライン: localStorage の値で継続 */ })
-  }, [])
+  }, [auth.token])
+
+  function onAuthed(token, username) {
+    try { localStorage.setItem(TOKEN_KEY, token); localStorage.setItem(USER_KEY, username) } catch { /* ignore */ }
+    setAuth({ token, username })
+  }
+  function logout() {
+    try {
+      localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(USER_KEY)
+      localStorage.removeItem(XP_KEY)
+    } catch { /* ignore */ }
+    setClearedIds([])
+    setAuth({ token: null, username: null })
+    setLanguage(null)
+    setScreen('home')
+  }
 
   function chooseSkin(id) {
     setSkinId(id)
@@ -755,6 +869,8 @@ export default function App() {
     })
   }
 
+  if (!auth.token) return <AuthScreen skin={skin} onAuthed={onAuthed} />
+
   if (language) return (
     <Course
       language={language} skin={skin} accessory={accId} xp={xp} clearedIds={clearedIds}
@@ -771,6 +887,7 @@ export default function App() {
   return (
     <Home
       skin={skin} accessory={accId} xp={xp} muted={muted} onToggleMute={toggleMute}
+      username={auth.username} onLogout={logout}
       onSelect={setLanguage} onOpenCloset={() => setScreen('closet')}
     />
   )
@@ -935,7 +1052,7 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
     try {
       const res = await fetch(`/api/problems/${problem.id}/submit`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ language, code }),
       })
       if (!res.ok) {
@@ -1125,6 +1242,17 @@ const s = {
   closetTitle: { fontFamily: FONT_PX, fontSize: 14, color: c.yellow, letterSpacing: 1 },
   closetBody: { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22, padding: '28px 20px', overflowY: 'auto' },
   closetGuide: { fontFamily: FONT_DOT, fontSize: 15, color: c.yellow, letterSpacing: 1 },
+
+  // 認証画面
+  authRoot: { minHeight: '100vh', background: c.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, fontFamily: FONT_DOT, imageRendering: 'pixelated' },
+  authBox: { width: '100%', maxWidth: 380, background: c.panel, ...bevel(4), padding: '26px 24px', display: 'flex', flexDirection: 'column', gap: 14 },
+  authTitleWrap: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 },
+  authTitle: { fontFamily: FONT_PX, fontSize: 22, letterSpacing: 1, margin: 0 },
+  authLead: { fontFamily: FONT_DOT, color: c.yellow, fontSize: 14, textAlign: 'center', letterSpacing: 1, margin: 0 },
+  authTabs: { display: 'flex', marginTop: 4 },
+  authInput: { fontFamily: FONT_DOT, fontSize: 15, padding: '10px 12px', background: c.bevD, color: c.white, border: 0, borderRadius: 0, ...bevelIn(2), outline: 'none' },
+  authError: { fontFamily: FONT_DOT, color: c.pink, fontSize: 13, lineHeight: 1.5 },
+  authSubmit: { ...pxBtn(c.green, c.bevD, '#9CFF9C', '#2FA02F'), fontSize: 12, padding: '12px', marginTop: 4 },
 
   // 正解演出
   clearOverlay: { position: 'fixed', inset: 0, background: 'rgba(10,9,24,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: 16 },

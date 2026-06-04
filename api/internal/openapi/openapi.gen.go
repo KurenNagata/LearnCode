@@ -15,9 +15,21 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// AuthResponse defines model for AuthResponse.
+type AuthResponse struct {
+	Token    string `json:"token"`
+	Username string `json:"username"`
+}
+
 // ListProblemsResponse defines model for ListProblemsResponse.
 type ListProblemsResponse struct {
 	Problems []Problem `json:"problems"`
+}
+
+// LoginRequest defines model for LoginRequest.
+type LoginRequest struct {
+	Password string `json:"password"`
+	Username string `json:"username"`
 }
 
 // Problem defines model for Problem.
@@ -39,6 +51,12 @@ type ProgressResponse struct {
 	ClearedProblemIds []int64 `json:"clearedProblemIds"`
 }
 
+// SignupRequest defines model for SignupRequest.
+type SignupRequest struct {
+	Password string `json:"password"`
+	Username string `json:"username"`
+}
+
 // SubmitRequest defines model for SubmitRequest.
 type SubmitRequest struct {
 	Code     string `json:"code"`
@@ -57,11 +75,23 @@ type ProblemsInterfaceListParams struct {
 	Language *string `form:"language,omitempty" json:"language,omitempty"`
 }
 
+// AuthInterfaceLoginJSONRequestBody defines body for AuthInterfaceLogin for application/json ContentType.
+type AuthInterfaceLoginJSONRequestBody = LoginRequest
+
+// AuthInterfaceSignupJSONRequestBody defines body for AuthInterfaceSignup for application/json ContentType.
+type AuthInterfaceSignupJSONRequestBody = SignupRequest
+
 // ProblemsInterfaceSubmitJSONRequestBody defines body for ProblemsInterfaceSubmit for application/json ContentType.
 type ProblemsInterfaceSubmitJSONRequestBody = SubmitRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+
+	// (POST /api/auth/login)
+	AuthInterfaceLogin(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/auth/signup)
+	AuthInterfaceSignup(w http.ResponseWriter, r *http.Request)
 
 	// (GET /api/problems)
 	ProblemsInterfaceList(w http.ResponseWriter, r *http.Request, params ProblemsInterfaceListParams)
@@ -79,6 +109,16 @@ type ServerInterface interface {
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
 
 type Unimplemented struct{}
+
+// (POST /api/auth/login)
+func (_ Unimplemented) AuthInterfaceLogin(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (POST /api/auth/signup)
+func (_ Unimplemented) AuthInterfaceSignup(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
 
 // (GET /api/problems)
 func (_ Unimplemented) ProblemsInterfaceList(w http.ResponseWriter, r *http.Request, params ProblemsInterfaceListParams) {
@@ -108,6 +148,34 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// AuthInterfaceLogin operation middleware
+func (siw *ServerInterfaceWrapper) AuthInterfaceLogin(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AuthInterfaceLogin(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// AuthInterfaceSignup operation middleware
+func (siw *ServerInterfaceWrapper) AuthInterfaceSignup(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AuthInterfaceSignup(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // ProblemsInterfaceList operation middleware
 func (siw *ServerInterfaceWrapper) ProblemsInterfaceList(w http.ResponseWriter, r *http.Request) {
@@ -322,6 +390,12 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/auth/login", wrapper.AuthInterfaceLogin)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/auth/signup", wrapper.AuthInterfaceSignup)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/problems", wrapper.ProblemsInterfaceList)
 	})
 	r.Group(func(r chi.Router) {
@@ -335,6 +409,50 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 
 	return r
+}
+
+type AuthInterfaceLoginRequestObject struct {
+	Body *AuthInterfaceLoginJSONRequestBody
+}
+
+type AuthInterfaceLoginResponseObject interface {
+	VisitAuthInterfaceLoginResponse(w http.ResponseWriter) error
+}
+
+type AuthInterfaceLogin200JSONResponse AuthResponse
+
+func (response AuthInterfaceLogin200JSONResponse) VisitAuthInterfaceLoginResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type AuthInterfaceSignupRequestObject struct {
+	Body *AuthInterfaceSignupJSONRequestBody
+}
+
+type AuthInterfaceSignupResponseObject interface {
+	VisitAuthInterfaceSignupResponse(w http.ResponseWriter) error
+}
+
+type AuthInterfaceSignup200JSONResponse AuthResponse
+
+func (response AuthInterfaceSignup200JSONResponse) VisitAuthInterfaceSignupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type ProblemsInterfaceListRequestObject struct {
@@ -428,6 +546,12 @@ func (response ProgressInterfaceGet200JSONResponse) VisitProgressInterfaceGetRes
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
+	// (POST /api/auth/login)
+	AuthInterfaceLogin(ctx context.Context, request AuthInterfaceLoginRequestObject) (AuthInterfaceLoginResponseObject, error)
+
+	// (POST /api/auth/signup)
+	AuthInterfaceSignup(ctx context.Context, request AuthInterfaceSignupRequestObject) (AuthInterfaceSignupResponseObject, error)
+
 	// (GET /api/problems)
 	ProblemsInterfaceList(ctx context.Context, request ProblemsInterfaceListRequestObject) (ProblemsInterfaceListResponseObject, error)
 
@@ -468,6 +592,68 @@ type strictHandler struct {
 	ssi         StrictServerInterface
 	middlewares []StrictMiddlewareFunc
 	options     StrictHTTPServerOptions
+}
+
+// AuthInterfaceLogin operation middleware
+func (sh *strictHandler) AuthInterfaceLogin(w http.ResponseWriter, r *http.Request) {
+	var request AuthInterfaceLoginRequestObject
+
+	var body AuthInterfaceLoginJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.AuthInterfaceLogin(ctx, request.(AuthInterfaceLoginRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "AuthInterfaceLogin")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(AuthInterfaceLoginResponseObject); ok {
+		if err := validResponse.VisitAuthInterfaceLoginResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// AuthInterfaceSignup operation middleware
+func (sh *strictHandler) AuthInterfaceSignup(w http.ResponseWriter, r *http.Request) {
+	var request AuthInterfaceSignupRequestObject
+
+	var body AuthInterfaceSignupJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.AuthInterfaceSignup(ctx, request.(AuthInterfaceSignupRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "AuthInterfaceSignup")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(AuthInterfaceSignupResponseObject); ok {
+		if err := validResponse.VisitAuthInterfaceSignupResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
 }
 
 // ProblemsInterfaceList operation middleware

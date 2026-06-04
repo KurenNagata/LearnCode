@@ -12,10 +12,33 @@ type Handler struct {
 	problemSvc  *service.ProblemService
 	judgeSvc    *service.JudgeService
 	progressSvc *service.ProgressService
+	authSvc     *service.AuthService
 }
 
-func NewHandler(ps *service.ProblemService, js *service.JudgeService, prog *service.ProgressService) *Handler {
-	return &Handler{problemSvc: ps, judgeSvc: js, progressSvc: prog}
+func NewHandler(ps *service.ProblemService, js *service.JudgeService, prog *service.ProgressService, auth *service.AuthService) *Handler {
+	return &Handler{problemSvc: ps, judgeSvc: js, progressSvc: prog, authSvc: auth}
+}
+
+func (h *Handler) AuthInterfaceSignup(ctx context.Context, req openapi.AuthInterfaceSignupRequestObject) (openapi.AuthInterfaceSignupResponseObject, error) {
+	if req.Body == nil {
+		return nil, service.ErrInvalidInput
+	}
+	tok, err := h.authSvc.Signup(ctx, req.Body.Username, req.Body.Password)
+	if err != nil {
+		return nil, err
+	}
+	return openapi.AuthInterfaceSignup200JSONResponse{Token: tok, Username: req.Body.Username}, nil
+}
+
+func (h *Handler) AuthInterfaceLogin(ctx context.Context, req openapi.AuthInterfaceLoginRequestObject) (openapi.AuthInterfaceLoginResponseObject, error) {
+	if req.Body == nil {
+		return nil, service.ErrInvalidCredentials
+	}
+	tok, err := h.authSvc.Login(ctx, req.Body.Username, req.Body.Password)
+	if err != nil {
+		return nil, err
+	}
+	return openapi.AuthInterfaceLogin200JSONResponse{Token: tok, Username: req.Body.Username}, nil
 }
 
 func (h *Handler) ProblemsInterfaceList(ctx context.Context, req openapi.ProblemsInterfaceListRequestObject) (openapi.ProblemsInterfaceListResponseObject, error) {
@@ -44,7 +67,8 @@ func (h *Handler) ProblemsInterfaceGet(ctx context.Context, req openapi.Problems
 }
 
 func (h *Handler) ProblemsInterfaceSubmit(ctx context.Context, req openapi.ProblemsInterfaceSubmitRequestObject) (openapi.ProblemsInterfaceSubmitResponseObject, error) {
-	result, err := h.judgeSvc.Judge(ctx, req.Id, req.Body.Language, req.Body.Code)
+	userID, _ := UserIDFromContext(ctx)
+	result, err := h.judgeSvc.Judge(ctx, req.Id, req.Body.Language, req.Body.Code, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +80,8 @@ func (h *Handler) ProblemsInterfaceSubmit(ctx context.Context, req openapi.Probl
 }
 
 func (h *Handler) ProgressInterfaceGet(ctx context.Context, _ openapi.ProgressInterfaceGetRequestObject) (openapi.ProgressInterfaceGetResponseObject, error) {
-	ids, err := h.progressSvc.ListClearedProblemIDs(ctx)
+	userID, _ := UserIDFromContext(ctx)
+	ids, err := h.progressSvc.ListClearedProblemIDs(ctx, userID)
 	if err != nil {
 		return nil, err
 	}

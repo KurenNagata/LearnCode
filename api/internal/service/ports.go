@@ -18,6 +18,11 @@ type ProgressRepository interface {
 	ListClearedProblemIDs(ctx context.Context, userID string) ([]int64, error)
 }
 
+type UserRepository interface {
+	CreateUser(ctx context.Context, username, passwordHash string) (domain.User, error)
+	GetUserByUsername(ctx context.Context, username string) (domain.User, error)
+}
+
 type CodeExecutor interface {
 	Execute(ctx context.Context, req ExecuteRequest) (ExecuteResult, error)
 }

@@ -37,6 +37,21 @@ model ProgressResponse {
   clearedProblemIds: int64[];
 }
 
+model SignupRequest {
+  username: string;
+  password: string;
+}
+
+model LoginRequest {
+  username: string;
+  password: string;
+}
+
+model AuthResponse {
+  token: string;
+  username: string;
+}
+
 @route("/api/problems")
 interface ProblemsInterface {
   @get list(@query language?: string): ListProblemsResponse;
@@ -53,4 +68,15 @@ interface ProblemsInterface {
 @route("/api/progress")
 interface ProgressInterface {
   @get get(): ProgressResponse;
+}
+
+@route("/api/auth")
+interface AuthInterface {
+  @post
+  @route("signup")
+  signup(@body body: SignupRequest): AuthResponse;
+
+  @post
+  @route("login")
+  login(@body body: LoginRequest): AuthResponse;
 }

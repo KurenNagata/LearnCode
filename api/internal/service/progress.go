@@ -4,15 +4,14 @@ import "context"
 
 // ProgressService はユーザーの学習進捗（クリア済み問題）を扱う。
 type ProgressService struct {
-	repo          ProgressRepository
-	defaultUserID string
+	repo ProgressRepository
 }
 
-func NewProgressService(repo ProgressRepository, defaultUserID string) *ProgressService {
-	return &ProgressService{repo: repo, defaultUserID: defaultUserID}
+func NewProgressService(repo ProgressRepository) *ProgressService {
+	return &ProgressService{repo: repo}
 }
 
-// ListClearedProblemIDs はクリア済み問題IDの一覧を返す。
-func (s *ProgressService) ListClearedProblemIDs(ctx context.Context) ([]int64, error) {
-	return s.repo.ListClearedProblemIDs(ctx, s.defaultUserID)
+// ListClearedProblemIDs は指定ユーザーのクリア済み問題IDの一覧を返す。
+func (s *ProgressService) ListClearedProblemIDs(ctx context.Context, userID string) ([]int64, error) {
+	return s.repo.ListClearedProblemIDs(ctx, userID)
 }

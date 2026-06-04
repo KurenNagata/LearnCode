@@ -10,6 +10,7 @@ type Config struct {
 	PistonURL     string
 	Port          string
 	DefaultUserID string
+	JWTSecret     string
 }
 
 func Load() *Config {
@@ -22,6 +23,7 @@ func Load() *Config {
 		PistonURL:     getEnv("PISTON_URL", "http://localhost:2000"),
 		Port:          getEnv("PORT", "8080"),
 		DefaultUserID: getEnv("DEFAULT_USER_ID", "00000000-0000-0000-0000-000000000001"),
+		JWTSecret:     getEnv("JWT_SECRET", "dev-secret-change-me"),
 	}
 }
 
