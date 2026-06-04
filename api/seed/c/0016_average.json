@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 16,
+  "title": "平均値（切り捨て）",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。平均値を **小数点以下切り捨て**（整数の割り算）で出力してください。\n\n**入力例：**\n```\n3\n10 20 30\n```\n**出力例：** `20`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "合計を求めてから N で割ります。整数同士の `/` は自動で切り捨てになります。\n\n```c\nint sum = 0;\nfor (int i = 0; i < n; i++) {\n    int x;\n    scanf(\"%d\", &x);\n    sum += x;\n}\nprintf(\"%d\\n\", sum / n);\n```",
+  "explanation": "## 解説\n\nN 個の整数を読みながら合計し、最後に `sum / n` を出力します。整数同士の割り算なので小数点以下は自動的に切り捨てられます。\n\n```c\nint sum = 0;\nfor (int i = 0; i < n; i++) {\n    int x;\n    scanf(\"%d\", &x);\n    sum += x;\n}\nprintf(\"%d\\n\", sum / n);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int sum = 0;\n    for (int i = 0; i < n; i++) {\n        int x;\n        scanf(\"%d\", &x);\n        sum += x;\n    }\n    printf(\"%d\\n\", sum / n);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "3\n10 20 30", "stdout": "20"},
+    {"stdin": "4\n1 2 3 4", "stdout": "2"},
+    {"stdin": "1\n7", "stdout": "7"},
+    {"stdin": "5\n2 4 6 8 10", "stdout": "6"}
+  ]
+}

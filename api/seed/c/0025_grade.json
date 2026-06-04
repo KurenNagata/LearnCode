@@ -1,0 +1,20 @@
+{
+  "language": "c",
+  "level": "intermediate",
+  "order": 25,
+  "title": "成績評価（総合問題）",
+  "description": "0〜100 の点数 N が与えられます。次の基準で評価（A〜D）を出力してください。\n\n- 90 以上 → `A`\n- 70 以上 90 未満 → `B`\n- 50 以上 70 未満 → `C`\n- 50 未満 → `D`\n\n**入力例：** `85`\n**出力例：** `B`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "高い基準から順に `if` / `else if` で判定します。\n\n```c\nif (n >= 90) {\n    printf(\"A\\n\");\n} else if (n >= 70) {\n    printf(\"B\\n\");\n} else if (n >= 50) {\n    printf(\"C\\n\");\n} else {\n    printf(\"D\\n\");\n}\n```",
+  "explanation": "## 解説\n\n上から順に判定すると、各範囲を簡潔に書けます。例えば `n >= 70` に来る時点で「90 未満」は確定しているので、上限の条件を書く必要はありません。\n\n```c\nif (n >= 90) {\n    printf(\"A\\n\");\n} else if (n >= 70) {\n    printf(\"B\\n\");\n} else if (n >= 50) {\n    printf(\"C\\n\");\n} else {\n    printf(\"D\\n\");\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    if (n >= 90) {\n        printf(\"A\\n\");\n    } else if (n >= 70) {\n        printf(\"B\\n\");\n    } else if (n >= 50) {\n        printf(\"C\\n\");\n    } else {\n        printf(\"D\\n\");\n    }\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "85", "stdout": "B"},
+    {"stdin": "90", "stdout": "A"},
+    {"stdin": "100", "stdout": "A"},
+    {"stdin": "70", "stdout": "B"},
+    {"stdin": "50", "stdout": "C"},
+    {"stdin": "49", "stdout": "D"},
+    {"stdin": "0", "stdout": "D"}
+  ]
+}

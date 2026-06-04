@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 9,
+  "title": "偶数の列挙",
+  "description": "整数 N が与えられます。1 から N までの **偶数** を、小さい順に空白区切りで 1 行に出力してください。\n\n**入力例：** `10`\n**出力例：** `2 4 6 8 10`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "カウンタを 2 から始めて 2 ずつ増やすと偶数だけを取り出せます。\n\n```c\nint started = 0;\nfor (int i = 2; i <= n; i += 2) {\n    if (started) printf(\" \");\n    printf(\"%d\", i);\n    started = 1;\n}\nprintf(\"\\n\");\n```",
+  "explanation": "## 解説\n\n`i` を 2 から 2 ずつ増やすと偶数を順に得られます。値の間だけに空白を入れるため、最初の値かどうかを `started` で管理します。\n\n```c\nint started = 0;\nfor (int i = 2; i <= n; i += 2) {\n    if (started) printf(\" \");\n    printf(\"%d\", i);\n    started = 1;\n}\nprintf(\"\\n\");\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int started = 0;\n    for (int i = 2; i <= n; i += 2) {\n        if (started) printf(\" \");\n        printf(\"%d\", i);\n        started = 1;\n    }\n    printf(\"\\n\");\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "10", "stdout": "2 4 6 8 10"},
+    {"stdin": "2", "stdout": "2"},
+    {"stdin": "7", "stdout": "2 4 6"},
+    {"stdin": "20", "stdout": "2 4 6 8 10 12 14 16 18 20"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "intermediate",
+  "order": 19,
+  "title": "再帰：階乗",
+  "description": "0 以上の整数 N が与えられます。N の階乗 `N!`（= 1×2×…×N、ただし 0! = 1）を **再帰関数** で計算して出力してください。\n\n**入力例：** `5`\n**出力例：** `120`",
+  "starter_code": "#include <stdio.h>\n\n// ここに再帰関数を定義してください\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // 関数を呼び出して結果を出力してください\n    return 0;\n}\n",
+  "hint": "`n` が 1 以下なら 1、そうでなければ `n * fact(n - 1)` を返します。\n\n```c\nlong long fact(int n) {\n    if (n <= 1) return 1;\n    return (long long)n * fact(n - 1);\n}\n```\n\n大きな値になるので `long long` を使い、`%lld` で出力します。",
+  "explanation": "## 解説\n\n階乗は `N! = N × (N-1)!` という再帰で定義できます。終了条件（0 か 1 のとき 1 を返す）を忘れないようにします。値が大きくなるため `long long` を使います。\n\n```c\n#include <stdio.h>\n\nlong long fact(int n) {\n    if (n <= 1) return 1;\n    return (long long)n * fact(n - 1);\n}\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    printf(\"%lld\\n\", fact(n));\n    return 0;\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nlong long fact(int n) {\n    if (n <= 1) return 1;\n    return (long long)n * fact(n - 1);\n}\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    printf(\"%lld\\n\", fact(n));\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "5", "stdout": "120"},
+    {"stdin": "0", "stdout": "1"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "6", "stdout": "720"},
+    {"stdin": "10", "stdout": "3628800"}
+  ]
+}

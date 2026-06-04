@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 15,
+  "title": "約数の個数",
+  "description": "正の整数 N が与えられます。N の約数（N を割り切れる正の整数）の個数を出力してください。\n\n**入力例：** `6`\n**出力例：** `4`（1, 2, 3, 6 の 4 個）",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "1 から N まで順に、`n % i == 0` なら約数です。\n\n```c\nint count = 0;\nfor (int i = 1; i <= n; i++) {\n    if (n % i == 0) count++;\n}\nprintf(\"%d\\n\", count);\n```",
+  "explanation": "## 解説\n\n1 から N までのそれぞれについて、`n % i == 0`（割り切れる）かどうかを調べ、割り切れたら数えます。\n\n```c\nint count = 0;\nfor (int i = 1; i <= n; i++) {\n    if (n % i == 0) count++;\n}\nprintf(\"%d\\n\", count);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int count = 0;\n    for (int i = 1; i <= n; i++) {\n        if (n % i == 0) count++;\n    }\n    printf(\"%d\\n\", count);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "6", "stdout": "4"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "12", "stdout": "6"},
+    {"stdin": "7", "stdout": "2"}
+  ]
+}

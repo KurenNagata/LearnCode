@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "intermediate",
+  "order": 18,
+  "title": "素数判定",
+  "description": "2 以上の整数 N が与えられます。N が素数なら `素数`、そうでなければ `素数ではない` を出力してください。\n\n素数とは、1 と自分自身以外に約数を持たない数です。\n\n**入力例：** `7`\n**出力例：** `素数`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "2 から `i * i <= n` の範囲で割り切れる数があるか調べます。1 つでもあれば素数ではありません。\n\n```c\nint prime = 1;\nfor (int i = 2; i * i <= n; i++) {\n    if (n % i == 0) { prime = 0; break; }\n}\n```",
+  "explanation": "## 解説\n\n2 から √N まで（`i * i <= n` で表現）の数で割り切れるか調べます。1 つでも割り切れたら素数ではありません。割り切れる数が無ければ素数です。\n\n```c\nint prime = 1;\nfor (int i = 2; i * i <= n; i++) {\n    if (n % i == 0) { prime = 0; break; }\n}\nif (prime) {\n    printf(\"素数\\n\");\n} else {\n    printf(\"素数ではない\\n\");\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int prime = 1;\n    for (int i = 2; i * i <= n; i++) {\n        if (n % i == 0) { prime = 0; break; }\n    }\n    if (prime) {\n        printf(\"素数\\n\");\n    } else {\n        printf(\"素数ではない\\n\");\n    }\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "7", "stdout": "素数"},
+    {"stdin": "2", "stdout": "素数"},
+    {"stdin": "4", "stdout": "素数ではない"},
+    {"stdin": "9", "stdout": "素数ではない"},
+    {"stdin": "17", "stdout": "素数"}
+  ]
+}

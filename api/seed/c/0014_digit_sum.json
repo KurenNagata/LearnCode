@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 14,
+  "title": "各桁の和",
+  "description": "正の整数 N が与えられます。各桁の数字の合計を出力してください。\n\n**入力例：** `123`\n**出力例：** `6`（= 1+2+3）",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`n % 10` で一番下の桁が取り出せます。取り出したら `n /= 10` で桁を落とします。\n\n```c\nint sum = 0;\nwhile (n > 0) {\n    sum += n % 10;\n    n /= 10;\n}\nprintf(\"%d\\n\", sum);\n```",
+  "explanation": "## 解説\n\n`n % 10` で最下位の桁を取り出して足し、`n /= 10` でその桁を落とす、を繰り返します。\n\n```c\nint sum = 0;\nwhile (n > 0) {\n    sum += n % 10;\n    n /= 10;\n}\nprintf(\"%d\\n\", sum);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int sum = 0;\n    while (n > 0) {\n        sum += n % 10;\n        n /= 10;\n    }\n    printf(\"%d\\n\", sum);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "123", "stdout": "6"},
+    {"stdin": "5", "stdout": "5"},
+    {"stdin": "99", "stdout": "18"},
+    {"stdin": "1000", "stdout": "1"}
+  ]
+}

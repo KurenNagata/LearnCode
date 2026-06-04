@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 12,
+  "title": "2つの数の差（絶対値）",
+  "description": "空白区切りで 2 つの整数 a, b が与えられます。その差の絶対値 `|a - b|` を出力してください。\n\n**入力例：** `3 5`\n**出力例：** `2`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "差を計算し、負なら符号を反転します。\n\n```c\nint d = a - b;\nif (d < 0) d = -d;\nprintf(\"%d\\n\", d);\n```",
+  "explanation": "## 解説\n\n`a - b` を求め、それが負なら `-d` にして正の値（絶対値）にします。\n\n```c\nint d = a - b;\nif (d < 0) d = -d;\nprintf(\"%d\\n\", d);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    int d = a - b;\n    if (d < 0) d = -d;\n    printf(\"%d\\n\", d);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "3 5", "stdout": "2"},
+    {"stdin": "5 3", "stdout": "2"},
+    {"stdin": "10 10", "stdout": "0"},
+    {"stdin": "-4 6", "stdout": "10"}
+  ]
+}

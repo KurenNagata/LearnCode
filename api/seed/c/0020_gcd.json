@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "intermediate",
+  "order": 20,
+  "title": "最大公約数（ユークリッドの互除法）",
+  "description": "空白区切りで 2 つの正の整数 a, b が与えられます。その **最大公約数（GCD）** を出力してください。\n\n**入力例：** `12 18`\n**出力例：** `6`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "ユークリッドの互除法を使います。`b` が 0 になるまで `a` を `b`、`b` を `a % b` に置き換え続けます。\n\n```c\nwhile (b != 0) {\n    int t = a % b;\n    a = b;\n    b = t;\n}\nprintf(\"%d\\n\", a);\n```",
+  "explanation": "## 解説\n\nユークリッドの互除法は「a と b の最大公約数は、b と a%b の最大公約数に等しい」という性質を使います。`b` が 0 になったときの `a` が最大公約数です。\n\n```c\nwhile (b != 0) {\n    int t = a % b;\n    a = b;\n    b = t;\n}\nprintf(\"%d\\n\", a);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    while (b != 0) {\n        int t = a % b;\n        a = b;\n        b = t;\n    }\n    printf(\"%d\\n\", a);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "12 18", "stdout": "6"},
+    {"stdin": "17 5", "stdout": "1"},
+    {"stdin": "100 80", "stdout": "20"},
+    {"stdin": "7 7", "stdout": "7"},
+    {"stdin": "48 36", "stdout": "12"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "intermediate",
+  "order": 17,
+  "title": "関数の定義（2乗）",
+  "description": "整数 N が与えられます。「受け取った整数の 2 乗を返す関数」を自分で定義して使い、N の 2 乗を出力してください。\n\n**入力例：** `4`\n**出力例：** `16`",
+  "starter_code": "#include <stdio.h>\n\n// ここに関数を定義してください\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // 関数を呼び出して結果を出力してください\n    return 0;\n}\n",
+  "hint": "`main` の外に関数を定義し、`main` から呼び出します。\n\n```c\nint square(int x) {\n    return x * x;\n}\n```\n\n呼び出しは `square(n)` のように書きます。",
+  "explanation": "## 解説\n\n`戻り値の型 関数名(引数) { ... return 値; }` の形で関数を定義します。`main` から `square(n)` と呼ぶと、その戻り値が使えます。\n\n```c\n#include <stdio.h>\n\nint square(int x) {\n    return x * x;\n}\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    printf(\"%d\\n\", square(n));\n    return 0;\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint square(int x) {\n    return x * x;\n}\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    printf(\"%d\\n\", square(n));\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "4", "stdout": "16"},
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "9", "stdout": "81"},
+    {"stdin": "-3", "stdout": "9"},
+    {"stdin": "12", "stdout": "144"}
+  ]
+}

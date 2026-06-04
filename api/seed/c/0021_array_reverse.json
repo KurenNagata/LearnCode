@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "intermediate",
+  "order": 21,
+  "title": "配列の反転",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。**逆順** に並べ替えて、空白区切りで 1 行に出力してください。\n\n**入力例：**\n```\n3\n1 2 3\n```\n**出力例：** `3 2 1`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int a[100];\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "配列を末尾（`n-1`）から先頭（`0`）に向かって出力します。\n\n```c\nfor (int i = n - 1; i >= 0; i--) {\n    if (i < n - 1) printf(\" \");\n    printf(\"%d\", a[i]);\n}\nprintf(\"\\n\");\n```",
+  "explanation": "## 解説\n\nいったん配列に読み込み、添字を `n-1` から `0` へ減らしながら出力すると逆順になります。値の間だけに空白を入れます。\n\n```c\nfor (int i = n - 1; i >= 0; i--) {\n    if (i < n - 1) printf(\" \");\n    printf(\"%d\", a[i]);\n}\nprintf(\"\\n\");\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int a[100];\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n    for (int i = n - 1; i >= 0; i--) {\n        if (i < n - 1) printf(\" \");\n        printf(\"%d\", a[i]);\n    }\n    printf(\"\\n\");\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "3\n1 2 3", "stdout": "3 2 1"},
+    {"stdin": "5\n10 20 30 40 50", "stdout": "50 40 30 20 10"},
+    {"stdin": "1\n7", "stdout": "7"},
+    {"stdin": "4\n-1 -2 -3 -4", "stdout": "-4 -3 -2 -1"}
+  ]
+}

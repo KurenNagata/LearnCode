@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 13,
+  "title": "整数の桁数",
+  "description": "正の整数 N が与えられます。N が何桁かを出力してください。\n\n**入力例：** `42`\n**出力例：** `2`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "10 で割り続け、0 になるまでの回数を数えます。\n\n```c\nint count = 0;\nwhile (n > 0) {\n    count++;\n    n /= 10;\n}\nprintf(\"%d\\n\", count);\n```",
+  "explanation": "## 解説\n\n`n /= 10` は一番下の桁を 1 つ落とす操作です。0 になるまで繰り返した回数が桁数になります。\n\n```c\nint count = 0;\nwhile (n > 0) {\n    count++;\n    n /= 10;\n}\nprintf(\"%d\\n\", count);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int count = 0;\n    while (n > 0) {\n        count++;\n        n /= 10;\n    }\n    printf(\"%d\\n\", count);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "5", "stdout": "1"},
+    {"stdin": "42", "stdout": "2"},
+    {"stdin": "1000", "stdout": "4"},
+    {"stdin": "99999", "stdout": "5"}
+  ]
+}

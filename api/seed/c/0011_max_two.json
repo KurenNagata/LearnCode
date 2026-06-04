@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 11,
+  "title": "大きい方を出力",
+  "description": "空白区切りで 2 つの整数 a, b が与えられます。大きい方の値を出力してください（等しいときはその値）。\n\n**入力例：** `3 5`\n**出力例：** `5`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`if` で比較します。\n\n```c\nif (a > b) {\n    printf(\"%d\\n\", a);\n} else {\n    printf(\"%d\\n\", b);\n}\n```",
+  "explanation": "## 解説\n\n`a > b` のときは `a`、そうでなければ `b`（b が大きいか等しい）を出力します。\n\n```c\nif (a > b) {\n    printf(\"%d\\n\", a);\n} else {\n    printf(\"%d\\n\", b);\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    if (a > b) {\n        printf(\"%d\\n\", a);\n    } else {\n        printf(\"%d\\n\", b);\n    }\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "3 5", "stdout": "5"},
+    {"stdin": "10 2", "stdout": "10"},
+    {"stdin": "7 7", "stdout": "7"},
+    {"stdin": "-5 -2", "stdout": "-2"}
+  ]
+}

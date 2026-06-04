@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 7,
+  "title": "九九の一段",
+  "description": "整数 N（1〜9）が与えられます。N の段（N×1 から N×9）の答えを、空白区切りで 1 行に出力してください。\n\n**入力例：** `3`\n**出力例：** `3 6 9 12 15 18 21 24 27`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`for` ループで 1〜9 を掛けます。2 個目以降の前に空白を入れると、末尾に余計な空白が付きません。\n\n```c\nfor (int i = 1; i <= 9; i++) {\n    if (i > 1) printf(\" \");\n    printf(\"%d\", n * i);\n}\nprintf(\"\\n\");\n```",
+  "explanation": "## 解説\n\n`for` ループで掛ける数 `i` を 1〜9 と変化させ、`n * i` を出力します。値の間だけに空白を入れるため、`i > 1` のときに空白を先に出力します。\n\n```c\nfor (int i = 1; i <= 9; i++) {\n    if (i > 1) printf(\" \");\n    printf(\"%d\", n * i);\n}\nprintf(\"\\n\");\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    for (int i = 1; i <= 9; i++) {\n        if (i > 1) printf(\" \");\n        printf(\"%d\", n * i);\n    }\n    printf(\"\\n\");\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "3", "stdout": "3 6 9 12 15 18 21 24 27"},
+    {"stdin": "1", "stdout": "1 2 3 4 5 6 7 8 9"},
+    {"stdin": "9", "stdout": "9 18 27 36 45 54 63 72 81"},
+    {"stdin": "5", "stdout": "5 10 15 20 25 30 35 40 45"}
+  ]
+}
