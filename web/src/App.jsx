@@ -130,7 +130,7 @@ function HintModal({ problem, onClose }) {
 }
 
 // ── 正解演出（STAGE CLEAR! ＋ コドにゃんが喜ぶ） ──────────────
-function ClearOverlay({ result, skin, clearInfo, onContinue }) {
+function ClearOverlay({ result, skin, accessory, clearInfo, onContinue }) {
   useEffect(() => {
     sfx.clear()
     if (clearInfo?.leveledUp) {
@@ -149,7 +149,7 @@ function ClearOverlay({ result, skin, clearInfo, onContinue }) {
         <span className="lc-star lc-star4">✦</span>
 
         <div className="lc-clear-title">STAGE CLEAR!</div>
-        <PixelCat size={104} happy color={skin?.color} belly={skin?.belly} className="lc-clear-cat" />
+        <PixelCat size={104} happy color={skin?.color} belly={skin?.belly} accessory={accessory} className="lc-clear-cat" />
         <div className="lc-clear-sub">
           ぜんぶ正解！{result ? ` ${result.passedTests}/${result.totalTests} テスト通過` : ''}
         </div>
@@ -262,6 +262,33 @@ const CAT_SKINS = [
   { id: 'kin', label: 'きん', color: '#FFD93D', belly: '#FFF1B0', unlockLevel: 10 },
 ]
 const SKIN_KEY = 'lc-cat-skin'
+
+// ── アクセサリー（ドット絵・コドにゃんに重ねる）。unlockLevel で解放 ──
+// pixels: [x, y, w, h, '#色']。layer:'back' は猫の後ろ、既定は前面に描画。
+const ACCESSORIES = [
+  { id: 'none', label: 'なし', unlockLevel: 1, pixels: [] },
+  { id: 'ribbon_red', label: 'あかリボン', unlockLevel: 1, pixels: [[6, 1, 1, 1, '#FF5C8A'], [9, 1, 1, 1, '#FF5C8A'], [6, 2, 1, 1, '#FF5C8A'], [9, 2, 1, 1, '#FF5C8A'], [7, 2, 2, 1, '#C72E5C']] },
+  { id: 'ribbon_blue', label: 'あおリボン', unlockLevel: 1, pixels: [[6, 1, 1, 1, '#6EA8FF'], [9, 1, 1, 1, '#6EA8FF'], [6, 2, 1, 1, '#6EA8FF'], [9, 2, 1, 1, '#6EA8FF'], [7, 2, 2, 1, '#2E5CC7']] },
+  { id: 'flower', label: 'おはな', unlockLevel: 2, pixels: [[3, 1, 1, 1, '#FF8AAE'], [2, 2, 1, 1, '#FF8AAE'], [4, 2, 1, 1, '#FF8AAE'], [3, 3, 1, 1, '#FF8AAE'], [3, 2, 1, 1, '#FFD93D']] },
+  { id: 'kachusha', label: 'カチューシャ', unlockLevel: 2, pixels: [[3, 3, 10, 1, '#C77DFF'], [11, 1, 1, 1, '#FF5C8A'], [12, 2, 1, 1, '#FF5C8A'], [11, 2, 1, 1, '#C72E5C']] },
+  { id: 'glasses', label: 'メガネ', unlockLevel: 2, pixels: [[3, 5, 3, 1, '#2B2A45'], [3, 8, 3, 1, '#2B2A45'], [3, 6, 1, 2, '#2B2A45'], [5, 6, 1, 2, '#2B2A45'], [9, 5, 3, 1, '#2B2A45'], [9, 8, 3, 1, '#2B2A45'], [9, 6, 1, 2, '#2B2A45'], [11, 6, 1, 2, '#2B2A45'], [6, 6, 3, 1, '#2B2A45']] },
+  { id: 'piercing', label: 'ピアス', unlockLevel: 2, pixels: [[2, 9, 1, 1, '#51E5FF'], [13, 9, 1, 1, '#51E5FF']] },
+  { id: 'cap_red', label: 'キャップ', unlockLevel: 3, pixels: [[4, 1, 8, 2, '#FF5C5C'], [11, 2, 4, 1, '#C72E5C']] },
+  { id: 'beanie', label: 'ニットぼう', unlockLevel: 3, pixels: [[7, 0, 2, 1, '#FFFFFF'], [3, 1, 10, 2, '#5DD0A0'], [3, 3, 10, 1, '#3FA77C']] },
+  { id: 'bowtie', label: 'ちょうネクタイ', unlockLevel: 3, pixels: [[6, 11, 1, 1, '#FF5C8A'], [9, 11, 1, 1, '#FF5C8A'], [7, 11, 2, 1, '#C72E5C']] },
+  { id: 'collar_bell', label: 'すずくびわ', unlockLevel: 3, pixels: [[5, 10, 6, 1, '#C72E5C'], [7, 11, 2, 1, '#FFD93D']] },
+  { id: 'party_hat', label: 'とんがりハット', unlockLevel: 4, pixels: [[7, 0, 1, 1, '#FFFFFF'], [7, 1, 2, 1, '#FF5C8A'], [6, 2, 3, 1, '#FFD93D']] },
+  { id: 'scarf', label: 'マフラー', unlockLevel: 4, pixels: [[4, 10, 8, 1, '#FF5C5C'], [5, 11, 5, 1, '#E04141'], [10, 11, 1, 2, '#FF5C5C']] },
+  { id: 'earring_gold', label: 'きんピアス', unlockLevel: 4, pixels: [[2, 9, 1, 1, '#FFD93D'], [2, 10, 1, 1, '#FFE98A'], [13, 9, 1, 1, '#FFD93D'], [13, 10, 1, 1, '#FFE98A']] },
+  { id: 'tophat', label: 'シルクハット', unlockLevel: 5, pixels: [[5, 0, 6, 2, '#2B2A45'], [5, 1, 6, 1, '#FFD93D'], [4, 2, 8, 1, '#1A1930']] },
+  { id: 'sunglasses', label: 'サングラス', unlockLevel: 5, pixels: [[3, 6, 3, 2, '#1A1930'], [9, 6, 3, 2, '#1A1930'], [6, 6, 1, 1, '#1A1930']] },
+  { id: 'star_clip', label: 'ほしクリップ', unlockLevel: 5, pixels: [[11, 3, 1, 1, '#FFD93D'], [10, 4, 3, 1, '#FFD93D'], [11, 5, 1, 1, '#FFD93D'], [11, 4, 1, 1, '#FFF1B0']] },
+  { id: 'witch_hat', label: 'まじょぼう', unlockLevel: 6, pixels: [[7, 0, 1, 1, '#6B4FA0'], [6, 1, 2, 1, '#6B4FA0'], [5, 2, 4, 1, '#6B4FA0'], [5, 2, 3, 1, '#FFD93D'], [3, 3, 8, 1, '#4A3570']] },
+  { id: 'headphones', label: 'ヘッドホン', unlockLevel: 6, pixels: [[3, 1, 8, 1, '#2B2A45'], [2, 2, 1, 3, '#2B2A45'], [13, 2, 1, 3, '#2B2A45'], [2, 5, 2, 2, '#51E5FF'], [12, 5, 2, 2, '#51E5FF']] },
+  { id: 'crown', label: 'おうかん', unlockLevel: 8, pixels: [[4, 1, 1, 1, '#FFD93D'], [7, 1, 1, 1, '#FFD93D'], [11, 1, 1, 1, '#FFD93D'], [4, 2, 8, 1, '#FFD93D'], [7, 2, 2, 1, '#FF5C8A']] },
+  { id: 'halo', label: 'てんしのわ', unlockLevel: 9, pixels: [[4, 0, 8, 1, '#FFD93D']] },
+]
+const ACC_KEY = 'lc-cat-acc'
 
 // ── XP / レベル（初心者→玄人）。今はローカル保存（後で DB 化可） ──
 const XP_KEY = 'lc-cleared'        // 初クリア済み問題ID（XP付与は1回だけ）
@@ -381,9 +408,12 @@ const CAT_EYES_HAPPY = [
   [9, 7, 1, 1, 'p'], [10, 6, 1, 1, 'p'], [11, 7, 1, 1, 'p'], // 右 ^
 ]
 
-function PixelCat({ size = 64, color = '#FFC06A', belly = '#FFE6C2', happy = false, className, title = 'コドにゃん（LearnCode のマスコット）' }) {
+function PixelCat({ size = 64, color = '#FFC06A', belly = '#FFE6C2', happy = false, accessory, className, title = 'コドにゃん（LearnCode のマスコット）' }) {
   const fill = { o: color, i: '#FF8AAE', p: '#2B2A45', w: '#FFFFFF', n: '#FF6FA0', b: '#FF9EC4', f: belly, wh: '#F0DDB0' }
   const pixels = [...CAT_PIXELS, ...(happy ? CAT_EYES_HAPPY : CAT_EYES_NORMAL)]
+  const acc = accessory && accessory !== 'none' ? ACCESSORIES.find(a => a.id === accessory) : null
+  const accBack = acc?.layer === 'back' ? acc.pixels : []
+  const accFront = acc && acc.layer !== 'back' ? acc.pixels : []
   return (
     <svg
       className={className}
@@ -395,8 +425,14 @@ function PixelCat({ size = 64, color = '#FFC06A', belly = '#FFE6C2', happy = fal
       role="img"
       aria-label={title}
     >
+      {accBack.map(([x, y, w, h, col], i) => (
+        <rect key={`ab${i}`} x={x} y={y} width={w} height={h} fill={col} />
+      ))}
       {pixels.map(([x, y, w, h, k], i) => (
-        <rect key={i} x={x} y={y} width={w} height={h} fill={fill[k]} />
+        <rect key={`c${i}`} x={x} y={y} width={w} height={h} fill={fill[k]} />
+      ))}
+      {accFront.map(([x, y, w, h, col], i) => (
+        <rect key={`af${i}`} x={x} y={y} width={w} height={h} fill={col} />
       ))}
     </svg>
   )
@@ -418,7 +454,7 @@ function LevelBadge({ info, width = 150 }) {
 }
 
 // ── トップページ（8bit アーケード風タイトル画面） ─────────────
-function Home({ onSelect, onOpenCloset, skin, xp, muted, onToggleMute }) {
+function Home({ onSelect, onOpenCloset, skin, accessory, xp, muted, onToggleMute }) {
   const start = () => onSelect('python')
 
   return (
@@ -440,7 +476,7 @@ function Home({ onSelect, onOpenCloset, skin, xp, muted, onToggleMute }) {
       <div className="lc-screen">
         {/* 大タイトル＋マスコット */}
         <div className="lc-titlewrap">
-          <PixelCat className="lc-mascot" color={skin.color} belly={skin.belly} />
+          <PixelCat className="lc-mascot" color={skin.color} belly={skin.belly} accessory={accessory} />
           <h1 className="lc-title">
             <span className="lc-title-learn">LEARN</span>
             <span className="lc-title-code">CODE</span>
@@ -666,6 +702,9 @@ export default function App() {
   const [skinId, setSkinId] = useState(() => {
     try { return localStorage.getItem(SKIN_KEY) || 'orange' } catch { return 'orange' }
   })
+  const [accId, setAccId] = useState(() => {
+    try { return localStorage.getItem(ACC_KEY) || 'none' } catch { return 'none' }
+  })
   const [clearedIds, setClearedIds] = useState(() => {
     try { return JSON.parse(localStorage.getItem(XP_KEY) || '[]') } catch { return [] }
   })
@@ -680,6 +719,10 @@ export default function App() {
   function chooseSkin(id) {
     setSkinId(id)
     try { localStorage.setItem(SKIN_KEY, id) } catch { /* ignore */ }
+  }
+  function chooseAcc(id) {
+    setAccId(id)
+    try { localStorage.setItem(ACC_KEY, id) } catch { /* ignore */ }
   }
   function recordClear(id) {
     setClearedIds(prev => {
@@ -700,22 +743,27 @@ export default function App() {
 
   if (language) return (
     <Course
-      language={language} skin={skin} xp={xp} clearedIds={clearedIds}
+      language={language} skin={skin} accessory={accId} xp={xp} clearedIds={clearedIds}
       muted={muted} onToggleMute={toggleMute}
       onClear={recordClear} onBack={() => setLanguage(null)}
     />
   )
-  if (screen === 'closet') return <Closet skin={skin} xp={xp} onSelect={chooseSkin} onBack={() => setScreen('home')} />
+  if (screen === 'closet') return (
+    <Closet
+      skin={skin} accId={accId} xp={xp}
+      onSelectSkin={chooseSkin} onSelectAcc={chooseAcc} onBack={() => setScreen('home')}
+    />
+  )
   return (
     <Home
-      skin={skin} xp={xp} muted={muted} onToggleMute={toggleMute}
+      skin={skin} accessory={accId} xp={xp} muted={muted} onToggleMute={toggleMute}
       onSelect={setLanguage} onOpenCloset={() => setScreen('closet')}
     />
   )
 }
 
 // ── 着せ替え画面（クローゼット） ──────────────────────────────
-function Closet({ skin, xp, onSelect, onBack }) {
+function Closet({ skin, accId, xp, onSelectSkin, onSelectAcc, onBack }) {
   return (
     <div style={s.closetRoot}>
       <ClosetStyles />
@@ -728,9 +776,9 @@ function Closet({ skin, xp, onSelect, onBack }) {
       </div>
 
       <div style={s.closetBody}>
-        {/* プレビュー */}
+        {/* プレビュー（カラー＋アクセサリー） */}
         <div className="lc-cl-stage">
-          <PixelCat size={160} color={skin.color} belly={skin.belly} />
+          <PixelCat size={160} color={skin.color} belly={skin.belly} accessory={accId} />
           <div className="lc-cl-name">コドにゃん（{skin.label}）</div>
         </div>
 
@@ -744,16 +792,37 @@ function Closet({ skin, xp, onSelect, onBack }) {
                 key={sk.id}
                 type="button"
                 disabled={locked}
-                onClick={() => !locked && onSelect(sk.id)}
+                onClick={() => !locked && onSelectSkin(sk.id)}
                 aria-label={locked ? `${sk.label}（LV.${sk.unlockLevel} で解放）` : `${sk.label} にする`}
                 aria-pressed={sk.id === skin.id}
                 className={`lc-cl-card${sk.id === skin.id ? ' lc-cl-sel' : ''}${locked ? ' lc-cl-locked' : ''}`}
               >
                 <PixelCat size={56} color={sk.color} belly={sk.belly} />
                 <span className="lc-cl-card-name">{sk.label}</span>
-                {locked && (
-                  <span className="lc-cl-locktag"><PixelLock /> LV.{sk.unlockLevel}</span>
-                )}
+                {locked && (<span className="lc-cl-locktag"><PixelLock /> LV.{sk.unlockLevel}</span>)}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* アクセサリー選択 */}
+        <p style={s.closetGuide}>▼ アクセサリーをえらぶ（レベルで解放）</p>
+        <div className="lc-cl-grid">
+          {ACCESSORIES.map(acc => {
+            const locked = xp.level < acc.unlockLevel
+            return (
+              <button
+                key={acc.id}
+                type="button"
+                disabled={locked}
+                onClick={() => !locked && onSelectAcc(acc.id)}
+                aria-label={locked ? `${acc.label}（LV.${acc.unlockLevel} で解放）` : `${acc.label} をつける`}
+                aria-pressed={acc.id === accId}
+                className={`lc-cl-card${acc.id === accId ? ' lc-cl-sel' : ''}${locked ? ' lc-cl-locked' : ''}`}
+              >
+                <PixelCat size={56} color={skin.color} belly={skin.belly} accessory={acc.id} />
+                <span className="lc-cl-card-name">{acc.label}</span>
+                {locked && (<span className="lc-cl-locktag"><PixelLock /> LV.{acc.unlockLevel}</span>)}
               </button>
             )
           })}
@@ -803,7 +872,7 @@ function ClosetStyles() {
 }
 
 // ── 学習画面（言語ごと） ──────────────────────────────────────
-function Course({ language, skin, xp, clearedIds, muted, onToggleMute, onClear, onBack }) {
+function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute, onClear, onBack }) {
   const [problems, setProblems] = useState([])
   const [problem, setProblem] = useState(null)
   const [code, setCode] = useState('')
@@ -885,6 +954,7 @@ function Course({ language, skin, xp, clearedIds, muted, onToggleMute, onClear, 
         <ClearOverlay
           result={result}
           skin={skin}
+          accessory={accessory}
           clearInfo={clearInfo}
           onContinue={() => { setShowClear(false); setShowModal(true) }}
         />
