@@ -1,0 +1,14 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 1,
+  "title": "Hello, World!",
+  "description": "C# で画面に以下の文字列を **そのまま** 出力してください。\n\n**出力：**\n```\nHello, World!\n```",
+  "starter_code": "using System;\n\nclass Program {\n    static void Main() {\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`Console.WriteLine()` で出力します。\n\n```csharp\nConsole.WriteLine(\"文字列\");\n```",
+  "explanation": "## 解説\n\nC# では `Console.WriteLine()` で文字列を出力し、末尾に改行を付けます。\n\n```csharp\nusing System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine(\"Hello, World!\");\n    }\n}\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine(\"Hello, World!\");\n    }\n}",
+  "test_cases": [
+    {"stdin": "", "stdout": "Hello, World!"}
+  ]
+}

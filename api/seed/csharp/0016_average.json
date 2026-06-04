@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 16,
+  "title": "平均（小数2桁）",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。平均値を **小数第 2 位まで** 出力してください。\n\n**入力例：**\n```\n4\n10 20 30 40\n```\n**出力例：** `25.00`",
+  "starter_code": "using System;\nusing System.Linq;\nusing System.Globalization;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "LINQ の `Average()` で平均を出し、`ToString(\"F2\", ...)` で小数 2 桁にします。\n\n```csharp\ndouble avg = arr.Average();\nConsole.WriteLine(avg.ToString(\"F2\", CultureInfo.InvariantCulture));\n```",
+  "explanation": "## 解説\n\n`Average()` は平均（`double`）を返します。`ToString(\"F2\", CultureInfo.InvariantCulture)` で、環境に依らず小数点を `.` にして小数第 2 位までそろえます。\n\n```csharp\ndouble avg = arr.Average();\nConsole.WriteLine(avg.ToString(\"F2\", CultureInfo.InvariantCulture));\n```",
+  "answer_code": "using System;\nusing System.Linq;\nusing System.Globalization;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        double avg = arr.Average();\n        Console.WriteLine(avg.ToString(\"F2\", CultureInfo.InvariantCulture));\n    }\n}",
+  "test_cases": [
+    {"stdin": "4\n10 20 30 40", "stdout": "25.00"},
+    {"stdin": "3\n1 2 3", "stdout": "2.00"},
+    {"stdin": "2\n1 2", "stdout": "1.50"},
+    {"stdin": "4\n10 20 30 45", "stdout": "26.25"}
+  ]
+}

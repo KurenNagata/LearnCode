@@ -1,0 +1,18 @@
+{
+  "language": "csharp",
+  "level": "intermediate",
+  "order": 19,
+  "title": "再帰：階乗",
+  "description": "0 以上の整数 N が与えられます。N の階乗 `N!`（0! = 1）を **再帰メソッド** で計算して出力してください。\n\n**入力例：** `5`\n**出力例：** `120`",
+  "starter_code": "using System;\n\nclass Program {\n    // ここに再帰メソッドを定義してください\n\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        // メソッドを呼び出して出力してください\n    }\n}\n",
+  "hint": "`n` が 1 以下なら 1、そうでなければ `n * Fact(n - 1)`。大きくなるので `long` を使います。\n\n```csharp\nstatic long Fact(int n) => n <= 1 ? 1 : (long)n * Fact(n - 1);\n```",
+  "explanation": "## 解説\n\n階乗は `N! = N * (N-1)!` という再帰で定義できます。終了条件（0 と 1 で 1）を用意します。値が大きくなるため `long` を使います。\n\n```csharp\nstatic long Fact(int n) => n <= 1 ? 1 : (long)n * Fact(n - 1);\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static long Fact(int n) => n <= 1 ? 1 : (long)n * Fact(n - 1);\n\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        Console.WriteLine(Fact(n));\n    }\n}",
+  "test_cases": [
+    {"stdin": "5", "stdout": "120"},
+    {"stdin": "0", "stdout": "1"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "6", "stdout": "720"},
+    {"stdin": "10", "stdout": "3628800"}
+  ]
+}

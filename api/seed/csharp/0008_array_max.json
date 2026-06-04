@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 8,
+  "title": "配列の最大値",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。最大値を出力してください。\n\n**入力例：**\n```\n4\n3 1 4 1\n```\n**出力例：** `4`",
+  "starter_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "LINQ の `Max()` で最大値が得られます。\n\n```csharp\nConsole.WriteLine(arr.Max());\n```",
+  "explanation": "## 解説\n\nLINQ の `Max()` は配列の最大値を返します。\n\n```csharp\nConsole.WriteLine(arr.Max());\n```",
+  "answer_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        Console.WriteLine(arr.Max());\n    }\n}",
+  "test_cases": [
+    {"stdin": "4\n3 1 4 1", "stdout": "4"},
+    {"stdin": "5\n10 20 5 30 25", "stdout": "30"},
+    {"stdin": "1\n7", "stdout": "7"},
+    {"stdin": "3\n-5 -2 -9", "stdout": "-2"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 4,
+  "title": "大文字に変換",
+  "description": "1 行の文字列（半角英字、空白なし）をすべて大文字にして出力してください。\n\n**入力例：** `hello`\n**出力例：** `HELLO`",
+  "starter_code": "using System;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`string` の `.ToUpper()` を使います。\n\n```csharp\nConsole.WriteLine(s.ToUpper());\n```",
+  "explanation": "## 解説\n\n`.ToUpper()` は文字列を大文字にした新しい文字列を返します。\n\n```csharp\nConsole.WriteLine(s.ToUpper());\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        Console.WriteLine(s.ToUpper());\n    }\n}",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "HELLO"},
+    {"stdin": "Csharp", "stdout": "CSHARP"},
+    {"stdin": "abcXYZ", "stdout": "ABCXYZ"},
+    {"stdin": "a", "stdout": "A"}
+  ]
+}

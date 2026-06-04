@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "advanced",
+  "order": 28,
+  "title": "スコア集計（合計が最大の人）",
+  "description": "1 行目に行数 N、続く N 行に「名前 点数」（空白区切り）が与えられます。名前ごとに点数を合計し、**合計が最も高い人の名前** を出力してください。同点のときは **最初に登場した** 名前を出力します。\n\n**入力例：**\n```\n3\nalice 50\nbob 30\nalice 40\n```\n**出力例：** `alice`（alice の合計は 90）",
+  "starter_code": "using System;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`Dictionary` で名前ごとの合計を持ち、初登場順を `List` に記録します。\n\n```csharp\nvar total = new Dictionary<string, int>();\nvar order = new List<string>();\nfor (int i = 0; i < n; i++) {\n    var p = Console.ReadLine().Split();\n    string name = p[0]; int sc = int.Parse(p[1]);\n    if (!total.ContainsKey(name)) { total[name] = 0; order.Add(name); }\n    total[name] += sc;\n}\nstring best = null; int bestv = int.MinValue;\nforeach (var name in order) if (total[name] > bestv) { bestv = total[name]; best = name; }\nConsole.WriteLine(best);\n```",
+  "explanation": "## 解説\n\n各行を読みながら、`Dictionary` で名前ごとの点数を合計します。初登場順を `List` に覚えておき、最大を `>` で探すと、同点のとき先に登場した名前が残ります。\n\n```csharp\nvar total = new Dictionary<string, int>();\nvar order = new List<string>();\nfor (int i = 0; i < n; i++) {\n    var p = Console.ReadLine().Split();\n    string name = p[0]; int sc = int.Parse(p[1]);\n    if (!total.ContainsKey(name)) { total[name] = 0; order.Add(name); }\n    total[name] += sc;\n}\nstring best = null; int bestv = int.MinValue;\nforeach (var name in order) if (total[name] > bestv) { bestv = total[name]; best = name; }\nConsole.WriteLine(best);\n```",
+  "answer_code": "using System;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        var total = new Dictionary<string, int>();\n        var order = new List<string>();\n        for (int i = 0; i < n; i++) {\n            var p = Console.ReadLine().Split();\n            string name = p[0]; int sc = int.Parse(p[1]);\n            if (!total.ContainsKey(name)) { total[name] = 0; order.Add(name); }\n            total[name] += sc;\n        }\n        string best = null; int bestv = int.MinValue;\n        foreach (var name in order) if (total[name] > bestv) { bestv = total[name]; best = name; }\n        Console.WriteLine(best);\n    }\n}",
+  "test_cases": [
+    {"stdin": "3\nalice 50\nbob 30\nalice 40", "stdout": "alice"},
+    {"stdin": "2\nx 10\ny 20", "stdout": "y"},
+    {"stdin": "4\na 5\nb 5\na 1\nb 1", "stdout": "a"},
+    {"stdin": "1\nsolo 100", "stdout": "solo"}
+  ]
+}

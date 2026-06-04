@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 14,
+  "title": "偶数だけ抽出",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。偶数だけを、元の順番のまま空白区切りで出力してください。\n\n**入力例：**\n```\n6\n1 2 3 4 5 6\n```\n**出力例：** `2 4 6`",
+  "starter_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "LINQ の `Where` で条件に合う要素だけ取り出せます。\n\n```csharp\nConsole.WriteLine(string.Join(\" \", arr.Where(x => x % 2 == 0)));\n```",
+  "explanation": "## 解説\n\n`Where(条件)` は条件に合う要素だけの列を返します。偶数の条件 `x % 2 == 0` を渡し、`string.Join` で出力します（偶数が無ければ空行）。\n\n```csharp\nConsole.WriteLine(string.Join(\" \", arr.Where(x => x % 2 == 0)));\n```",
+  "answer_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        Console.WriteLine(string.Join(\" \", arr.Where(x => x % 2 == 0)));\n    }\n}",
+  "test_cases": [
+    {"stdin": "6\n1 2 3 4 5 6", "stdout": "2 4 6"},
+    {"stdin": "3\n1 3 5", "stdout": ""},
+    {"stdin": "4\n2 4 6 8", "stdout": "2 4 6 8"},
+    {"stdin": "5\n-2 -1 0 1 2", "stdout": "-2 0 2"}
+  ]
+}

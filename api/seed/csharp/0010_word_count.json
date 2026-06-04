@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 10,
+  "title": "単語数を数える",
+  "description": "スペース区切りの文が 1 行で与えられます。単語の個数を出力してください。\n\n**入力例：** `I love Csharp`\n**出力例：** `3`",
+  "starter_code": "using System;\n\nclass Program {\n    static void Main() {\n        string line = Console.ReadLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`Split` で空白ごとに分割します。空要素を除くと安全です。\n\n```csharp\nvar words = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);\nConsole.WriteLine(words.Length);\n```",
+  "explanation": "## 解説\n\n`Split` に `StringSplitOptions.RemoveEmptyEntries` を渡すと、連続した空白による空文字を除いて分割できます。配列の長さが単語数です。\n\n```csharp\nvar words = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);\nConsole.WriteLine(words.Length);\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static void Main() {\n        string line = Console.ReadLine();\n        var words = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);\n        Console.WriteLine(words.Length);\n    }\n}",
+  "test_cases": [
+    {"stdin": "I love Csharp", "stdout": "3"},
+    {"stdin": "Hello", "stdout": "1"},
+    {"stdin": "a b c d", "stdout": "4"},
+    {"stdin": "one two", "stdout": "2"}
+  ]
+}

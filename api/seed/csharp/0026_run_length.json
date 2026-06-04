@@ -1,0 +1,18 @@
+{
+  "language": "csharp",
+  "level": "advanced",
+  "order": 26,
+  "title": "ランレングス圧縮",
+  "description": "英小文字のみからなる文字列が与えられます。連続して同じ文字が並ぶ部分を「文字＋連続回数」にまとめて出力してください。\n\n**入力例：** `aaabbc`\n**出力例：** `a3b2c1`",
+  "starter_code": "using System;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "同じ文字が続く区間を見つけ、文字と長さを連結します。\n\n```csharp\nstring outp = \"\";\nint i = 0;\nwhile (i < s.Length) {\n    int j = i;\n    while (j < s.Length && s[j] == s[i]) j++;\n    outp += s[i];\n    outp += (j - i);\n    i = j;\n}\nConsole.WriteLine(outp);\n```",
+  "explanation": "## 解説\n\n位置 `i` から同じ文字が続く終わり `j` を探し、「文字＋(j-i)」を足して `i` を `j` に進めます。\n\n```csharp\nstring outp = \"\";\nint i = 0;\nwhile (i < s.Length) {\n    int j = i;\n    while (j < s.Length && s[j] == s[i]) j++;\n    outp += s[i];\n    outp += (j - i);\n    i = j;\n}\nConsole.WriteLine(outp);\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        string outp = \"\";\n        int i = 0;\n        while (i < s.Length) {\n            int j = i;\n            while (j < s.Length && s[j] == s[i]) j++;\n            outp += s[i];\n            outp += (j - i);\n            i = j;\n        }\n        Console.WriteLine(outp);\n    }\n}",
+  "test_cases": [
+    {"stdin": "aaabbc", "stdout": "a3b2c1"},
+    {"stdin": "abc", "stdout": "a1b1c1"},
+    {"stdin": "aaaa", "stdout": "a4"},
+    {"stdin": "wwwwaaadexxxxxx", "stdout": "w4a3d1e1x6"},
+    {"stdin": "z", "stdout": "z1"}
+  ]
+}

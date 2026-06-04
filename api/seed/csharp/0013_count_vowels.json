@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 13,
+  "title": "母音の数",
+  "description": "1 行の文字列（半角英小文字、空白なし）に含まれる母音（a, e, i, o, u）の個数を出力してください。\n\n**入力例：** `hello`\n**出力例：** `2`",
+  "starter_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "LINQ の `Count` に条件を渡せます。\n\n```csharp\nint count = s.Count(ch => \"aeiou\".IndexOf(ch) >= 0);\nConsole.WriteLine(count);\n```",
+  "explanation": "## 解説\n\n文字列は `IEnumerable<char>` なので、LINQ の `Count(条件)` で条件に合う文字を数えられます。母音集合 `\"aeiou\"` に含まれるかで判定します。\n\n```csharp\nint count = s.Count(ch => \"aeiou\".IndexOf(ch) >= 0);\nConsole.WriteLine(count);\n```",
+  "answer_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        int count = s.Count(ch => \"aeiou\".IndexOf(ch) >= 0);\n        Console.WriteLine(count);\n    }\n}",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "2"},
+    {"stdin": "aeiou", "stdout": "5"},
+    {"stdin": "xyz", "stdout": "0"},
+    {"stdin": "programming", "stdout": "3"}
+  ]
+}

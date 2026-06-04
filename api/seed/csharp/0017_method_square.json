@@ -1,0 +1,18 @@
+{
+  "language": "csharp",
+  "level": "intermediate",
+  "order": 17,
+  "title": "メソッドの定義（2乗）",
+  "description": "整数 N が与えられます。「受け取った整数の 2 乗を返すメソッド」を定義して使い、N の 2 乗を出力してください。\n\n**入力例：** `4`\n**出力例：** `16`",
+  "starter_code": "using System;\n\nclass Program {\n    // ここにメソッドを定義してください\n\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        // メソッドを呼び出して出力してください\n    }\n}\n",
+  "hint": "`static` メソッドを定義します。式形式でも書けます。\n\n```csharp\nstatic int Square(int x) => x * x;\n```\n\n呼び出しは `Square(n)` です。",
+  "explanation": "## 解説\n\n`static 戻り値の型 メソッド名(引数) => 式;` の形（式形式メンバー）で簡潔に定義できます。`Square(n)` で呼び出します。\n\n```csharp\nclass Program {\n    static int Square(int x) => x * x;\n\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        Console.WriteLine(Square(n));\n    }\n}\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static int Square(int x) => x * x;\n\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        Console.WriteLine(Square(n));\n    }\n}",
+  "test_cases": [
+    {"stdin": "4", "stdout": "16"},
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "9", "stdout": "81"},
+    {"stdin": "-3", "stdout": "9"},
+    {"stdin": "12", "stdout": "144"}
+  ]
+}

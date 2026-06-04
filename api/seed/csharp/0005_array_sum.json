@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 5,
+  "title": "配列の合計",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。合計を出力してください。\n\n**入力例：**\n```\n3\n10 20 30\n```\n**出力例：** `60`",
+  "starter_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "LINQ の `Sum()` で合計できます。\n\n```csharp\nConsole.WriteLine(arr.Sum());\n```",
+  "explanation": "## 解説\n\n`Split().Select(int.Parse).ToArray()` で整数配列にし、LINQ の `Sum()` で合計します。\n\n```csharp\nConsole.WriteLine(arr.Sum());\n```",
+  "answer_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        int[] arr = Console.ReadLine().Split().Select(int.Parse).ToArray();\n        Console.WriteLine(arr.Sum());\n    }\n}",
+  "test_cases": [
+    {"stdin": "3\n10 20 30", "stdout": "60"},
+    {"stdin": "5\n1 2 3 4 5", "stdout": "15"},
+    {"stdin": "1\n100", "stdout": "100"},
+    {"stdin": "4\n-1 -2 -3 -4", "stdout": "-10"}
+  ]
+}

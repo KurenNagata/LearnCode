@@ -1,0 +1,18 @@
+{
+  "language": "csharp",
+  "level": "intermediate",
+  "order": 20,
+  "title": "最大公約数",
+  "description": "空白区切りで 2 つの正の整数 a, b が与えられます。最大公約数（GCD）をユークリッドの互除法で求めて出力してください。\n\n**入力例：** `12 18`\n**出力例：** `6`",
+  "starter_code": "using System;\n\nclass Program {\n    static void Main() {\n        var p = Console.ReadLine().Split();\n        int a = int.Parse(p[0]);\n        int b = int.Parse(p[1]);\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`b` が 0 になるまで、`a` を `b`、`b` を `a % b` に置き換えます。\n\n```csharp\nwhile (b != 0) { int t = a % b; a = b; b = t; }\nConsole.WriteLine(a);\n```",
+  "explanation": "## 解説\n\nユークリッドの互除法は「a と b の GCD は b と a%b の GCD に等しい」を使います。`b` が 0 になったときの `a` が答えです。\n\n```csharp\nwhile (b != 0) { int t = a % b; a = b; b = t; }\nConsole.WriteLine(a);\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static void Main() {\n        var p = Console.ReadLine().Split();\n        int a = int.Parse(p[0]);\n        int b = int.Parse(p[1]);\n        while (b != 0) { int t = a % b; a = b; b = t; }\n        Console.WriteLine(a);\n    }\n}",
+  "test_cases": [
+    {"stdin": "12 18", "stdout": "6"},
+    {"stdin": "17 5", "stdout": "1"},
+    {"stdin": "100 80", "stdout": "20"},
+    {"stdin": "7 7", "stdout": "7"},
+    {"stdin": "48 36", "stdout": "12"}
+  ]
+}

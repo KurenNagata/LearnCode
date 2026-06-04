@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 9,
+  "title": "文字列の長さ",
+  "description": "1 行の文字列（半角、空白なし）の文字数を出力してください。\n\n**入力例：** `Hello`\n**出力例：** `5`",
+  "starter_code": "using System;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`s.Length` が文字数です。\n\n```csharp\nConsole.WriteLine(s.Length);\n```",
+  "explanation": "## 解説\n\n`string` の `.Length` プロパティは文字数を返します。\n\n```csharp\nConsole.WriteLine(s.Length);\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        Console.WriteLine(s.Length);\n    }\n}",
+  "test_cases": [
+    {"stdin": "Hello", "stdout": "5"},
+    {"stdin": "abcdef", "stdout": "6"},
+    {"stdin": "programming", "stdout": "11"},
+    {"stdin": "a", "stdout": "1"}
+  ]
+}

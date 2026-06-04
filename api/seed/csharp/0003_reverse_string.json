@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 3,
+  "title": "文字列の反転",
+  "description": "1 行の文字列（半角、空白なし）を逆順にして出力してください。\n\n**入力例：** `abc`\n**出力例：** `cba`",
+  "starter_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "LINQ の `Reverse()` で文字を逆順にし、`new string(...)` で文字列に戻します。\n\n```csharp\nConsole.WriteLine(new string(s.Reverse().ToArray()));\n```",
+  "explanation": "## 解説\n\n文字列は `IEnumerable<char>` として扱えるので、LINQ の `Reverse()` で逆順にし、`char[]` から `new string(...)` で文字列に戻します。\n\n```csharp\nConsole.WriteLine(new string(s.Reverse().ToArray()));\n```",
+  "answer_code": "using System;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        Console.WriteLine(new string(s.Reverse().ToArray()));\n    }\n}",
+  "test_cases": [
+    {"stdin": "abc", "stdout": "cba"},
+    {"stdin": "Hello", "stdout": "olleH"},
+    {"stdin": "12345", "stdout": "54321"},
+    {"stdin": "A", "stdout": "A"}
+  ]
+}

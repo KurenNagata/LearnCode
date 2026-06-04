@@ -1,0 +1,17 @@
+{
+  "language": "csharp",
+  "level": "beginner",
+  "order": 6,
+  "title": "偶数か奇数か",
+  "description": "整数が 1 つ与えられます。偶数なら `even`、奇数なら `odd` を出力してください。\n\n**入力例：** `4`\n**出力例：** `even`",
+  "starter_code": "using System;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`n % 2` が 0 なら偶数です。\n\n```csharp\nConsole.WriteLine(n % 2 == 0 ? \"even\" : \"odd\");\n```",
+  "explanation": "## 解説\n\n`n % 2 == 0` で偶数を判定し、三項演算子で出力する文字列を選びます。\n\n```csharp\nConsole.WriteLine(n % 2 == 0 ? \"even\" : \"odd\");\n```",
+  "answer_code": "using System;\n\nclass Program {\n    static void Main() {\n        int n = int.Parse(Console.ReadLine());\n        Console.WriteLine(n % 2 == 0 ? \"even\" : \"odd\");\n    }\n}",
+  "test_cases": [
+    {"stdin": "4", "stdout": "even"},
+    {"stdin": "7", "stdout": "odd"},
+    {"stdin": "0", "stdout": "even"},
+    {"stdin": "-3", "stdout": "odd"}
+  ]
+}

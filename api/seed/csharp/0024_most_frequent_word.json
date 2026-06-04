@@ -1,0 +1,18 @@
+{
+  "language": "csharp",
+  "level": "intermediate",
+  "order": 24,
+  "title": "最頻出の単語",
+  "description": "スペース区切りの単語列が 1 行で与えられます。最も多く出現する単語を出力してください。同数のときは **最初に出現した** 単語を出力します。\n\n**入力例：** `apple banana apple`\n**出力例：** `apple`",
+  "starter_code": "using System;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        var words = Console.ReadLine().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`Dictionary` で回数を数え、出現順を別の `List` で覚えておくと、同数のとき最初の単語を選べます。\n\n```csharp\nvar count = new Dictionary<string, int>();\nvar order = new List<string>();\nforeach (var w in words) {\n    if (!count.ContainsKey(w)) { count[w] = 0; order.Add(w); }\n    count[w]++;\n}\nstring best = null; int bc = -1;\nforeach (var w in order) if (count[w] > bc) { bc = count[w]; best = w; }\nConsole.WriteLine(best);\n```",
+  "explanation": "## 解説\n\n`Dictionary` で単語ごとの回数を数え、初出順を `List` に記録します。最大を探すとき `>` で更新すると、同数の場合は先に現れた単語が残ります。\n\n```csharp\nvar count = new Dictionary<string, int>();\nvar order = new List<string>();\nforeach (var w in words) {\n    if (!count.ContainsKey(w)) { count[w] = 0; order.Add(w); }\n    count[w]++;\n}\nstring best = null; int bc = -1;\nforeach (var w in order) if (count[w] > bc) { bc = count[w]; best = w; }\nConsole.WriteLine(best);\n```",
+  "answer_code": "using System;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        var words = Console.ReadLine().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);\n        var count = new Dictionary<string, int>();\n        var order = new List<string>();\n        foreach (var w in words) {\n            if (!count.ContainsKey(w)) { count[w] = 0; order.Add(w); }\n            count[w]++;\n        }\n        string best = null; int bc = -1;\n        foreach (var w in order) if (count[w] > bc) { bc = count[w]; best = w; }\n        Console.WriteLine(best);\n    }\n}",
+  "test_cases": [
+    {"stdin": "apple banana apple", "stdout": "apple"},
+    {"stdin": "a b b c b", "stdout": "b"},
+    {"stdin": "one two two one", "stdout": "one"},
+    {"stdin": "hello", "stdout": "hello"},
+    {"stdin": "x y z x y x", "stdout": "x"}
+  ]
+}
