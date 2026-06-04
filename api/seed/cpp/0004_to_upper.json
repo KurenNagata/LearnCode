@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 4,
+  "title": "大文字に変換",
+  "description": "1 行の文字列（半角英字、空白なし）をすべて大文字にして出力してください。\n\n**入力例：** `hello`\n**出力例：** `HELLO`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "各文字を `toupper` で変換します。\n\n```cpp\nfor (char &ch : s) ch = toupper(ch);\ncout << s << endl;\n```",
+  "explanation": "## 解説\n\n範囲 for で文字を参照 `char &ch` で取り出し、`toupper` で大文字にします。参照なので元の文字列が書き換わります。\n\n```cpp\nfor (char &ch : s) ch = toupper(ch);\ncout << s << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    for (char &ch : s) ch = toupper(ch);\n    cout << s << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "HELLO"},
+    {"stdin": "Cpp", "stdout": "CPP"},
+    {"stdin": "abcXYZ", "stdout": "ABCXYZ"},
+    {"stdin": "a", "stdout": "A"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "language": "cpp",
+  "level": "intermediate",
+  "order": 23,
+  "title": "回文判定",
+  "description": "文字列（半角英数字、空白なし）が与えられます。前から読んでも後ろから読んでも同じ（回文）なら `Yes`、そうでなければ `No` を出力してください。\n\n**入力例：** `level`\n**出力例：** `Yes`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "反転した文字列と比べます。\n\n```cpp\nstring r = s;\nreverse(r.begin(), r.end());\ncout << (s == r ? \"Yes\" : \"No\") << endl;\n```",
+  "explanation": "## 解説\n\nコピーした文字列を `reverse` で反転し、元と一致すれば回文です。\n\n```cpp\nstring r = s;\nreverse(r.begin(), r.end());\ncout << (s == r ? \"Yes\" : \"No\") << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    string r = s;\n    reverse(r.begin(), r.end());\n    cout << (s == r ? \"Yes\" : \"No\") << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "level", "stdout": "Yes"},
+    {"stdin": "hello", "stdout": "No"},
+    {"stdin": "abcba", "stdout": "Yes"},
+    {"stdin": "a", "stdout": "Yes"},
+    {"stdin": "ab", "stdout": "No"}
+  ]
+}

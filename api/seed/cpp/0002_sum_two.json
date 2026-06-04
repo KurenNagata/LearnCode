@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 2,
+  "title": "2つの整数の和",
+  "description": "空白区切りで 2 つの整数が与えられます。その和を出力してください。\n\n**入力例：** `3 5`\n**出力例：** `8`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int a, b;\n    cin >> a >> b;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`cin >> a >> b` で読み込み、`cout << a + b` で出力します。",
+  "explanation": "## 解説\n\n`cin >> a >> b` は空白や改行で区切って 2 つの整数を読み込みます。和を出力します。\n\n```cpp\ncout << a + b << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int a, b;\n    cin >> a >> b;\n    cout << a + b << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "3 5", "stdout": "8"},
+    {"stdin": "10 20", "stdout": "30"},
+    {"stdin": "-4 4", "stdout": "0"},
+    {"stdin": "100 250", "stdout": "350"}
+  ]
+}

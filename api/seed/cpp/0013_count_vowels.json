@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 13,
+  "title": "母音の数",
+  "description": "1 行の文字列（半角英小文字、空白なし）に含まれる母音（a, e, i, o, u）の個数を出力してください。\n\n**入力例：** `hello`\n**出力例：** `2`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "母音をまとめた文字列に含まれるかで判定します。\n\n```cpp\nstring vowels = \"aeiou\";\nint count = 0;\nfor (char ch : s) if (vowels.find(ch) != string::npos) count++;\ncout << count << endl;\n```",
+  "explanation": "## 解説\n\n`string::find` は見つからないと `string::npos` を返します。母音集合 `\"aeiou\"` に含まれる文字を数えます。\n\n```cpp\nstring vowels = \"aeiou\";\nint count = 0;\nfor (char ch : s) if (vowels.find(ch) != string::npos) count++;\ncout << count << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    string vowels = \"aeiou\";\n    int count = 0;\n    for (char ch : s) if (vowels.find(ch) != string::npos) count++;\n    cout << count << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "2"},
+    {"stdin": "aeiou", "stdout": "5"},
+    {"stdin": "xyz", "stdout": "0"},
+    {"stdin": "programming", "stdout": "3"}
+  ]
+}

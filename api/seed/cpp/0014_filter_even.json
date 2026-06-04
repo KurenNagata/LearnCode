@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 14,
+  "title": "偶数だけ抽出",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。偶数だけを、元の順番のまま空白区切りで出力してください。\n\n**入力例：**\n```\n6\n1 2 3 4 5 6\n```\n**出力例：** `2 4 6`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    vector<int> v(n);\n    for (int i = 0; i < n; i++) cin >> v[i];\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "偶数のときだけ出力します。値の間にだけ空白を入れるため、最初に出したかを管理します。\n\n```cpp\nbool first = true;\nfor (int x : v) if (x % 2 == 0) {\n    if (!first) cout << \" \";\n    cout << x;\n    first = false;\n}\ncout << \"\\n\";\n```",
+  "explanation": "## 解説\n\n各要素を見て `x % 2 == 0` のものだけ出力します。`first` フラグで値の間にだけ空白を入れます（偶数が無いときは空行になります）。\n\n```cpp\nbool first = true;\nfor (int x : v) if (x % 2 == 0) {\n    if (!first) cout << \" \";\n    cout << x;\n    first = false;\n}\ncout << \"\\n\";\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    vector<int> v(n);\n    for (int i = 0; i < n; i++) cin >> v[i];\n    bool first = true;\n    for (int x : v) if (x % 2 == 0) {\n        if (!first) cout << \" \";\n        cout << x;\n        first = false;\n    }\n    cout << \"\\n\";\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "6\n1 2 3 4 5 6", "stdout": "2 4 6"},
+    {"stdin": "3\n1 3 5", "stdout": ""},
+    {"stdin": "4\n2 4 6 8", "stdout": "2 4 6 8"},
+    {"stdin": "5\n-2 -1 0 1 2", "stdout": "-2 0 2"}
+  ]
+}

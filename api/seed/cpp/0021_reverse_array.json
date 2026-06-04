@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "intermediate",
+  "order": 21,
+  "title": "配列の反転",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。逆順にして空白区切りで出力してください。\n\n**入力例：**\n```\n3\n1 2 3\n```\n**出力例：** `3 2 1`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    vector<int> v(n);\n    for (int i = 0; i < n; i++) cin >> v[i];\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`reverse(v.begin(), v.end())` で逆順にできます。\n\n```cpp\nreverse(v.begin(), v.end());\nfor (int i = 0; i < n; i++) { if (i) cout << \" \"; cout << v[i]; }\ncout << \"\\n\";\n```",
+  "explanation": "## 解説\n\n`reverse` で配列を逆順にし、空白区切りで出力します。\n\n```cpp\nreverse(v.begin(), v.end());\nfor (int i = 0; i < n; i++) { if (i) cout << \" \"; cout << v[i]; }\ncout << \"\\n\";\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    vector<int> v(n);\n    for (int i = 0; i < n; i++) cin >> v[i];\n    reverse(v.begin(), v.end());\n    for (int i = 0; i < n; i++) { if (i) cout << \" \"; cout << v[i]; }\n    cout << \"\\n\";\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "3\n1 2 3", "stdout": "3 2 1"},
+    {"stdin": "5\n10 20 30 40 50", "stdout": "50 40 30 20 10"},
+    {"stdin": "1\n7", "stdout": "7"},
+    {"stdin": "4\n-1 -2 -3 -4", "stdout": "-4 -3 -2 -1"}
+  ]
+}

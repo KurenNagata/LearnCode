@@ -1,0 +1,18 @@
+{
+  "language": "cpp",
+  "level": "intermediate",
+  "order": 18,
+  "title": "素数判定",
+  "description": "2 以上の整数 N が与えられます。N が素数なら `prime`、そうでなければ `not prime` を出力してください。\n\n**入力例：** `7`\n**出力例：** `prime`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "2 から √N まで割り切れるか調べます。`i * i <= n` で表現します。\n\n```cpp\nbool isPrime = (n >= 2);\nfor (int i = 2; (long long)i * i <= n; i++) if (n % i == 0) { isPrime = false; break; }\ncout << (isPrime ? \"prime\" : \"not prime\") << endl;\n```",
+  "explanation": "## 解説\n\n2 から √N までの数で割り切れるか調べ、1 つでも割り切れたら素数ではありません。\n\n```cpp\nbool isPrime = (n >= 2);\nfor (int i = 2; (long long)i * i <= n; i++) if (n % i == 0) { isPrime = false; break; }\ncout << (isPrime ? \"prime\" : \"not prime\") << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    bool isPrime = (n >= 2);\n    for (int i = 2; (long long)i * i <= n; i++) if (n % i == 0) { isPrime = false; break; }\n    cout << (isPrime ? \"prime\" : \"not prime\") << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "7", "stdout": "prime"},
+    {"stdin": "2", "stdout": "prime"},
+    {"stdin": "4", "stdout": "not prime"},
+    {"stdin": "9", "stdout": "not prime"},
+    {"stdin": "17", "stdout": "prime"}
+  ]
+}

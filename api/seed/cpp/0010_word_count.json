@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 10,
+  "title": "単語数を数える",
+  "description": "スペース区切りの文が 1 行で与えられます。単語の個数を出力してください。\n\n**入力例：** `I love Cpp`\n**出力例：** `3`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`cin >> w` は空白区切りで 1 単語ずつ読みます。読めなくなるまで数えます。\n\n```cpp\nstring w;\nint count = 0;\nwhile (cin >> w) count++;\ncout << count << endl;\n```",
+  "explanation": "## 解説\n\n`cin >> w` は空白・改行を区切りに 1 単語ずつ読み込みます。入力が尽きるまでループして数えれば単語数になります。\n\n```cpp\nstring w;\nint count = 0;\nwhile (cin >> w) count++;\ncout << count << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string w;\n    int count = 0;\n    while (cin >> w) count++;\n    cout << count << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "I love Cpp", "stdout": "3"},
+    {"stdin": "Hello", "stdout": "1"},
+    {"stdin": "a b c d", "stdout": "4"},
+    {"stdin": "one two", "stdout": "2"}
+  ]
+}

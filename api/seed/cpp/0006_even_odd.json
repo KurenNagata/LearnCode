@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 6,
+  "title": "偶数か奇数か",
+  "description": "整数が 1 つ与えられます。偶数なら `even`、奇数なら `odd` を出力してください。\n\n**入力例：** `4`\n**出力例：** `even`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`n % 2` が 0 なら偶数です。\n\n```cpp\ncout << (n % 2 == 0 ? \"even\" : \"odd\") << endl;\n```",
+  "explanation": "## 解説\n\n`n % 2 == 0` で偶数を判定します。三項演算子で出力する文字列を選べます。\n\n```cpp\ncout << (n % 2 == 0 ? \"even\" : \"odd\") << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    cout << (n % 2 == 0 ? \"even\" : \"odd\") << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "4", "stdout": "even"},
+    {"stdin": "7", "stdout": "odd"},
+    {"stdin": "0", "stdout": "even"},
+    {"stdin": "-3", "stdout": "odd"}
+  ]
+}

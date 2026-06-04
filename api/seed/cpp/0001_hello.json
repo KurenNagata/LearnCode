@@ -1,0 +1,14 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 1,
+  "title": "Hello, World!",
+  "description": "C++ で画面に以下の文字列を **そのまま** 出力してください。\n\n**出力：**\n```\nHello, World!\n```",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`cout` で出力します。改行は `endl` または `\"\\n\"`。\n\n```cpp\ncout << \"文字列\" << endl;\n```",
+  "explanation": "## 解説\n\nC++ では `std::cout` に `<<` で値を流して出力します。`endl` で改行します。\n\n```cpp\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, World!\" << endl;\n    return 0;\n}\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, World!\" << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "", "stdout": "Hello, World!"}
+  ]
+}

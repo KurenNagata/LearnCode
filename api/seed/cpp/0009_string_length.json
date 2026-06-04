@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 9,
+  "title": "文字列の長さ",
+  "description": "1 行の文字列（半角、空白なし）の文字数を出力してください。\n\n**入力例：** `Hello`\n**出力例：** `5`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`s.size()` が文字数です。\n\n```cpp\ncout << s.size() << endl;\n```",
+  "explanation": "## 解説\n\n`string` の `.size()`（または `.length()`）は文字数を返します。\n\n```cpp\ncout << s.size() << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    cout << s.size() << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "Hello", "stdout": "5"},
+    {"stdin": "abcdef", "stdout": "6"},
+    {"stdin": "programming", "stdout": "11"},
+    {"stdin": "a", "stdout": "1"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "language": "cpp",
+  "level": "beginner",
+  "order": 3,
+  "title": "文字列の反転",
+  "description": "1 行の文字列（半角、空白なし）を逆順にして出力してください。\n\n**入力例：** `abc`\n**出力例：** `cba`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`reverse(s.begin(), s.end())` で文字列を逆順にできます。\n\n```cpp\nreverse(s.begin(), s.end());\ncout << s << endl;\n```",
+  "explanation": "## 解説\n\n`<algorithm>` の `reverse` に文字列の先頭・末尾のイテレータを渡すと、その場で逆順になります。\n\n```cpp\nreverse(s.begin(), s.end());\ncout << s << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    string s;\n    cin >> s;\n    reverse(s.begin(), s.end());\n    cout << s << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "abc", "stdout": "cba"},
+    {"stdin": "Hello", "stdout": "olleH"},
+    {"stdin": "12345", "stdout": "54321"},
+    {"stdin": "A", "stdout": "A"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "language": "cpp",
+  "level": "advanced",
+  "order": 26,
+  "title": "素因数分解",
+  "description": "2 以上の整数 N が与えられます。素因数分解し、素因数を小さい順に空白区切りで出力してください。同じ素因数は出現回数だけ繰り返します。\n\n**入力例：** `12`\n**出力例：** `2 2 3`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "2 から順に割り切れる間は割り続け、その都度出力します。最後に残った N が 1 より大きければそれも素因数です。\n\n```cpp\nbool first = true;\nfor (int d = 2; (long long)d * d <= n; d++)\n    while (n % d == 0) { if (!first) cout << \" \"; cout << d; first = false; n /= d; }\nif (n > 1) { if (!first) cout << \" \"; cout << n; }\ncout << \"\\n\";\n```",
+  "explanation": "## 解説\n\n小さい数 `d` から割り切れる回数だけ `d` を出力します。`d * d <= n` まで調べ、最後に残った N が 1 より大きければ、それ自体が（最大の）素因数です。\n\n```cpp\nbool first = true;\nfor (int d = 2; (long long)d * d <= n; d++)\n    while (n % d == 0) { if (!first) cout << \" \"; cout << d; first = false; n /= d; }\nif (n > 1) { if (!first) cout << \" \"; cout << n; }\ncout << \"\\n\";\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    bool first = true;\n    for (int d = 2; (long long)d * d <= n; d++)\n        while (n % d == 0) { if (!first) cout << \" \"; cout << d; first = false; n /= d; }\n    if (n > 1) { if (!first) cout << \" \"; cout << n; }\n    cout << \"\\n\";\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "12", "stdout": "2 2 3"},
+    {"stdin": "2", "stdout": "2"},
+    {"stdin": "17", "stdout": "17"},
+    {"stdin": "60", "stdout": "2 2 3 5"},
+    {"stdin": "100", "stdout": "2 2 5 5"}
+  ]
+}

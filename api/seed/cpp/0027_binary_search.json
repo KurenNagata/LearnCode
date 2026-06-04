@@ -1,0 +1,18 @@
+{
+  "language": "cpp",
+  "level": "advanced",
+  "order": 27,
+  "title": "二分探索",
+  "description": "1 行目に個数 N、2 行目に **昇順に並んだ** N 個の整数、3 行目に探す値 target が与えられます。target が配列の何番目か（0 から数えた添字）を出力してください。見つからなければ `-1` を出力します。\n\n**入力例：**\n```\n5\n1 3 5 7 9\n5\n```\n**出力例：** `2`",
+  "starter_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    vector<int> v(n);\n    for (int i = 0; i < n; i++) cin >> v[i];\n    int target;\n    cin >> target;\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "中央の要素と target を比べ、探す範囲を半分に絞ります。\n\n```cpp\nint lo = 0, hi = n - 1, ans = -1;\nwhile (lo <= hi) {\n    int mid = (lo + hi) / 2;\n    if (v[mid] == target) { ans = mid; break; }\n    else if (v[mid] < target) lo = mid + 1;\n    else hi = mid - 1;\n}\ncout << ans << endl;\n```",
+  "explanation": "## 解説\n\n二分探索は、ソート済み配列の中央と比較して探索範囲を毎回半分にします。一致したらその添字、最後まで見つからなければ -1 を返します。\n\n```cpp\nint lo = 0, hi = n - 1, ans = -1;\nwhile (lo <= hi) {\n    int mid = (lo + hi) / 2;\n    if (v[mid] == target) { ans = mid; break; }\n    else if (v[mid] < target) lo = mid + 1;\n    else hi = mid - 1;\n}\ncout << ans << endl;\n```",
+  "answer_code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    int n;\n    cin >> n;\n    vector<int> v(n);\n    for (int i = 0; i < n; i++) cin >> v[i];\n    int target;\n    cin >> target;\n    int lo = 0, hi = n - 1, ans = -1;\n    while (lo <= hi) {\n        int mid = (lo + hi) / 2;\n        if (v[mid] == target) { ans = mid; break; }\n        else if (v[mid] < target) lo = mid + 1;\n        else hi = mid - 1;\n    }\n    cout << ans << endl;\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "5\n1 3 5 7 9\n5", "stdout": "2"},
+    {"stdin": "5\n1 3 5 7 9\n1", "stdout": "0"},
+    {"stdin": "5\n1 3 5 7 9\n9", "stdout": "4"},
+    {"stdin": "5\n1 3 5 7 9\n4", "stdout": "-1"},
+    {"stdin": "1\n10\n10", "stdout": "0"}
+  ]
+}
