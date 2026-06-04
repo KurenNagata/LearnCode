@@ -1,0 +1,17 @@
+{
+  "language": "javascript",
+  "level": "intermediate",
+  "order": 19,
+  "title": "JSON から値を取り出す",
+  "description": "1 行の JSON オブジェクト（`name` と `score` を持つ）が与えられます。`score` の値を出力してください。\n\n**入力例：** `{\"name\":\"Alice\",\"score\":80}`\n**出力例：** `80`",
+  "starter_code": "const obj = JSON.parse(require('fs').readFileSync(0, 'utf8'));\n// ここにコードを書いてください\n",
+  "hint": "`JSON.parse` でオブジェクトにし、`.score` で値を取り出します。\n\n```js\nconsole.log(obj.score);\n```",
+  "explanation": "## 解説\n\n`JSON.parse` は JSON 文字列を JavaScript のオブジェクトに変換します。`obj.score` でプロパティの値が得られます。\n\n```js\nconsole.log(obj.score);\n```",
+  "answer_code": "const obj = JSON.parse(require('fs').readFileSync(0, 'utf8'));\nconsole.log(obj.score);",
+  "test_cases": [
+    {"stdin": "{\"name\":\"Alice\",\"score\":80}", "stdout": "80"},
+    {"stdin": "{\"name\":\"Bob\",\"score\":95}", "stdout": "95"},
+    {"stdin": "{\"name\":\"X\",\"score\":0}", "stdout": "0"},
+    {"stdin": "{\"score\":42,\"name\":\"Y\"}", "stdout": "42"}
+  ]
+}

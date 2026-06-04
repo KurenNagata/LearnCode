@@ -1,0 +1,17 @@
+{
+  "language": "javascript",
+  "level": "beginner",
+  "order": 9,
+  "title": "文字列の長さ",
+  "description": "1 行の文字列（半角、空白なし）の文字数を出力してください。\n\n**入力例：** `Hello`\n**出力例：** `5`",
+  "starter_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\n// ここにコードを書いてください\n",
+  "hint": "文字列の `.length` プロパティが文字数です。\n\n```js\nconsole.log(s.length);\n```",
+  "explanation": "## 解説\n\n文字列の `.length` は文字数を返します。\n\n```js\nconsole.log(s.length);\n```",
+  "answer_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\nconsole.log(s.length);",
+  "test_cases": [
+    {"stdin": "Hello", "stdout": "5"},
+    {"stdin": "JavaScript", "stdout": "10"},
+    {"stdin": "abcdef", "stdout": "6"},
+    {"stdin": "a", "stdout": "1"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "language": "javascript",
+  "level": "intermediate",
+  "order": 23,
+  "title": "アナグラム判定",
+  "description": "2 つの文字列（半角英小文字、空白なし）が 1 行ずつ与えられます。文字を並べ替えると一致する（アナグラム）なら `Yes`、そうでなければ `No` を出力してください。\n\n**入力例：**\n```\nlisten\nsilent\n```\n**出力例：** `Yes`",
+  "starter_code": "const [s, t] = require('fs').readFileSync(0, 'utf8').split('\\n');\n// ここにコードを書いてください\n",
+  "hint": "各文字列の文字を並べ替えて比べます。\n\n```js\nconst norm = x => x.trim().split('').sort().join('');\nconsole.log(norm(s) === norm(t) ? \"Yes\" : \"No\");\n```",
+  "explanation": "## 解説\n\nアナグラムは「同じ文字を同じ数だけ使う」ことです。両方をソートして同じ並びになれば一致します。\n\n```js\nconst norm = x => x.trim().split('').sort().join('');\nconsole.log(norm(s) === norm(t) ? \"Yes\" : \"No\");\n```",
+  "answer_code": "const [s, t] = require('fs').readFileSync(0, 'utf8').split('\\n');\nconst norm = x => x.trim().split('').sort().join('');\nconsole.log(norm(s) === norm(t) ? \"Yes\" : \"No\");",
+  "test_cases": [
+    {"stdin": "listen\nsilent", "stdout": "Yes"},
+    {"stdin": "hello\nworld", "stdout": "No"},
+    {"stdin": "abc\ncba", "stdout": "Yes"},
+    {"stdin": "aab\nabb", "stdout": "No"},
+    {"stdin": "a\na", "stdout": "Yes"}
+  ]
+}

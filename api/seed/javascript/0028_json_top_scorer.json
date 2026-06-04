@@ -1,0 +1,17 @@
+{
+  "language": "javascript",
+  "level": "advanced",
+  "order": 28,
+  "title": "JSON で最高得点者",
+  "description": "1 行の JSON 配列が与えられます。各要素は `name` と `score` を持つオブジェクトです。`score` が最も高い人の `name` を出力してください。同点のときは **先に現れた** 人を出力します。\n\n**入力例：**\n```\n[{\"name\":\"Alice\",\"score\":80},{\"name\":\"Bob\",\"score\":95},{\"name\":\"Carol\",\"score\":90}]\n```\n**出力例：** `Bob`",
+  "starter_code": "const people = JSON.parse(require('fs').readFileSync(0, 'utf8'));\n// ここにコードを書いてください\n",
+  "hint": "先頭を仮の最高として、`score` がより大きい人で更新します。`>` を使うと同点のとき先頭側が残ります。\n\n```js\nlet best = people[0];\nfor (const p of people) if (p.score > best.score) best = p;\nconsole.log(best.name);\n```",
+  "explanation": "## 解説\n\n`JSON.parse` でオブジェクトの配列にし、最高得点者を探します。`>`（より大きい）で更新すると、同点のときは先に現れた人が残ります。\n\n```js\nlet best = people[0];\nfor (const p of people) if (p.score > best.score) best = p;\nconsole.log(best.name);\n```",
+  "answer_code": "const people = JSON.parse(require('fs').readFileSync(0, 'utf8'));\nlet best = people[0];\nfor (const p of people) if (p.score > best.score) best = p;\nconsole.log(best.name);",
+  "test_cases": [
+    {"stdin": "[{\"name\":\"Alice\",\"score\":80},{\"name\":\"Bob\",\"score\":95},{\"name\":\"Carol\",\"score\":90}]", "stdout": "Bob"},
+    {"stdin": "[{\"name\":\"X\",\"score\":50}]", "stdout": "X"},
+    {"stdin": "[{\"name\":\"A\",\"score\":70},{\"name\":\"B\",\"score\":70}]", "stdout": "A"},
+    {"stdin": "[{\"name\":\"P\",\"score\":-5},{\"name\":\"Q\",\"score\":-2}]", "stdout": "Q"}
+  ]
+}

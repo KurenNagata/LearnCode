@@ -1,0 +1,18 @@
+{
+  "language": "javascript",
+  "level": "intermediate",
+  "order": 24,
+  "title": "回文判定",
+  "description": "文字列（半角英数字、空白なし）が与えられます。前から読んでも後ろから読んでも同じ（回文）なら `Yes`、そうでなければ `No` を出力してください。\n\n**入力例：** `level`\n**出力例：** `Yes`",
+  "starter_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\n// ここにコードを書いてください\n",
+  "hint": "反転した文字列と元の文字列を比べます。\n\n```js\nconst rev = s.split('').reverse().join('');\nconsole.log(s === rev ? \"Yes\" : \"No\");\n```",
+  "explanation": "## 解説\n\n文字列を反転して元と一致すれば回文です。\n\n```js\nconst rev = s.split('').reverse().join('');\nconsole.log(s === rev ? \"Yes\" : \"No\");\n```",
+  "answer_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\nconst rev = s.split('').reverse().join('');\nconsole.log(s === rev ? \"Yes\" : \"No\");",
+  "test_cases": [
+    {"stdin": "level", "stdout": "Yes"},
+    {"stdin": "hello", "stdout": "No"},
+    {"stdin": "abcba", "stdout": "Yes"},
+    {"stdin": "a", "stdout": "Yes"},
+    {"stdin": "ab", "stdout": "No"}
+  ]
+}

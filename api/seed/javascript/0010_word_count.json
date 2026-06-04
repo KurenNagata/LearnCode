@@ -1,0 +1,17 @@
+{
+  "language": "javascript",
+  "level": "beginner",
+  "order": 10,
+  "title": "単語数を数える",
+  "description": "スペース区切りの文が 1 行で与えられます。単語の個数を出力してください。\n\n**入力例：** `I love JavaScript`\n**出力例：** `3`",
+  "starter_code": "const line = require('fs').readFileSync(0, 'utf8').trim();\n// ここにコードを書いてください\n",
+  "hint": "`split(/\\s+/)` で空白ごとに分割すると、配列の長さが単語数です。\n\n```js\nconsole.log(line.split(/\\s+/).length);\n```",
+  "explanation": "## 解説\n\n`trim()` で前後の空白を除いてから `split(/\\s+/)`（1 個以上の空白で分割）すると、単語数を正しく数えられます。\n\n```js\nconsole.log(line.split(/\\s+/).length);\n```",
+  "answer_code": "const line = require('fs').readFileSync(0, 'utf8').trim();\nconsole.log(line.split(/\\s+/).length);",
+  "test_cases": [
+    {"stdin": "I love JavaScript", "stdout": "3"},
+    {"stdin": "Hello", "stdout": "1"},
+    {"stdin": "a b c d", "stdout": "4"},
+    {"stdin": "one two", "stdout": "2"}
+  ]
+}

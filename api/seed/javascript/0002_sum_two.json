@@ -1,0 +1,17 @@
+{
+  "language": "javascript",
+  "level": "beginner",
+  "order": 2,
+  "title": "2つの整数の和",
+  "description": "空白区切りで 2 つの整数が 1 行で与えられます。その和を出力してください。\n\n**入力例：** `3 5`\n**出力例：** `8`",
+  "starter_code": "const [a, b] = require('fs').readFileSync(0, 'utf8').trim().split(/\\s+/).map(Number);\n// ここにコードを書いてください\n",
+  "hint": "`console.log(a + b)` で和を出力します。",
+  "explanation": "## 解説\n\n標準入力を読み、空白で分割して数値に変換します。あとは `a + b` を出力するだけです。\n\n```js\nconst [a, b] = require('fs').readFileSync(0, 'utf8').trim().split(/\\s+/).map(Number);\nconsole.log(a + b);\n```",
+  "answer_code": "const [a, b] = require('fs').readFileSync(0, 'utf8').trim().split(/\\s+/).map(Number);\nconsole.log(a + b);",
+  "test_cases": [
+    {"stdin": "3 5", "stdout": "8"},
+    {"stdin": "10 20", "stdout": "30"},
+    {"stdin": "-4 4", "stdout": "0"},
+    {"stdin": "100 250", "stdout": "350"}
+  ]
+}

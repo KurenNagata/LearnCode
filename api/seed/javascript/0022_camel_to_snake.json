@@ -1,0 +1,18 @@
+{
+  "language": "javascript",
+  "level": "intermediate",
+  "order": 22,
+  "title": "キャメルケースをスネークケースに",
+  "description": "キャメルケースの文字列（先頭は小文字、単語境界が大文字。半角英字、空白なし）をスネークケースに変換して出力してください。大文字は「`_` ＋ 小文字」に置き換えます。\n\n**入力例：** `helloWorld`\n**出力例：** `hello_world`",
+  "starter_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\n// ここにコードを書いてください\n",
+  "hint": "`replace` の第 2 引数に関数を渡すと、マッチした大文字を変換できます。\n\n```js\nconsole.log(s.replace(/[A-Z]/g, c => '_' + c.toLowerCase()));\n```",
+  "explanation": "## 解説\n\n`replace(/[A-Z]/g, ...)` ですべての大文字を対象にし、コールバックで `_` ＋ 小文字に置き換えます。\n\n```js\nconsole.log(s.replace(/[A-Z]/g, c => '_' + c.toLowerCase()));\n```",
+  "answer_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\nconsole.log(s.replace(/[A-Z]/g, c => '_' + c.toLowerCase()));",
+  "test_cases": [
+    {"stdin": "helloWorld", "stdout": "hello_world"},
+    {"stdin": "camelCaseString", "stdout": "camel_case_string"},
+    {"stdin": "abc", "stdout": "abc"},
+    {"stdin": "aB", "stdout": "a_b"},
+    {"stdin": "myVariableName", "stdout": "my_variable_name"}
+  ]
+}

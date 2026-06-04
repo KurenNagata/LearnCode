@@ -1,0 +1,18 @@
+{
+  "language": "javascript",
+  "level": "intermediate",
+  "order": 21,
+  "title": "文字列中の数字の合計",
+  "description": "文字や数字が混ざった文字列（空白なし）が与えられます。含まれる数字（0〜9）をすべて合計して出力してください。\n\n**入力例：** `a1b2c3`\n**出力例：** `6`（= 1+2+3）",
+  "starter_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\n// ここにコードを書いてください\n",
+  "hint": "正規表現 `/\\d/g` で数字だけ取り出し、数値に変換して合計します。\n\n```js\nconst digits = s.match(/\\d/g) || [];\nconsole.log(digits.reduce((a, d) => a + Number(d), 0));\n```",
+  "explanation": "## 解説\n\n`match(/\\d/g)` は文字列中の数字すべてにマッチした配列（無ければ `null`）を返します。各文字を数値にして `reduce` で合計します。\n\n```js\nconst digits = s.match(/\\d/g) || [];\nconsole.log(digits.reduce((a, d) => a + Number(d), 0));\n```",
+  "answer_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\nconst digits = s.match(/\\d/g) || [];\nconsole.log(digits.reduce((a, d) => a + Number(d), 0));",
+  "test_cases": [
+    {"stdin": "a1b2c3", "stdout": "6"},
+    {"stdin": "123", "stdout": "6"},
+    {"stdin": "abc", "stdout": "0"},
+    {"stdin": "x9y9", "stdout": "18"},
+    {"stdin": "0z0", "stdout": "0"}
+  ]
+}

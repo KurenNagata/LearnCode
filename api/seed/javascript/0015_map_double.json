@@ -1,0 +1,17 @@
+{
+  "language": "javascript",
+  "level": "beginner",
+  "order": 15,
+  "title": "各要素を2倍",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。各要素を 2 倍にして、空白区切りで出力してください。\n\n**入力例：**\n```\n4\n1 2 3 4\n```\n**出力例：** `2 4 6 8`",
+  "starter_code": "const L = require('fs').readFileSync(0, 'utf8').split('\\n');\nconst n = Number(L[0]);\nconst arr = L[1].trim().split(/\\s+/).map(Number);\n// ここにコードを書いてください\n",
+  "hint": "`map` で各要素を変換した新しい配列を作れます。\n\n```js\nconsole.log(arr.map(x => x * 2).join(' '));\n```",
+  "explanation": "## 解説\n\n`map` は各要素にコールバックを適用した新しい配列を返します。ここでは `x => x * 2` で 2 倍にします。\n\n```js\nconsole.log(arr.map(x => x * 2).join(' '));\n```",
+  "answer_code": "const L = require('fs').readFileSync(0, 'utf8').split('\\n');\nconst n = Number(L[0]);\nconst arr = L[1].trim().split(/\\s+/).map(Number);\nconsole.log(arr.map(x => x * 2).join(' '));",
+  "test_cases": [
+    {"stdin": "4\n1 2 3 4", "stdout": "2 4 6 8"},
+    {"stdin": "1\n5", "stdout": "10"},
+    {"stdin": "3\n0 -1 -2", "stdout": "0 -2 -4"},
+    {"stdin": "2\n100 250", "stdout": "200 500"}
+  ]
+}

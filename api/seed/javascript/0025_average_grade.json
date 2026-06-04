@@ -1,0 +1,18 @@
+{
+  "language": "javascript",
+  "level": "intermediate",
+  "order": 25,
+  "title": "平均と成績評価（総合問題）",
+  "description": "1 行目に人数 N、2 行目に N 個の点数（0〜100）が空白区切りで与えられます。次の 2 行を出力してください。\n\n1. 平均点（小数点以下切り捨て）\n2. 評価（90 以上 `A`、70 以上 `B`、50 以上 `C`、それ未満 `D`）\n\n**入力例：**\n```\n3\n80 90 100\n```\n**出力例：**\n```\n90\nA\n```",
+  "starter_code": "const L = require('fs').readFileSync(0, 'utf8').split('\\n');\nconst n = Number(L[0]);\nconst arr = L[1].trim().split(/\\s+/).map(Number);\n// ここにコードを書いてください\n",
+  "hint": "`Math.floor` で切り捨て平均を求め、`if` / `else if` で評価を決めます。\n\n```js\nconst avg = Math.floor(arr.reduce((a, b) => a + b, 0) / n);\nlet g;\nif (avg >= 90) g = \"A\";\nelse if (avg >= 70) g = \"B\";\nelse if (avg >= 50) g = \"C\";\nelse g = \"D\";\nconsole.log(avg + \"\\n\" + g);\n```",
+  "explanation": "## 解説\n\n合計を N で割り `Math.floor` で切り捨てて平均を出します。その平均点を高い基準から順に判定して評価を決め、2 行で出力します。\n\n```js\nconst avg = Math.floor(arr.reduce((a, b) => a + b, 0) / n);\nlet g;\nif (avg >= 90) g = \"A\";\nelse if (avg >= 70) g = \"B\";\nelse if (avg >= 50) g = \"C\";\nelse g = \"D\";\nconsole.log(avg + \"\\n\" + g);\n```",
+  "answer_code": "const L = require('fs').readFileSync(0, 'utf8').split('\\n');\nconst n = Number(L[0]);\nconst arr = L[1].trim().split(/\\s+/).map(Number);\nconst avg = Math.floor(arr.reduce((a, b) => a + b, 0) / n);\nlet g;\nif (avg >= 90) g = \"A\";\nelse if (avg >= 70) g = \"B\";\nelse if (avg >= 50) g = \"C\";\nelse g = \"D\";\nconsole.log(avg + \"\\n\" + g);",
+  "test_cases": [
+    {"stdin": "3\n80 90 100", "stdout": "90\nA"},
+    {"stdin": "4\n60 70 80 90", "stdout": "75\nB"},
+    {"stdin": "2\n40 60", "stdout": "50\nC"},
+    {"stdin": "3\n10 20 30", "stdout": "20\nD"},
+    {"stdin": "1\n100", "stdout": "100\nA"}
+  ]
+}

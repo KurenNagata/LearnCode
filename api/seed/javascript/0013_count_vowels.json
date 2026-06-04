@@ -1,0 +1,17 @@
+{
+  "language": "javascript",
+  "level": "beginner",
+  "order": 13,
+  "title": "母音の数",
+  "description": "1 行の文字列（半角英小文字、空白なし）に含まれる母音（a, e, i, o, u）の個数を出力してください。\n\n**入力例：** `hello`\n**出力例：** `2`",
+  "starter_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\n// ここにコードを書いてください\n",
+  "hint": "正規表現 `/[aeiou]/g` にマッチした数を数えられます。\n\n```js\nconst m = s.match(/[aeiou]/g);\nconsole.log(m ? m.length : 0);\n```",
+  "explanation": "## 解説\n\n`match(/[aeiou]/g)` は母音すべてにマッチした配列を返します（無いと `null`）。その長さが母音の数です。\n\n```js\nconst m = s.match(/[aeiou]/g);\nconsole.log(m ? m.length : 0);\n```",
+  "answer_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\nconst m = s.match(/[aeiou]/g);\nconsole.log(m ? m.length : 0);",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "2"},
+    {"stdin": "aeiou", "stdout": "5"},
+    {"stdin": "xyz", "stdout": "0"},
+    {"stdin": "programming", "stdout": "3"}
+  ]
+}

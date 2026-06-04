@@ -1,0 +1,14 @@
+{
+  "language": "javascript",
+  "level": "beginner",
+  "order": 1,
+  "title": "Hello, World!",
+  "description": "JavaScript で画面に以下の文字列を **そのまま** 出力してください。\n\n**出力：**\n```\nHello, World!\n```",
+  "starter_code": "// ここにコードを書いてください\n",
+  "hint": "`console.log()` で出力します。\n\n```js\nconsole.log(\"文字列\");\n```",
+  "explanation": "## 解説\n\n`console.log()` は引数を標準出力に出力し、末尾に改行を付けます。\n\n```js\nconsole.log(\"Hello, World!\");\n```",
+  "answer_code": "console.log(\"Hello, World!\");",
+  "test_cases": [
+    {"stdin": "", "stdout": "Hello, World!"}
+  ]
+}

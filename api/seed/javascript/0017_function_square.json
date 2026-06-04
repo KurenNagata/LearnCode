@@ -1,0 +1,18 @@
+{
+  "language": "javascript",
+  "level": "intermediate",
+  "order": 17,
+  "title": "関数の定義（2乗）",
+  "description": "整数 N が与えられます。「受け取った数の 2 乗を返す関数」を定義して使い、N の 2 乗を出力してください。\n\n**入力例：** `4`\n**出力例：** `16`",
+  "starter_code": "const n = Number(require('fs').readFileSync(0, 'utf8').trim());\n// ここに関数を定義して使ってください\n",
+  "hint": "アロー関数で簡潔に定義できます。\n\n```js\nconst square = x => x * x;\nconsole.log(square(n));\n```",
+  "explanation": "## 解説\n\n`const 名前 = 引数 => 式` の形（アロー関数）で関数を定義できます。`square(n)` で呼び出します。\n\n```js\nconst square = x => x * x;\nconsole.log(square(n));\n```",
+  "answer_code": "const n = Number(require('fs').readFileSync(0, 'utf8').trim());\nconst square = x => x * x;\nconsole.log(square(n));",
+  "test_cases": [
+    {"stdin": "4", "stdout": "16"},
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "9", "stdout": "81"},
+    {"stdin": "-3", "stdout": "9"},
+    {"stdin": "12", "stdout": "144"}
+  ]
+}

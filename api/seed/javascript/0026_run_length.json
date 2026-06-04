@@ -1,0 +1,18 @@
+{
+  "language": "javascript",
+  "level": "advanced",
+  "order": 26,
+  "title": "ランレングス圧縮",
+  "description": "英小文字のみからなる文字列が与えられます。連続して同じ文字が並ぶ部分を「文字＋連続回数」にまとめて出力してください。\n\n**入力例：** `aaabbc`\n**出力例：** `a3b2c1`",
+  "starter_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\n// ここにコードを書いてください\n",
+  "hint": "同じ文字が続く区間を見つけ、文字と長さを連結します。\n\n```js\nlet out = '', i = 0;\nwhile (i < s.length) {\n  let j = i;\n  while (j < s.length && s[j] === s[i]) j++;\n  out += s[i] + (j - i);\n  i = j;\n}\nconsole.log(out);\n```",
+  "explanation": "## 解説\n\n位置 `i` から同じ文字が続く終わり `j` を探し、「文字＋(j-i)」を足して `i` を `j` に進めます。\n\n```js\nlet out = '', i = 0;\nwhile (i < s.length) {\n  let j = i;\n  while (j < s.length && s[j] === s[i]) j++;\n  out += s[i] + (j - i);\n  i = j;\n}\nconsole.log(out);\n```",
+  "answer_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\nlet out = '', i = 0;\nwhile (i < s.length) {\n  let j = i;\n  while (j < s.length && s[j] === s[i]) j++;\n  out += s[i] + (j - i);\n  i = j;\n}\nconsole.log(out);",
+  "test_cases": [
+    {"stdin": "aaabbc", "stdout": "a3b2c1"},
+    {"stdin": "abc", "stdout": "a1b1c1"},
+    {"stdin": "aaaa", "stdout": "a4"},
+    {"stdin": "wwwwaaadexxxxxx", "stdout": "w4a3d1e1x6"},
+    {"stdin": "z", "stdout": "z1"}
+  ]
+}
