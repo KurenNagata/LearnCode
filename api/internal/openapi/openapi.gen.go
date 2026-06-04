@@ -70,10 +70,20 @@ type SubmitResponse struct {
 	TotalTests  int32 `json:"totalTests"`
 }
 
+// UpdateAccountRequest defines model for UpdateAccountRequest.
+type UpdateAccountRequest struct {
+	CurrentPassword string  `json:"currentPassword"`
+	NewPassword     *string `json:"newPassword,omitempty"`
+	NewUsername     *string `json:"newUsername,omitempty"`
+}
+
 // ProblemsInterfaceListParams defines parameters for ProblemsInterfaceList.
 type ProblemsInterfaceListParams struct {
 	Language *string `form:"language,omitempty" json:"language,omitempty"`
 }
+
+// AccountInterfaceUpdateJSONRequestBody defines body for AccountInterfaceUpdate for application/json ContentType.
+type AccountInterfaceUpdateJSONRequestBody = UpdateAccountRequest
 
 // AuthInterfaceLoginJSONRequestBody defines body for AuthInterfaceLogin for application/json ContentType.
 type AuthInterfaceLoginJSONRequestBody = LoginRequest
@@ -86,6 +96,9 @@ type ProblemsInterfaceSubmitJSONRequestBody = SubmitRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+
+	// (POST /api/account/update)
+	AccountInterfaceUpdate(w http.ResponseWriter, r *http.Request)
 
 	// (POST /api/auth/login)
 	AuthInterfaceLogin(w http.ResponseWriter, r *http.Request)
@@ -109,6 +122,11 @@ type ServerInterface interface {
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
 
 type Unimplemented struct{}
+
+// (POST /api/account/update)
+func (_ Unimplemented) AccountInterfaceUpdate(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
 
 // (POST /api/auth/login)
 func (_ Unimplemented) AuthInterfaceLogin(w http.ResponseWriter, r *http.Request) {
@@ -148,6 +166,20 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// AccountInterfaceUpdate operation middleware
+func (siw *ServerInterfaceWrapper) AccountInterfaceUpdate(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AccountInterfaceUpdate(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // AuthInterfaceLogin operation middleware
 func (siw *ServerInterfaceWrapper) AuthInterfaceLogin(w http.ResponseWriter, r *http.Request) {
@@ -390,6 +422,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/account/update", wrapper.AccountInterfaceUpdate)
+	})
+	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/api/auth/login", wrapper.AuthInterfaceLogin)
 	})
 	r.Group(func(r chi.Router) {
@@ -409,6 +444,28 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 
 	return r
+}
+
+type AccountInterfaceUpdateRequestObject struct {
+	Body *AccountInterfaceUpdateJSONRequestBody
+}
+
+type AccountInterfaceUpdateResponseObject interface {
+	VisitAccountInterfaceUpdateResponse(w http.ResponseWriter) error
+}
+
+type AccountInterfaceUpdate200JSONResponse AuthResponse
+
+func (response AccountInterfaceUpdate200JSONResponse) VisitAccountInterfaceUpdateResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type AuthInterfaceLoginRequestObject struct {
@@ -546,6 +603,9 @@ func (response ProgressInterfaceGet200JSONResponse) VisitProgressInterfaceGetRes
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
+	// (POST /api/account/update)
+	AccountInterfaceUpdate(ctx context.Context, request AccountInterfaceUpdateRequestObject) (AccountInterfaceUpdateResponseObject, error)
+
 	// (POST /api/auth/login)
 	AuthInterfaceLogin(ctx context.Context, request AuthInterfaceLoginRequestObject) (AuthInterfaceLoginResponseObject, error)
 
@@ -592,6 +652,37 @@ type strictHandler struct {
 	ssi         StrictServerInterface
 	middlewares []StrictMiddlewareFunc
 	options     StrictHTTPServerOptions
+}
+
+// AccountInterfaceUpdate operation middleware
+func (sh *strictHandler) AccountInterfaceUpdate(w http.ResponseWriter, r *http.Request) {
+	var request AccountInterfaceUpdateRequestObject
+
+	var body AccountInterfaceUpdateJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.AccountInterfaceUpdate(ctx, request.(AccountInterfaceUpdateRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "AccountInterfaceUpdate")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(AccountInterfaceUpdateResponseObject); ok {
+		if err := validResponse.VisitAccountInterfaceUpdateResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
 }
 
 // AuthInterfaceLogin operation middleware

@@ -47,6 +47,9 @@ func requiresAuth(r *http.Request) bool {
 	if p == "/api/progress" {
 		return true
 	}
+	if strings.HasPrefix(p, "/api/account/") {
+		return true
+	}
 	if r.Method == http.MethodPost && strings.HasSuffix(p, "/submit") {
 		return true
 	}

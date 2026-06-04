@@ -52,6 +52,12 @@ model AuthResponse {
   username: string;
 }
 
+model UpdateAccountRequest {
+  currentPassword: string;
+  newUsername?: string;
+  newPassword?: string;
+}
+
 @route("/api/problems")
 interface ProblemsInterface {
   @get list(@query language?: string): ListProblemsResponse;
@@ -79,4 +85,11 @@ interface AuthInterface {
   @post
   @route("login")
   login(@body body: LoginRequest): AuthResponse;
+}
+
+@route("/api/account")
+interface AccountInterface {
+  @post
+  @route("update")
+  update(@body body: UpdateAccountRequest): AuthResponse;
 }

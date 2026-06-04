@@ -43,6 +43,49 @@ func (s *AuthService) Signup(ctx context.Context, username, password string) (st
 	return token.Issue(s.jwtSecret, u.Username)
 }
 
+// UpdateAccount は現在のパスワードで本人確認し、ユーザー名／パスワードを更新する。
+// 更新後のユーザー名と、新しいトークンを返す。
+func (s *AuthService) UpdateAccount(ctx context.Context, currentUsername, currentPassword string, newUsername, newPassword *string) (token2 string, finalUsername string, err error) {
+	u, err := s.users.GetUserByUsername(ctx, currentUsername)
+	if err != nil {
+		return "", "", ErrInvalidCredentials
+	}
+	if bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(currentPassword)) != nil {
+		return "", "", ErrInvalidCredentials
+	}
+
+	finalUsername = currentUsername
+
+	if newUsername != nil && *newUsername != "" && *newUsername != currentUsername {
+		if len(*newUsername) < 3 || len(*newUsername) > 50 {
+			return "", "", ErrInvalidInput
+		}
+		if err := s.users.UpdateUsername(ctx, currentUsername, *newUsername); err != nil {
+			return "", "", err // domain.ErrUserExists を含む
+		}
+		finalUsername = *newUsername
+	}
+
+	if newPassword != nil && *newPassword != "" {
+		if len(*newPassword) < 4 {
+			return "", "", ErrInvalidInput
+		}
+		hash, err := bcrypt.GenerateFromPassword([]byte(*newPassword), bcrypt.DefaultCost)
+		if err != nil {
+			return "", "", err
+		}
+		if err := s.users.UpdatePassword(ctx, finalUsername, string(hash)); err != nil {
+			return "", "", err
+		}
+	}
+
+	tok, err := token.Issue(s.jwtSecret, finalUsername)
+	if err != nil {
+		return "", "", err
+	}
+	return tok, finalUsername, nil
+}
+
 // Login は認証してトークンを返す。失敗は ErrInvalidCredentials。
 func (s *AuthService) Login(ctx context.Context, username, password string) (string, error) {
 	u, err := s.users.GetUserByUsername(ctx, username)

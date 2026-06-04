@@ -464,7 +464,7 @@ function LevelBadge({ info, minWidth = 150 }) {
 }
 
 // ── トップページ（8bit アーケード風タイトル画面） ─────────────
-function Home({ onSelect, onOpenCloset, skin, accessory, xp, muted, onToggleMute, username, onLogout }) {
+function Home({ onSelect, onOpenCloset, skin, accessory, xp, muted, onToggleMute, username, onLogout, onOpenAccount }) {
   const start = () => onSelect('python')
 
   return (
@@ -475,7 +475,11 @@ function Home({ onSelect, onOpenCloset, skin, accessory, xp, muted, onToggleMute
       <div className="lc-hud">
         <span className="lc-hud-left">■ LEARNCODE.EXE</span>
         <span className="lc-hud-right">
-          {username && <span className="lc-hud-user">👤 {username}</span>}
+          {username && (
+            <button type="button" className="lc-hud-user" onClick={onOpenAccount} aria-label="アカウント設定">
+              👤 {username}
+            </button>
+          )}
           <button type="button" className="lc-hud-btn" onClick={onToggleMute} aria-label={muted ? '効果音をオンにする' : '効果音をオフにする'}>
             {muted ? 'SE ✕' : 'SE ♪'}
           </button>
@@ -578,7 +582,12 @@ function HomeStyles() {
       .lc-hud-left { color:var(--green); }
       .lc-hud-right { display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:flex-end; }
       .lc-hud-lv { color:var(--yellow); }
-      .lc-hud-user { font-family:'DotGothic16', sans-serif; font-size:13px; color:var(--cyan); }
+      .lc-hud-user {
+        font-family:'DotGothic16', sans-serif; font-size:13px; color:var(--cyan);
+        background:none; border:0; cursor:pointer; padding:2px 4px; letter-spacing:1px;
+      }
+      .lc-hud-user:hover { color:var(--white); text-decoration:underline; }
+      .lc-hud-user:focus-visible { outline:2px dashed var(--cyan); outline-offset:2px; }
       .lc-hud-btn {
         font-family:'DotGothic16', sans-serif; font-size:13px; font-weight:bold; letter-spacing:1px;
         color:var(--cyan); background:var(--bev-l); cursor:pointer; padding:6px 12px; border-radius:0;
@@ -789,6 +798,102 @@ function AuthScreen({ skin, onAuthed }) {
   )
 }
 
+// ── アカウント画面（ID表示・ID/パスワード変更） ───────────────
+function AccountModal({ username, onAuthed, onClose }) {
+  const [current, setCurrent] = useState('')
+  const [newUsername, setNewUsername] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [error, setError] = useState('')
+  const [msg, setMsg] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  async function submit(e) {
+    e.preventDefault()
+    if (busy) return
+    if (!current) { setError('現在のパスワードを入力してください'); return }
+    if (!newUsername && !newPassword) { setError('新しいID または 新しいパスワードを入力してください'); return }
+    setBusy(true)
+    setError('')
+    setMsg('')
+    try {
+      const res = await fetch('/api/account/update', {
+        method: 'POST',
+        headers: authHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({
+          currentPassword: current,
+          newUsername: newUsername || undefined,
+          newPassword: newPassword || undefined,
+        }),
+      })
+      if (!res.ok) {
+        const byStatus = {
+          400: '入力が不正です（ID は3文字以上 / パスワードは4文字以上）',
+          401: '現在のパスワードが違います',
+          409: 'そのユーザー名は既に使われています',
+        }
+        setError(byStatus[res.status] || `エラー (${res.status})`)
+        return
+      }
+      const data = await res.json()
+      onAuthed(data.token, data.username)
+      setMsg('変更しました')
+      setCurrent('')
+      setNewUsername('')
+      setNewPassword('')
+    } catch (err) {
+      setError('通信エラー: ' + err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div style={s.modalOverlay}>
+      <form style={s.authBox} onSubmit={submit}>
+        <div style={s.accountHead}>
+          <span style={s.closetTitle}>アカウント</span>
+          <button type="button" onClick={onClose} style={s.modalClose} aria-label="閉じる">✕</button>
+        </div>
+
+        <div style={s.accountRow}>
+          <span style={s.accountLabel}>ユーザーID</span>
+          <span style={s.accountValue}>{username}</span>
+        </div>
+        <div style={s.accountRow}>
+          <span style={s.accountLabel}>パスワード</span>
+          <span style={s.accountValue}>••••••••</span>
+        </div>
+        <p style={s.accountNote}>※ パスワードは安全のため表示できません。変更は下のフォームから。</p>
+
+        <div style={s.accountDivider} />
+
+        <input
+          style={s.authInput} type="password" placeholder="現在のパスワード（確認用・必須）"
+          value={current} onChange={e => setCurrent(e.target.value)}
+          autoComplete="current-password" aria-label="現在のパスワード"
+        />
+        <input
+          style={s.authInput} placeholder="新しいユーザーID（変える場合）"
+          value={newUsername} onChange={e => setNewUsername(e.target.value)}
+          autoComplete="username" aria-label="新しいユーザーID"
+        />
+        <input
+          style={s.authInput} type="password" placeholder="新しいパスワード（変える場合）"
+          value={newPassword} onChange={e => setNewPassword(e.target.value)}
+          autoComplete="new-password" aria-label="新しいパスワード"
+        />
+
+        {error && <div style={s.authError}>⚠ {error}</div>}
+        {msg && <div style={{ ...s.authError, color: c.green }}>✓ {msg}</div>}
+
+        <button type="submit" disabled={busy} style={s.authSubmit}>
+          {busy ? '・・・' : '▶ 変更する'}
+        </button>
+      </form>
+    </div>
+  )
+}
+
 // ── ルート：home / closet / course を切替 ─────────────────────
 export default function App() {
   const [language, setLanguage] = useState(null)
@@ -809,6 +914,7 @@ export default function App() {
     try { return { token: localStorage.getItem(TOKEN_KEY), username: localStorage.getItem(USER_KEY) } }
     catch { return { token: null, username: null } }
   })
+  const [showAccount, setShowAccount] = useState(false)
   const skin = CAT_SKINS.find(sk => sk.id === skinId) ?? CAT_SKINS[0]
   const xp = xpInfo(clearedIds.length * XP_PER_CLEAR)
 
@@ -885,11 +991,16 @@ export default function App() {
     />
   )
   return (
-    <Home
-      skin={skin} accessory={accId} xp={xp} muted={muted} onToggleMute={toggleMute}
-      username={auth.username} onLogout={logout}
-      onSelect={setLanguage} onOpenCloset={() => setScreen('closet')}
-    />
+    <>
+      <Home
+        skin={skin} accessory={accId} xp={xp} muted={muted} onToggleMute={toggleMute}
+        username={auth.username} onLogout={logout} onOpenAccount={() => setShowAccount(true)}
+        onSelect={setLanguage} onOpenCloset={() => setScreen('closet')}
+      />
+      {showAccount && (
+        <AccountModal username={auth.username} onAuthed={onAuthed} onClose={() => setShowAccount(false)} />
+      )}
+    </>
   )
 }
 
@@ -1253,6 +1364,14 @@ const s = {
   authInput: { fontFamily: FONT_DOT, fontSize: 15, padding: '10px 12px', background: c.bevD, color: c.white, border: 0, borderRadius: 0, ...bevelIn(2), outline: 'none' },
   authError: { fontFamily: FONT_DOT, color: c.pink, fontSize: 13, lineHeight: 1.5 },
   authSubmit: { ...pxBtn(c.green, c.bevD, '#9CFF9C', '#2FA02F'), fontSize: 12, padding: '12px', marginTop: 4 },
+
+  // アカウント画面
+  accountHead: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+  accountRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, fontFamily: FONT_DOT },
+  accountLabel: { color: c.muted, fontSize: 13 },
+  accountValue: { color: c.white, fontSize: 15, fontWeight: 'bold', wordBreak: 'break-all' },
+  accountNote: { fontFamily: FONT_DOT, color: c.dim, fontSize: 11.5, lineHeight: 1.5, margin: 0 },
+  accountDivider: { height: 2, background: c.bevD, margin: '4px 0' },
 
   // 正解演出
   clearOverlay: { position: 'fixed', inset: 0, background: 'rgba(10,9,24,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: 16 },

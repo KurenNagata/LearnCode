@@ -21,6 +21,9 @@ type ProgressRepository interface {
 type UserRepository interface {
 	CreateUser(ctx context.Context, username, passwordHash string) (domain.User, error)
 	GetUserByUsername(ctx context.Context, username string) (domain.User, error)
+	// UpdateUsername は users と progress の user_id を同一トランザクションで付け替える。
+	UpdateUsername(ctx context.Context, oldUsername, newUsername string) error
+	UpdatePassword(ctx context.Context, username, passwordHash string) error
 }
 
 type CodeExecutor interface {

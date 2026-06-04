@@ -38,6 +38,34 @@ func (r *UserRepo) CreateUser(ctx context.Context, username, passwordHash string
 	return u, nil
 }
 
+func (r *UserRepo) UpdateUsername(ctx context.Context, oldUsername, newUsername string) error {
+	tx, err := r.db.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin tx: %w", err)
+	}
+	defer tx.Rollback(ctx)
+
+	if _, err := tx.Exec(ctx, `UPDATE users SET username=$1 WHERE username=$2`, newUsername, oldUsername); err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) && pgErr.Code == "23505" { // unique_violation
+			return domain.ErrUserExists
+		}
+		return fmt.Errorf("update username: %w", err)
+	}
+	if _, err := tx.Exec(ctx, `UPDATE progress SET user_id=$1 WHERE user_id=$2`, newUsername, oldUsername); err != nil {
+		return fmt.Errorf("update progress user_id: %w", err)
+	}
+	return tx.Commit(ctx)
+}
+
+func (r *UserRepo) UpdatePassword(ctx context.Context, username, passwordHash string) error {
+	_, err := r.db.Exec(ctx, `UPDATE users SET password_hash=$1 WHERE username=$2`, passwordHash, username)
+	if err != nil {
+		return fmt.Errorf("update password: %w", err)
+	}
+	return nil
+}
+
 func (r *UserRepo) GetUserByUsername(ctx context.Context, username string) (domain.User, error) {
 	var u domain.User
 	err := r.db.QueryRow(ctx,

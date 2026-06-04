@@ -41,6 +41,18 @@ func (h *Handler) AuthInterfaceLogin(ctx context.Context, req openapi.AuthInterf
 	return openapi.AuthInterfaceLogin200JSONResponse{Token: tok, Username: req.Body.Username}, nil
 }
 
+func (h *Handler) AccountInterfaceUpdate(ctx context.Context, req openapi.AccountInterfaceUpdateRequestObject) (openapi.AccountInterfaceUpdateResponseObject, error) {
+	if req.Body == nil {
+		return nil, service.ErrInvalidInput
+	}
+	userID, _ := UserIDFromContext(ctx)
+	tok, username, err := h.authSvc.UpdateAccount(ctx, userID, req.Body.CurrentPassword, req.Body.NewUsername, req.Body.NewPassword)
+	if err != nil {
+		return nil, err
+	}
+	return openapi.AccountInterfaceUpdate200JSONResponse{Token: tok, Username: username}, nil
+}
+
 func (h *Handler) ProblemsInterfaceList(ctx context.Context, req openapi.ProblemsInterfaceListRequestObject) (openapi.ProblemsInterfaceListResponseObject, error) {
 	language := ""
 	if req.Params.Language != nil {
