@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "advanced",
+  "order": 28,
+  "title": "素因数分解",
+  "description": "2 以上の整数 N が与えられます。N を **素因数分解** し、素因数を小さい順に空白区切りで出力してください。同じ素因数は出現する回数だけ繰り返します。\n\n**入力例：** `12`\n**出力例：** `2 2 3`（12 = 2 × 2 × 3）",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "2 から順に、割り切れる間は割り続け、その都度その数を出力します。最後に残った N が 1 より大きければ、それも素因数です。\n\n```c\nint started = 0;\nfor (int d = 2; d * d <= n; d++) {\n    while (n % d == 0) {\n        if (started) printf(\" \");\n        printf(\"%d\", d);\n        started = 1;\n        n /= d;\n    }\n}\nif (n > 1) {\n    if (started) printf(\" \");\n    printf(\"%d\", n);\n}\nprintf(\"\\n\");\n```",
+  "explanation": "## 解説\n\n小さい数 `d` から順に、N が `d` で割り切れる間は割り続け、その回数だけ `d` を出力します。`d * d <= n` まで調べれば十分で、最後に残った N が 1 より大きければ、それ自体が素因数（最大の素因数）です。\n\n```c\nint started = 0;\nfor (int d = 2; d * d <= n; d++) {\n    while (n % d == 0) {\n        if (started) printf(\" \");\n        printf(\"%d\", d);\n        started = 1;\n        n /= d;\n    }\n}\nif (n > 1) {\n    if (started) printf(\" \");\n    printf(\"%d\", n);\n}\nprintf(\"\\n\");\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int started = 0;\n    for (int d = 2; d * d <= n; d++) {\n        while (n % d == 0) {\n            if (started) printf(\" \");\n            printf(\"%d\", d);\n            started = 1;\n            n /= d;\n        }\n    }\n    if (n > 1) {\n        if (started) printf(\" \");\n        printf(\"%d\", n);\n    }\n    printf(\"\\n\");\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "12", "stdout": "2 2 3"},
+    {"stdin": "2", "stdout": "2"},
+    {"stdin": "17", "stdout": "17"},
+    {"stdin": "60", "stdout": "2 2 3 5"},
+    {"stdin": "100", "stdout": "2 2 5 5"}
+  ]
+}

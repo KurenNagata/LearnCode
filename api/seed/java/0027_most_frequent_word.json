@@ -1,0 +1,18 @@
+{
+  "language": "java",
+  "level": "advanced",
+  "order": 27,
+  "title": "最頻出の単語",
+  "description": "スペース区切りの単語列（半角英小文字）が 1 行で与えられます。最も多く出現する単語を出力してください。出現回数が同じ単語が複数あるときは、**最初に出現した** 単語を出力します。\n\n**入力例：** `apple banana apple`\n**出力例：** `apple`",
+  "starter_code": "import java.util.*;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String[] words = sc.nextLine().trim().split(\"\\\\s+\");\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`LinkedHashMap` は挿入順を保ちます。各単語の回数を数え、`>`（より大きい）で更新すると同数のとき最初の単語が残ります。\n\n```java\nLinkedHashMap<String, Integer> count = new LinkedHashMap<>();\nfor (String w : words) count.merge(w, 1, Integer::sum);\nString best = null;\nint bestCount = -1;\nfor (Map.Entry<String, Integer> e : count.entrySet()) {\n    if (e.getValue() > bestCount) {\n        bestCount = e.getValue();\n        best = e.getKey();\n    }\n}\nSystem.out.println(best);\n```",
+  "explanation": "## 解説\n\n`LinkedHashMap` で単語ごとの出現回数を、挿入された順番を保ちながら数えます。`count.merge(w, 1, Integer::sum)` は「既にあれば +1、無ければ 1」です。最大回数を探すとき `>` で更新すると、同数の場合は先に挿入された（＝最初に出現した）単語が残ります。\n\n```java\nLinkedHashMap<String, Integer> count = new LinkedHashMap<>();\nfor (String w : words) count.merge(w, 1, Integer::sum);\nString best = null;\nint bestCount = -1;\nfor (Map.Entry<String, Integer> e : count.entrySet()) {\n    if (e.getValue() > bestCount) {\n        bestCount = e.getValue();\n        best = e.getKey();\n    }\n}\nSystem.out.println(best);\n```",
+  "answer_code": "import java.util.*;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String[] words = sc.nextLine().trim().split(\"\\\\s+\");\n        LinkedHashMap<String, Integer> count = new LinkedHashMap<>();\n        for (String w : words) count.merge(w, 1, Integer::sum);\n        String best = null;\n        int bestCount = -1;\n        for (Map.Entry<String, Integer> e : count.entrySet()) {\n            if (e.getValue() > bestCount) {\n                bestCount = e.getValue();\n                best = e.getKey();\n            }\n        }\n        System.out.println(best);\n    }\n}",
+  "test_cases": [
+    {"stdin": "apple banana apple", "stdout": "apple"},
+    {"stdin": "a b b c b", "stdout": "b"},
+    {"stdin": "one two two one", "stdout": "one"},
+    {"stdin": "hello", "stdout": "hello"},
+    {"stdin": "x y z x y x", "stdout": "x"}
+  ]
+}

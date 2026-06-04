@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "advanced",
+  "order": 27,
+  "title": "立っているビットの数",
+  "description": "0 以上の整数 N が与えられます。N を 2 進数で表したときの **1 の個数**（立っているビットの数）を出力してください。\n\n**入力例：** `13`\n**出力例：** `3`（13 は 2 進数で `1101`）",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`n & 1` で一番下のビットが 1 かどうか分かります。`n >>= 1` で 1 ビット右にずらします。\n\n```c\nint count = 0;\nwhile (n > 0) {\n    count += n & 1;\n    n >>= 1;\n}\nprintf(\"%d\\n\", count);\n```",
+  "explanation": "## 解説\n\nビット演算を使います。`n & 1` は最下位ビット（0 か 1）を取り出し、`n >>= 1` で全体を 1 ビット右シフトします。これを `n` が 0 になるまで繰り返し、取り出した 1 を数えます。\n\n```c\nint count = 0;\nwhile (n > 0) {\n    count += n & 1;\n    n >>= 1;\n}\nprintf(\"%d\\n\", count);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int count = 0;\n    while (n > 0) {\n        count += n & 1;\n        n >>= 1;\n    }\n    printf(\"%d\\n\", count);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "13", "stdout": "3"},
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "255", "stdout": "8"},
+    {"stdin": "1024", "stdout": "1"},
+    {"stdin": "7", "stdout": "3"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "language": "java",
+  "level": "advanced",
+  "order": 28,
+  "title": "キャメルケースをスネークケースに",
+  "description": "キャメルケースの文字列（先頭は小文字、単語の区切りが大文字。半角英字、空白なし）が与えられます。**スネークケース** に変換して出力してください。大文字は「`_` ＋ その小文字」に置き換えます。\n\n**入力例：** `helloWorld`\n**出力例：** `hello_world`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "1 文字ずつ見て、大文字なら `_` を足してから小文字にして追加します。\n\n```java\nStringBuilder sb = new StringBuilder();\nfor (char c : s.toCharArray()) {\n    if (Character.isUpperCase(c)) {\n        sb.append('_').append(Character.toLowerCase(c));\n    } else {\n        sb.append(c);\n    }\n}\nSystem.out.println(sb.toString());\n```",
+  "explanation": "## 解説\n\n大文字を見つけたら、その前に `_` を入れ、`Character.toLowerCase` で小文字に変換して追加します。小文字はそのまま追加します。\n\n```java\nStringBuilder sb = new StringBuilder();\nfor (char c : s.toCharArray()) {\n    if (Character.isUpperCase(c)) {\n        sb.append('_').append(Character.toLowerCase(c));\n    } else {\n        sb.append(c);\n    }\n}\nSystem.out.println(sb.toString());\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        StringBuilder sb = new StringBuilder();\n        for (char c : s.toCharArray()) {\n            if (Character.isUpperCase(c)) {\n                sb.append('_').append(Character.toLowerCase(c));\n            } else {\n                sb.append(c);\n            }\n        }\n        System.out.println(sb.toString());\n    }\n}",
+  "test_cases": [
+    {"stdin": "helloWorld", "stdout": "hello_world"},
+    {"stdin": "camelCaseString", "stdout": "camel_case_string"},
+    {"stdin": "abc", "stdout": "abc"},
+    {"stdin": "aB", "stdout": "a_b"},
+    {"stdin": "myVariableName", "stdout": "my_variable_name"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "language": "java",
+  "level": "advanced",
+  "order": 26,
+  "title": "アナグラム判定",
+  "description": "2 つの文字列（半角英小文字、空白なし）が 1 行ずつ与えられます。文字を並べ替えると一致する（アナグラムである）なら `Yes`、そうでなければ `No` を出力してください。\n\n**入力例：**\n```\nlisten\nsilent\n```\n**出力例：** `Yes`",
+  "starter_code": "import java.util.Arrays;\nimport java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        String t = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "両方の文字を並べ替えて、一致するか比べます。\n\n```java\nchar[] x = s.toCharArray();\nchar[] y = t.toCharArray();\nArrays.sort(x);\nArrays.sort(y);\nSystem.out.println(Arrays.equals(x, y) ? \"Yes\" : \"No\");\n```",
+  "explanation": "## 解説\n\nアナグラムとは「同じ文字を同じ個数だけ使っている」ことです。両方の文字を `Arrays.sort` で並べ替えると、アナグラムなら同じ並びになります。`Arrays.equals` で比較します。\n\n```java\nchar[] x = s.toCharArray();\nchar[] y = t.toCharArray();\nArrays.sort(x);\nArrays.sort(y);\nSystem.out.println(Arrays.equals(x, y) ? \"Yes\" : \"No\");\n```",
+  "answer_code": "import java.util.Arrays;\nimport java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        String t = sc.next();\n        char[] x = s.toCharArray();\n        char[] y = t.toCharArray();\n        Arrays.sort(x);\n        Arrays.sort(y);\n        System.out.println(Arrays.equals(x, y) ? \"Yes\" : \"No\");\n    }\n}",
+  "test_cases": [
+    {"stdin": "listen\nsilent", "stdout": "Yes"},
+    {"stdin": "hello\nworld", "stdout": "No"},
+    {"stdin": "abc\ncba", "stdout": "Yes"},
+    {"stdin": "aab\nabb", "stdout": "No"},
+    {"stdin": "a\na", "stdout": "Yes"}
+  ]
+}

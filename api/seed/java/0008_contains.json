@@ -3,15 +3,15 @@
   "level": "beginner",
   "order": 8,
   "title": "文字列を含むか",
-  "description": "1 行目に文字列 s、2 行目に文字列 t が与えられます（どちらも半角、空白なし）。s が t を **含む** なら `はい`、含まないなら `いいえ` を出力してください。\n\n**入力例：**\n```\nbanana\nnan\n```\n**出力例：** `はい`",
+  "description": "1 行目に文字列 s、2 行目に文字列 t が与えられます（どちらも半角、空白なし）。s が t を **含む** なら `Yes`、含まないなら `No` を出力してください。\n\n**入力例：**\n```\nbanana\nnan\n```\n**出力例：** `Yes`",
   "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        String t = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
-  "hint": "`String` の `.contains()` は含むかどうかを `true` / `false` で返します。\n\n```java\nif (s.contains(t)) {\n    System.out.println(\"はい\");\n} else {\n    System.out.println(\"いいえ\");\n}\n```",
-  "explanation": "## 解説\n\n`s.contains(t)` は s の中に t が含まれていれば `true` を返します。三項演算子でも書けます。\n\n```java\nSystem.out.println(s.contains(t) ? \"はい\" : \"いいえ\");\n```",
-  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        String t = sc.next();\n        System.out.println(s.contains(t) ? \"はい\" : \"いいえ\");\n    }\n}",
+  "hint": "`String` の `.contains()` は含むかどうかを `true` / `false` で返します。\n\n```java\nif (s.contains(t)) {\n    System.out.println(\"Yes\");\n} else {\n    System.out.println(\"No\");\n}\n```",
+  "explanation": "## 解説\n\n`s.contains(t)` は s の中に t が含まれていれば `true` を返します。三項演算子でも書けます。\n\n```java\nSystem.out.println(s.contains(t) ? \"Yes\" : \"No\");\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        String t = sc.next();\n        System.out.println(s.contains(t) ? \"Yes\" : \"No\");\n    }\n}",
   "test_cases": [
-    {"stdin": "banana\nnan", "stdout": "はい"},
-    {"stdin": "hello\nxyz", "stdout": "いいえ"},
-    {"stdin": "abcdef\ncde", "stdout": "はい"},
-    {"stdin": "abc\nabcd", "stdout": "いいえ"}
+    {"stdin": "banana\nnan", "stdout": "Yes"},
+    {"stdin": "hello\nxyz", "stdout": "No"},
+    {"stdin": "abcdef\ncde", "stdout": "Yes"},
+    {"stdin": "abc\nabcd", "stdout": "No"}
   ]
 }

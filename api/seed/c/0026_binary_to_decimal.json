@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "advanced",
+  "order": 26,
+  "title": "2進数を10進数に変換",
+  "description": "`0` と `1` だけからなる 2 進数の文字列が与えられます。10 進数（整数）に変換して出力してください。\n\n**入力例：** `101`\n**出力例：** `5`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    char s[64];\n    scanf(\"%63s\", s);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "左から 1 文字ずつ読み、`値 = 値 * 2 + その桁` を繰り返します。\n\n```c\nlong v = 0;\nfor (int i = 0; s[i] != '\\0'; i++) {\n    v = v * 2 + (s[i] - '0');\n}\nprintf(\"%ld\\n\", v);\n```",
+  "explanation": "## 解説\n\n2 進数は各桁が 2 の累乗の重みを持ちます。左から処理して「これまでの値を 2 倍して新しい桁を足す」を繰り返すと、累乗を直接計算せずに 10 進数へ変換できます。\n\n```c\nlong v = 0;\nfor (int i = 0; s[i] != '\\0'; i++) {\n    v = v * 2 + (s[i] - '0');\n}\nprintf(\"%ld\\n\", v);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    char s[64];\n    scanf(\"%63s\", s);\n    long v = 0;\n    for (int i = 0; s[i] != '\\0'; i++) {\n        v = v * 2 + (s[i] - '0');\n    }\n    printf(\"%ld\\n\", v);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "101", "stdout": "5"},
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "1111", "stdout": "15"},
+    {"stdin": "10000", "stdout": "16"},
+    {"stdin": "11111111", "stdout": "255"}
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "language": "python",
+  "level": "advanced",
+  "order": 28,
+  "title": "括弧の対応チェック",
+  "description": "`(` `)` `[` `]` `{` `}` だけからなる文字列が与えられます。すべての括弧が正しく対応し、入れ子も正しければ `Yes`、そうでなければ `No` を出力してください。\n\n**入力例：** `{[()]}`\n**出力例：** `Yes`\n\n**入力例：** `([)]`\n**出力例：** `No`",
+  "starter_code": "s = input()\n# ここにコードを書いてください\n",
+  "hint": "スタックを使います。開き括弧は積み、閉じ括弧が来たら一番上と対応するか確認します。\n\n```python\nstack = []\npairs = {')': '(', ']': '[', '}': '{'}\nok = True\nfor ch in s:\n    if ch in '([{':\n        stack.append(ch)\n    elif not stack or stack.pop() != pairs[ch]:\n        ok = False\n        break\nprint(\"Yes\" if ok and not stack else \"No\")\n```",
+  "explanation": "## 解説\n\nスタックに開き括弧を積み、閉じ括弧が来たらスタックの一番上と対応するかを確認します。途中で対応が崩れる、または最後にスタックが空でなければ「対応していない」と判定します。\n\n```python\nstack = []\npairs = {')': '(', ']': '[', '}': '{'}\nok = True\nfor ch in s:\n    if ch in '([{':\n        stack.append(ch)\n    elif not stack or stack.pop() != pairs[ch]:\n        ok = False\n        break\nprint(\"Yes\" if ok and not stack else \"No\")\n```",
+  "answer_code": "s = input()\nstack = []\npairs = {')': '(', ']': '[', '}': '{'}\nok = True\nfor ch in s:\n    if ch in '([{':\n        stack.append(ch)\n    elif not stack or stack.pop() != pairs[ch]:\n        ok = False\n        break\nprint(\"Yes\" if ok and not stack else \"No\")",
+  "test_cases": [
+    {"stdin": "()", "stdout": "Yes"},
+    {"stdin": "([])", "stdout": "Yes"},
+    {"stdin": "{[()]}", "stdout": "Yes"},
+    {"stdin": "([)]", "stdout": "No"},
+    {"stdin": "(()", "stdout": "No"},
+    {"stdin": ")(", "stdout": "No"}
+  ]
+}
