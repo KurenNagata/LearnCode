@@ -40,6 +40,23 @@ tasks:
     cmds:
       - curl -s -X POST http://localhost:2000/api/v2/packages -H "Content-Type:application/json" -d "{\"language\":\"python\",\"version\":\"3.10.0\"}"
 
+  piston:install:java:
+    desc: Install Java runtime in Piston
+    cmds:
+      - curl -s -X POST http://localhost:2000/api/v2/packages -H "Content-Type:application/json" -d "{\"language\":\"java\",\"version\":\"15.0.2\"}"
+
+  piston:install:c:
+    desc: Install C/C++ (gcc) runtime in Piston
+    cmds:
+      - curl -s -X POST http://localhost:2000/api/v2/packages -H "Content-Type:application/json" -d "{\"language\":\"gcc\",\"version\":\"10.2.0\"}"
+
+  piston:install:all:
+    desc: Install Python, Java, C runtimes in Piston (run once after infra:up)
+    cmds:
+      - task: piston:install
+      - task: piston:install:java
+      - task: piston:install:c
+
   gen:
     desc: TypeSpec -> OpenAPI -> Go codegen
     cmds:
