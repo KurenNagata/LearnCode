@@ -13,6 +13,7 @@ model Problem {
   title: string;
   description: string;
   starterCode?: string;
+  hint?: string;
   explanation?: string;
   answerCode?: string;
 }

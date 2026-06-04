@@ -5,6 +5,7 @@
   "title": "リスト内包表記",
   "description": "整数 n を受け取り、1 から n までの各整数の **2 乗** をスペース区切りで 1 行に出力してください。\n\n**リスト内包表記**（`[式 for 変数 in range(...)]` の形式）を使って実装しましょう。\n\n例：n = 5 → `1 4 9 16 25`",
   "starter_code": "n = int(input())\n# リスト内包表記を使って 2 乗のリストを作ってください\n",
+  "hint": "リスト内包表記の形は `[式 for 変数 in イテラブル]` です。\n\n```python\nsquares = [i ** 2 for i in range(1, n + 1)]\nprint(\" \".join(map(str, squares)))\n```\n\n`i ** 2` は i の 2 乗（`i * i` と同じ）です。",
   "explanation": "## 解説\n\nリスト内包表記はリストを簡潔に作る構文です。\n\n```python\nn = int(input())\nsquares = [i ** 2 for i in range(1, n + 1)]\nprint(\" \".join(map(str, squares)))\n```\n\n`[i ** 2 for i in range(1, n+1)]` は「1 から n のそれぞれを 2 乗したリスト」を一行で作ります。通常の for ループで書くと以下と同じです：\n\n```python\nsquares = []\nfor i in range(1, n + 1):\n    squares.append(i ** 2)\n```",
   "answer_code": "n = int(input())\nsquares = [i ** 2 for i in range(1, n + 1)]\nprint(\" \".join(map(str, squares)))",
   "test_cases": [

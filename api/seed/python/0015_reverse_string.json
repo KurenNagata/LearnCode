@@ -5,6 +5,7 @@
   "title": "文字列の逆順",
   "description": "文字列を 1 行受け取り、文字を逆順にして出力してください。\n\n例：`hello` → `olleh`",
   "starter_code": "s = input()\n# ここにコードを書いてください\n",
+  "hint": "Python のスライス記法 `[::-1]` を使うと文字列を逆順にできます。\n\n```python\nprint(s[::-1])\n```\n\n`[start:stop:step]` の step を `-1` にすると逆方向になります。",
   "explanation": "## 解説\n\nPython のスライスを使うと簡潔に逆順にできます。\n\n```python\ns = input()\nprint(s[::-1])\n```\n\n`s[::-1]` は「末尾から先頭へ 1 文字ずつ」というスライスです。`[start:stop:step]` の `step` を `-1` にすると逆方向になります。`start` と `stop` を省略すると全体を対象にします。",
   "answer_code": "s = input()\nprint(s[::-1])",
   "test_cases": [

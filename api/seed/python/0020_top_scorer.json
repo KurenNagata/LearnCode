@@ -5,6 +5,7 @@
   "title": "最高点者の名前",
   "description": "最初の行に整数 n を受け取り、続く n 行にそれぞれ `\"名前 点数\"` の形式でデータが入力されます。最も高い点数の人の名前を出力してください。\n\n- 同点の場合は、先に登場した人を出力します。",
   "starter_code": "n = int(input())\nbest_name = \"\"\nbest_score = -1\nfor _ in range(n):\n    line = input().split()\n    name, score = line[0], int(line[1])\n    # ここにコードを書いてください\nprint(best_name)\n",
+  "hint": "現在の最高点より高ければ更新する、というパターンです。\n\n```python\nif score > best_score:\n    best_score = score\n    best_name = name\n```\n\n`>` なので同点は更新せず、先に登場した人が残ります。",
   "explanation": "## 解説\n\n辞書を使う方法と、変数で最大値を追跡する方法があります。\n\n```python\nn = int(input())\nbest_name = \"\"\nbest_score = -1\nfor _ in range(n):\n    line = input().split()\n    name, score = line[0], int(line[1])\n    if score > best_score:\n        best_score = score\n        best_name = name\nprint(best_name)\n```\n\n`input().split()` は入力をスペースで分割してリストにします。`a, b = list` の形で一度に複数変数に代入できます。",
   "answer_code": "n = int(input())\nbest_name = \"\"\nbest_score = -1\nfor _ in range(n):\n    line = input().split()\n    name, score = line[0], int(line[1])\n    if score > best_score:\n        best_score = score\n        best_name = name\nprint(best_name)",
   "test_cases": [

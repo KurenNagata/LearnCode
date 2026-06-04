@@ -5,6 +5,7 @@
   "title": "リストの並べ替え",
   "description": "最初の行に整数 n を受け取り、続く n 行にそれぞれ整数が 1 つ入力されます。これらを **昇順**（小さい順）に並べ替えて、スペース区切りで 1 行に出力してください。\n\n例：\n```\n入力    出力\n5       1 1 3 4 5\n3\n1\n4\n1\n5\n```",
   "starter_code": "n = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\n# ここにコードを書いてください\n",
+  "hint": "`sort()` で昇順に並べ替えた後、スペース区切りで出力します。\n\n```python\nnumbers.sort()\nprint(\" \".join(map(str, numbers)))\n```\n\n`map(str, numbers)` は各要素を文字列に変換します。",
   "explanation": "## 解説\n\n`sort()` メソッドでリストを昇順に並べ替えられます。\n\n```python\nn = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\nnumbers.sort()\nprint(\" \".join(map(str, numbers)))\n```\n\n`\" \".join(...)` は要素をスペースで結合します。`map(str, numbers)` は各要素を文字列に変換します（`join` は文字列にしか使えないため）。",
   "answer_code": "n = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\nnumbers.sort()\nprint(\" \".join(map(str, numbers)))",
   "test_cases": [

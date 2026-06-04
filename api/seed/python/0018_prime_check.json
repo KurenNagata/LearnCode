@@ -5,6 +5,7 @@
   "title": "素数判定",
   "description": "整数 n を受け取り、n が素数なら `Prime`、そうでなければ `Not Prime` と出力してください。\n\n素数とは、1 より大きく、1 と自分自身以外に約数を持たない整数です（例：2, 3, 5, 7, 11, ...）。\n\n`is_prime(n)` という関数を定義して使いましょう。",
   "starter_code": "def is_prime(n):\n    # ここに実装してください\n    pass\n\nn = int(input())\nif is_prime(n):\n    print(\"Prime\")\nelse:\n    print(\"Not Prime\")\n",
+  "hint": "2 未満は素数でない。2 から √n までの数で割り切れたら素数でない、というロジックです。\n\n```python\nif n < 2:\n    return False\nfor i in range(2, int(n ** 0.5) + 1):\n    if n % i == 0:\n        return False\nreturn True\n```\n\n`n ** 0.5` は √n です。",
   "explanation": "## 解説\n\n2 から √n まで割り切れる数がなければ素数です。\n\n```python\ndef is_prime(n):\n    if n < 2:\n        return False\n    for i in range(2, int(n ** 0.5) + 1):\n        if n % i == 0:\n            return False\n    return True\n\nn = int(input())\nif is_prime(n):\n    print(\"Prime\")\nelse:\n    print(\"Not Prime\")\n```\n\n`n ** 0.5` は √n です。√n より大きい数は確認不要（対になる約数が必ず √n 以下に存在するため）。これにより計算量が大幅に減ります。",
   "answer_code": "def is_prime(n):\n    if n < 2:\n        return False\n    for i in range(2, int(n ** 0.5) + 1):\n        if n % i == 0:\n            return False\n    return True\n\nn = int(input())\nif is_prime(n):\n    print(\"Prime\")\nelse:\n    print(\"Not Prime\")",
   "test_cases": [

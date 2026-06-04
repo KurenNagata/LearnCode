@@ -20,6 +20,7 @@ type seedProblem struct {
 	Title       string         `json:"title"`
 	Description string         `json:"description"`
 	StarterCode string         `json:"starter_code"`
+	Hint        string         `json:"hint"`
 	Explanation string         `json:"explanation"`
 	AnswerCode  string         `json:"answer_code"`
 	TestCases   []seedTestCase `json:"test_cases"`
@@ -58,13 +59,14 @@ func main() {
 
 		var problemID int64
 		err = db.QueryRow(ctx,
-			`INSERT INTO problems (language, level, "order", title, description, starter_code, explanation, answer_code)
-			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+			`INSERT INTO problems (language, level, "order", title, description, starter_code, hint, explanation, answer_code)
+			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
 			 ON CONFLICT (language,"order") DO UPDATE
 			 SET title=EXCLUDED.title, description=EXCLUDED.description,
-			     starter_code=EXCLUDED.starter_code, explanation=EXCLUDED.explanation, answer_code=EXCLUDED.answer_code
+			     starter_code=EXCLUDED.starter_code, hint=EXCLUDED.hint,
+			     explanation=EXCLUDED.explanation, answer_code=EXCLUDED.answer_code
 			 RETURNING id`,
-			p.Language, p.Level, p.Order, p.Title, p.Description, p.StarterCode, p.Explanation, p.AnswerCode,
+			p.Language, p.Level, p.Order, p.Title, p.Description, p.StarterCode, p.Hint, p.Explanation, p.AnswerCode,
 		).Scan(&problemID)
 		if err != nil {
 			log.Fatalf("insert problem %s: %v", f, err)

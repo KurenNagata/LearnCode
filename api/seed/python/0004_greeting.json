@@ -5,6 +5,7 @@
   "title": "名前を受け取って挨拶",
   "description": "標準入力から名前を1行受け取り、`\"こんにちは、{名前}！\"` と出力してください。\n\n例：入力が `Alice` のとき、出力は `こんにちは、Alice！` となります。",
   "starter_code": "name = input()\n# ここにコードを書いてください\n",
+  "hint": "f 文字列（f-string）を使うと変数を文字列に埋め込めます。\n\n```python\nprint(f\"こんにちは、{name}！\")\n```\n\n文字列の前に `f` を付け、変数は `{}` で囲みます。",
   "explanation": "## 解説\n\nf 文字列（f-string）を使うと、変数を文字列の中に埋め込めます。\n\n```python\nname = input()\nprint(f\"こんにちは、{name}！\")\n```\n\n`{}` の中に変数名を書くと、その値に置き換わります。文字列の前に `f` を付けるのがポイントです。",
   "answer_code": "name = input()\nprint(f\"こんにちは、{name}！\")",
   "test_cases": [

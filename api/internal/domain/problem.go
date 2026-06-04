@@ -8,6 +8,7 @@ type Problem struct {
 	Title       string
 	Description string
 	StarterCode string
+	Hint        string
 	Explanation string
 	AnswerCode  string
 }

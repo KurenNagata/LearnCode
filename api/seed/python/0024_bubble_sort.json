@@ -5,6 +5,7 @@
   "title": "バブルソートの実装",
   "description": "最初の行に整数 n を受け取り、続く 1 行にスペース区切りで n 個の整数が入力されます。**バブルソート**を実装して昇順に並べ替え、スペース区切りで出力してください。\n\nバブルソートの手順：\n1. 隣り合う要素を比べ、左 > 右なら入れ替える\n2. リストの末尾まで繰り返す（1 回で最大値が末尾に確定）\n3. 確定済みを除いて 1〜2 を繰り返す\n\n組み込みの `sort()` や `sorted()` は使わないこと。",
   "starter_code": "n = int(input())\nnumbers = list(map(int, input().split()))\n\n# バブルソートを実装してください\n\nprint(\" \".join(map(str, numbers)))\n",
+  "hint": "隣り合う要素を比べて、左 > 右なら交換します。外側のループで「確定済みの末尾」を広げます。\n\n```python\nfor i in range(n - 1):\n    for j in range(n - 1 - i):\n        if numbers[j] > numbers[j + 1]:\n            numbers[j], numbers[j + 1] = numbers[j + 1], numbers[j]\n```\n\n`a, b = b, a` でスワップできます。",
   "explanation": "## 解説\n\n```python\nn = int(input())\nnumbers = list(map(int, input().split()))\n\nfor i in range(n - 1):\n    for j in range(n - 1 - i):\n        if numbers[j] > numbers[j + 1]:\n            numbers[j], numbers[j + 1] = numbers[j + 1], numbers[j]\n\nprint(\" \".join(map(str, numbers)))\n```\n\n`a, b = b, a` という Python の多重代入でスワップを簡潔に書けます。外側のループは「末尾から確定済み要素を増やす」ため、内側のループ範囲が `n - 1 - i` で小さくなります。",
   "answer_code": "n = int(input())\nnumbers = list(map(int, input().split()))\nfor i in range(n - 1):\n    for j in range(n - 1 - i):\n        if numbers[j] > numbers[j + 1]:\n            numbers[j], numbers[j + 1] = numbers[j + 1], numbers[j]\nprint(\" \".join(map(str, numbers)))",
   "test_cases": [

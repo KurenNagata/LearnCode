@@ -5,6 +5,7 @@
   "title": "最頻値",
   "description": "最初の行に整数 n を受け取り、続く n 行にそれぞれ整数が 1 つ入力されます。最も多く出現する整数（最頻値）を出力してください。\n\n出現回数が同じ場合は、**値が小さい方**を出力してください。",
   "starter_code": "n = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\n# 辞書でカウントし、最頻値を求めてください\n",
+  "hint": "① 辞書でカウントする\n```python\ncount = {}\nfor x in numbers:\n    count[x] = count.get(x, 0) + 1\n```\n\n② 最初の候補を `min(count)` で初期化して、より頻度が高い（または同じ頻度で小さい）キーを探します。",
   "explanation": "## 解説\n\n辞書でカウントし、最大頻度を持つ最小値を選びます。\n\n```python\nn = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\n\ncount = {}\nfor x in numbers:\n    count[x] = count.get(x, 0) + 1\n\nbest = min(count.keys())\nfor k in count:\n    if count[k] > count[best] or (count[k] == count[best] and k < best):\n        best = k\nprint(best)\n```\n\n`min(count.keys())` で最小のキーを初期値にすることで、同頻度のときに小さい値を選べます。",
   "answer_code": "n = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\ncount = {}\nfor x in numbers:\n    count[x] = count.get(x, 0) + 1\nbest = min(count.keys())\nfor k in count:\n    if count[k] > count[best] or (count[k] == count[best] and k < best):\n        best = k\nprint(best)",
   "test_cases": [

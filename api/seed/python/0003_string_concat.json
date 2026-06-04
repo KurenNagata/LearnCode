@@ -3,8 +3,9 @@
   "level": "beginner",
   "order": 3,
   "title": "氏名の整形",
-  "description": "姓（last name）と名（first name）を別々の行で受け取り、`\"姓 名\"` の形式（半角スペース区切り）で1行に出力してください。\n\nヒント：文字列は `+` で連結できます。",
+  "description": "姓（last name）と名（first name）を別々の行で受け取り、`\"姓 名\"` の形式（半角スペース区切り）で1行に出力してください。",
   "starter_code": "last = input()\nfirst = input()\n# ここにコードを書いてください\n",
+  "hint": "文字列は `+` で連結できます。間にスペースを挟むには `\" \"` を追加します。\n\n```python\nprint(last + \" \" + first)\n```",
   "explanation": "## 解説\n\nPython では文字列を `+` で連結できます。\n\n```python\nlast = input()\nfirst = input()\nprint(last + \" \" + first)\n```\n\nまたは f 文字列（フォーマット文字列）を使うと読みやすく書けます。\n\n```python\nprint(f\"{last} {first}\")\n```",
   "answer_code": "last = input()\nfirst = input()\nprint(last + \" \" + first)",
   "test_cases": [

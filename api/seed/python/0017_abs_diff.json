@@ -5,6 +5,7 @@
   "title": "関数の定義",
   "description": "2 つの整数 a, b を受け取り、その **絶対値の差**（`|a - b|`）を返す関数 `abs_diff(a, b)` を定義して、結果を出力してください。\n\n例：a = 10, b = 3 → `7`　　a = 3, b = 10 → `7`",
   "starter_code": "def abs_diff(a, b):\n    # ここに実装してください\n    pass\n\na = int(input())\nb = int(input())\nprint(abs_diff(a, b))\n",
+  "hint": "絶対値を返す組み込み関数 `abs()` が使えます。\n\n```python\ndef abs_diff(a, b):\n    return abs(a - b)\n```\n\n`a - b` が負になっても `abs()` が正に変えてくれます。",
   "explanation": "## 解説\n\n`def` キーワードで関数を定義し、`return` で値を返します。\n\n```python\ndef abs_diff(a, b):\n    return abs(a - b)\n\na = int(input())\nb = int(input())\nprint(abs_diff(a, b))\n```\n\n`abs()` は絶対値を返す組み込み関数です。`a - b` が負の場合も正の値になります。\n\n関数を使うと「ロジック」と「入出力」を分離でき、コードが読みやすくなります。",
   "answer_code": "def abs_diff(a, b):\n    return abs(a - b)\n\na = int(input())\nb = int(input())\nprint(abs_diff(a, b))",
   "test_cases": [

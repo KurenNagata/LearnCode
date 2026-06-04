@@ -5,6 +5,7 @@
   "title": "文字の出現回数",
   "description": "英小文字のみからなる文字列を受け取り、各文字の出現回数を集計して **アルファベット順** に `\"文字:回数\"` 形式で出力してください。出現しない文字は出力しません。\n\n例：`hello` →\n```\ne:1\nh:1\nl:2\no:1\n```",
   "starter_code": "s = input()\n# 辞書を使って文字をカウントしてください\n",
+  "hint": "`dict.get(key, default)` を使うと、キーがなければデフォルト値を返してくれます。\n\n```python\ncount = {}\nfor c in s:\n    count[c] = count.get(c, 0) + 1\n```\n\nその後 `sorted(count)` でキーをアルファベット順に並べて出力します。",
   "explanation": "## 解説\n\n辞書（dict）で文字をカウントし、ソートして出力します。\n\n```python\ns = input()\ncount = {}\nfor c in s:\n    count[c] = count.get(c, 0) + 1\n\nfor c in sorted(count):\n    print(f\"{c}:{count[c]}\")\n```\n\n`count.get(c, 0)` はキー `c` の値を返し、存在しなければ `0` を返します。`sorted(count)` は辞書のキーをアルファベット順に並べます。",
   "answer_code": "s = input()\ncount = {}\nfor c in s:\n    count[c] = count.get(c, 0) + 1\nfor c in sorted(count):\n    print(f\"{c}:{count[c]}\")",
   "test_cases": [

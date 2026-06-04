@@ -66,6 +66,9 @@ func toAPIModel(p domain.Problem) openapi.Problem {
 	if p.StarterCode != "" {
 		op.StarterCode = &p.StarterCode
 	}
+	if p.Hint != "" {
+		op.Hint = &p.Hint
+	}
 	if p.Explanation != "" {
 		op.Explanation = &p.Explanation
 	}

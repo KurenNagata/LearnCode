@@ -25,6 +25,7 @@ type Problem struct {
 	AnswerCode  *string `json:"answerCode,omitempty"`
 	Description string  `json:"description"`
 	Explanation *string `json:"explanation,omitempty"`
+	Hint        *string `json:"hint,omitempty"`
 	Id          int64   `json:"id"`
 	Language    string  `json:"language"`
 	Level       string  `json:"level"`

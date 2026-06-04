@@ -19,7 +19,7 @@ func NewProblemRepo(db *pgxpool.Pool) *ProblemRepo {
 
 func (r *ProblemRepo) ListProblems(ctx context.Context, language string) ([]domain.Problem, error) {
 	query := `SELECT id, language, level, "order", title, description,
-	           COALESCE(starter_code,''), COALESCE(explanation,''), COALESCE(answer_code,'')
+	           COALESCE(starter_code,''), COALESCE(hint,''), COALESCE(explanation,''), COALESCE(answer_code,'')
 	           FROM problems`
 	args := []any{}
 	if language != "" {
@@ -38,7 +38,7 @@ func (r *ProblemRepo) ListProblems(ctx context.Context, language string) ([]doma
 	for rows.Next() {
 		var p domain.Problem
 		if err := rows.Scan(&p.ID, &p.Language, &p.Level, &p.Order, &p.Title, &p.Description,
-			&p.StarterCode, &p.Explanation, &p.AnswerCode); err != nil {
+			&p.StarterCode, &p.Hint, &p.Explanation, &p.AnswerCode); err != nil {
 			return nil, err
 		}
 		problems = append(problems, p)
@@ -50,11 +50,11 @@ func (r *ProblemRepo) GetProblemByID(ctx context.Context, id int64) (domain.Prob
 	var p domain.Problem
 	err := r.db.QueryRow(ctx,
 		`SELECT id, language, level, "order", title, description,
-		 COALESCE(starter_code,''), COALESCE(explanation,''), COALESCE(answer_code,'')
+		 COALESCE(starter_code,''), COALESCE(hint,''), COALESCE(explanation,''), COALESCE(answer_code,'')
 		 FROM problems WHERE id = $1`,
 		id,
 	).Scan(&p.ID, &p.Language, &p.Level, &p.Order, &p.Title, &p.Description,
-		&p.StarterCode, &p.Explanation, &p.AnswerCode)
+		&p.StarterCode, &p.Hint, &p.Explanation, &p.AnswerCode)
 	if err != nil {
 		return domain.Problem{}, fmt.Errorf("get problem %d: %w", id, err)
 	}
