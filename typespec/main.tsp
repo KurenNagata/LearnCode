@@ -33,6 +33,10 @@ model SubmitResponse {
   passedTests: int32;
 }
 
+model ProgressResponse {
+  clearedProblemIds: int64[];
+}
+
 @route("/api/problems")
 interface ProblemsInterface {
   @get list(@query language?: string): ListProblemsResponse;
@@ -44,4 +48,9 @@ interface ProblemsInterface {
   @post
   @route("{id}/submit")
   submit(@path id: int64, @body body: SubmitRequest): SubmitResponse;
+}
+
+@route("/api/progress")
+interface ProgressInterface {
+  @get get(): ProgressResponse;
 }

@@ -34,6 +34,11 @@ type Problem struct {
 	Title       string  `json:"title"`
 }
 
+// ProgressResponse defines model for ProgressResponse.
+type ProgressResponse struct {
+	ClearedProblemIds []int64 `json:"clearedProblemIds"`
+}
+
 // SubmitRequest defines model for SubmitRequest.
 type SubmitRequest struct {
 	Code     string `json:"code"`
@@ -66,6 +71,9 @@ type ServerInterface interface {
 
 	// (POST /api/problems/{id}/submit)
 	ProblemsInterfaceSubmit(w http.ResponseWriter, r *http.Request, id int64)
+
+	// (GET /api/progress)
+	ProgressInterfaceGet(w http.ResponseWriter, r *http.Request)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
@@ -84,6 +92,11 @@ func (_ Unimplemented) ProblemsInterfaceGet(w http.ResponseWriter, r *http.Reque
 
 // (POST /api/problems/{id}/submit)
 func (_ Unimplemented) ProblemsInterfaceSubmit(w http.ResponseWriter, r *http.Request, id int64) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (GET /api/progress)
+func (_ Unimplemented) ProgressInterfaceGet(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -172,6 +185,20 @@ func (siw *ServerInterfaceWrapper) ProblemsInterfaceSubmit(w http.ResponseWriter
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.ProblemsInterfaceSubmit(w, r, id)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ProgressInterfaceGet operation middleware
+func (siw *ServerInterfaceWrapper) ProgressInterfaceGet(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ProgressInterfaceGet(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -303,6 +330,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/api/problems/{id}/submit", wrapper.ProblemsInterfaceSubmit)
 	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/progress", wrapper.ProgressInterfaceGet)
+	})
 
 	return r
 }
@@ -374,6 +404,27 @@ func (response ProblemsInterfaceSubmit200JSONResponse) VisitProblemsInterfaceSub
 	return err
 }
 
+type ProgressInterfaceGetRequestObject struct {
+}
+
+type ProgressInterfaceGetResponseObject interface {
+	VisitProgressInterfaceGetResponse(w http.ResponseWriter) error
+}
+
+type ProgressInterfaceGet200JSONResponse ProgressResponse
+
+func (response ProgressInterfaceGet200JSONResponse) VisitProgressInterfaceGetResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
@@ -385,6 +436,9 @@ type StrictServerInterface interface {
 
 	// (POST /api/problems/{id}/submit)
 	ProblemsInterfaceSubmit(ctx context.Context, request ProblemsInterfaceSubmitRequestObject) (ProblemsInterfaceSubmitResponseObject, error)
+
+	// (GET /api/progress)
+	ProgressInterfaceGet(ctx context.Context, request ProgressInterfaceGetRequestObject) (ProgressInterfaceGetResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -494,6 +548,30 @@ func (sh *strictHandler) ProblemsInterfaceSubmit(w http.ResponseWriter, r *http.
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(ProblemsInterfaceSubmitResponseObject); ok {
 		if err := validResponse.VisitProblemsInterfaceSubmitResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ProgressInterfaceGet operation middleware
+func (sh *strictHandler) ProgressInterfaceGet(w http.ResponseWriter, r *http.Request) {
+	var request ProgressInterfaceGetRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ProgressInterfaceGet(ctx, request.(ProgressInterfaceGetRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ProgressInterfaceGet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ProgressInterfaceGetResponseObject); ok {
+		if err := validResponse.VisitProgressInterfaceGetResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {

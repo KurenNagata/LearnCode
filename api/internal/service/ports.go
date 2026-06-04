@@ -15,6 +15,7 @@ type ProblemRepository interface {
 type ProgressRepository interface {
 	GetProgress(ctx context.Context, userID string, problemID int64) (domain.Progress, error)
 	UpsertProgress(ctx context.Context, progress domain.Progress) error
+	ListClearedProblemIDs(ctx context.Context, userID string) ([]int64, error)
 }
 
 type CodeExecutor interface {

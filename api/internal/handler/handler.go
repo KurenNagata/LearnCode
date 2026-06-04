@@ -9,12 +9,13 @@ import (
 )
 
 type Handler struct {
-	problemSvc *service.ProblemService
-	judgeSvc   *service.JudgeService
+	problemSvc  *service.ProblemService
+	judgeSvc    *service.JudgeService
+	progressSvc *service.ProgressService
 }
 
-func NewHandler(ps *service.ProblemService, js *service.JudgeService) *Handler {
-	return &Handler{problemSvc: ps, judgeSvc: js}
+func NewHandler(ps *service.ProblemService, js *service.JudgeService, prog *service.ProgressService) *Handler {
+	return &Handler{problemSvc: ps, judgeSvc: js, progressSvc: prog}
 }
 
 func (h *Handler) ProblemsInterfaceList(ctx context.Context, req openapi.ProblemsInterfaceListRequestObject) (openapi.ProblemsInterfaceListResponseObject, error) {
@@ -52,6 +53,17 @@ func (h *Handler) ProblemsInterfaceSubmit(ctx context.Context, req openapi.Probl
 		TotalTests:  result.TotalTests,
 		PassedTests: result.PassedTests,
 	}, nil
+}
+
+func (h *Handler) ProgressInterfaceGet(ctx context.Context, _ openapi.ProgressInterfaceGetRequestObject) (openapi.ProgressInterfaceGetResponseObject, error) {
+	ids, err := h.progressSvc.ListClearedProblemIDs(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if ids == nil {
+		ids = []int64{}
+	}
+	return openapi.ProgressInterfaceGet200JSONResponse{ClearedProblemIds: ids}, nil
 }
 
 func toAPIModel(p domain.Problem) openapi.Problem {

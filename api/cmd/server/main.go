@@ -29,8 +29,9 @@ func main() {
 
 	problemSvc := service.NewProblemService(problemRepo)
 	judgeSvc := service.NewJudgeService(problemRepo, progressRepo, pistonClient, cfg.DefaultUserID)
+	progressSvc := service.NewProgressService(progressRepo, cfg.DefaultUserID)
 
-	h := handler.NewHandler(problemSvc, judgeSvc)
+	h := handler.NewHandler(problemSvc, judgeSvc, progressSvc)
 	httpHandler := openapi.Handler(openapi.NewStrictHandler(h, nil))
 
 	log.Printf("server listening on :%s", cfg.Port)
