@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 5,
+  "title": "1からNまでの合計",
+  "description": "整数 N が与えられます。1 から N までの整数の合計を出力してください。\n\n**入力例：** `5`\n**出力例：** `15`（= 1+2+3+4+5）",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`for` ループで 1 から N まで足していきます。\n\n```c\nint sum = 0;\nfor (int i = 1; i <= n; i++) {\n    sum += i;\n}\nprintf(\"%d\\n\", sum);\n```",
+  "explanation": "## 解説\n\n合計用の変数 `sum` を 0 で初期化し、`for` ループで 1 から N まで足します。\n\n```c\nint sum = 0;\nfor (int i = 1; i <= n; i++) {\n    sum += i;\n}\nprintf(\"%d\\n\", sum);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int sum = 0;\n    for (int i = 1; i <= n; i++) {\n        sum += i;\n    }\n    printf(\"%d\\n\", sum);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "5", "stdout": "15"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "10", "stdout": "55"},
+    {"stdin": "100", "stdout": "5050"}
+  ]
+}

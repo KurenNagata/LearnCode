@@ -1,0 +1,16 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 6,
+  "title": "カウントダウン",
+  "description": "整数 N が与えられます。N から 1 まで、1 行ずつ降順に出力してください。\n\n**入力例：** `3`\n**出力例：**\n```\n3\n2\n1\n```",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`for` ループでカウンタを N から 1 まで減らします。\n\n```c\nfor (int i = n; i >= 1; i--) {\n    printf(\"%d\\n\", i);\n}\n```",
+  "explanation": "## 解説\n\nカウンタ `i` を N から始め、1 ずつ減らしながら `i >= 1` の間ループします。\n\n```c\nfor (int i = n; i >= 1; i--) {\n    printf(\"%d\\n\", i);\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    for (int i = n; i >= 1; i--) {\n        printf(\"%d\\n\", i);\n    }\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "3", "stdout": "3\n2\n1"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "5", "stdout": "5\n4\n3\n2\n1"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 4,
+  "title": "正・負・ゼロの判定",
+  "description": "整数が 1 つ与えられます。次のルールで `正`・`負`・`ゼロ` のいずれかを出力してください。\n\n- 0 より大きい → `正`\n- 0 より小さい → `負`\n- 0 → `ゼロ`\n\n**入力例：** `-3`\n**出力例：** `負`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`if` / `else if` / `else` で場合分けします。\n\n```c\nif (n > 0) {\n    printf(\"正\\n\");\n} else if (n < 0) {\n    printf(\"負\\n\");\n} else {\n    printf(\"ゼロ\\n\");\n}\n```",
+  "explanation": "## 解説\n\n条件分岐 `if` / `else if` / `else` を使って 3 通りに分けます。\n\n```c\nif (n > 0) {\n    printf(\"正\\n\");\n} else if (n < 0) {\n    printf(\"負\\n\");\n} else {\n    printf(\"ゼロ\\n\");\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    if (n > 0) {\n        printf(\"正\\n\");\n    } else if (n < 0) {\n        printf(\"負\\n\");\n    } else {\n        printf(\"ゼロ\\n\");\n    }\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "5", "stdout": "正"},
+    {"stdin": "-3", "stdout": "負"},
+    {"stdin": "0", "stdout": "ゼロ"},
+    {"stdin": "100", "stdout": "正"},
+    {"stdin": "-100", "stdout": "負"}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 1,
+  "title": "Hello, World!",
+  "description": "C 言語で初めてのプログラムを書きましょう。\n\n画面に以下の文字列を **そのまま** 出力してください。\n\n**出力：**\n```\nHello, World!\n```",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`printf` で出力します。改行は `\\n` で表します。\n\n```c\nprintf(\"表示したい文字列\\n\");\n```",
+  "explanation": "## 解説\n\nC 言語では `printf` で文字列を出力します。改行は自動では付かないので、末尾に `\\n` を書きます。\n\n```c\n#include <stdio.h>\n\nint main(void) {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "", "stdout": "Hello, World!"}
+  ]
+}
