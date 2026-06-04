@@ -130,7 +130,7 @@ function HintModal({ problem, onClose }) {
 }
 
 // ── 正解演出（STAGE CLEAR! ＋ コドにゃんが喜ぶ） ──────────────
-function ClearOverlay({ result, onContinue }) {
+function ClearOverlay({ result, skin, onContinue }) {
   return (
     <div style={s.clearOverlay} role="dialog" aria-label="ステージクリア">
       <ClearStyles />
@@ -141,7 +141,7 @@ function ClearOverlay({ result, onContinue }) {
         <span className="lc-star lc-star4">✦</span>
 
         <div className="lc-clear-title">STAGE CLEAR!</div>
-        <PixelCat size={104} happy className="lc-clear-cat" />
+        <PixelCat size={104} happy color={skin?.color} belly={skin?.belly} className="lc-clear-cat" />
         <div className="lc-clear-sub">
           ぜんぶ正解！{result ? ` ${result.passedTests}/${result.totalTests} テスト通過` : ''}
         </div>
@@ -220,6 +220,19 @@ const LANGUAGES = [
   { id: 'cpp', label: 'C++', mono: 'C++', tileBg: '#51E5FF', tileFg: '#1A1930', available: false, blurb: '高速・低レイヤーの定番' },
   { id: 'csharp', label: 'C#', mono: 'C#', tileBg: '#C77DFF', tileFg: '#FFFFFF', available: false, blurb: 'アプリ・ゲーム開発に' },
 ]
+
+// ── コドにゃんの着せ替えスキン（色違い）。後で XP で解放予定 ──
+const CAT_SKINS = [
+  { id: 'orange', label: 'きほん', color: '#FFC06A', belly: '#FFE6C2' },
+  { id: 'gray', label: 'グレー', color: '#A9A6C9', belly: '#E6E4F5' },
+  { id: 'kuro', label: 'くろ', color: '#4A4866', belly: '#9D99C9' },
+  { id: 'shiro', label: 'しろ', color: '#EDEBFF', belly: '#FFFFFF' },
+  { id: 'mizu', label: 'みず', color: '#51E5FF', belly: '#BEF6FF' },
+  { id: 'momo', label: 'もも', color: '#FF8AAE', belly: '#FFD6E4' },
+  { id: 'midori', label: 'みどり', color: '#5DF15D', belly: '#BEF9BE' },
+  { id: 'kin', label: 'きん', color: '#FFD93D', belly: '#FFF1B0' },
+]
+const SKIN_KEY = 'lc-cat-skin'
 
 // ── ドット絵風の南京錠アイコン（インライン SVG） ──────────────
 function PixelLock() {
@@ -300,7 +313,7 @@ function PixelCat({ size = 64, color = '#FFC06A', belly = '#FFE6C2', happy = fal
 }
 
 // ── トップページ（8bit アーケード風タイトル画面） ─────────────
-function Home({ onSelect }) {
+function Home({ onSelect, onOpenCloset, skin }) {
   const start = () => onSelect('python')
 
   return (
@@ -310,13 +323,16 @@ function Home({ onSelect }) {
       {/* 上部 HUD バー */}
       <div className="lc-hud">
         <span className="lc-hud-left">■ LEARNCODE.EXE</span>
-        <span className="lc-hud-right">★ LV.1</span>
+        <span className="lc-hud-right">
+          <button type="button" className="lc-hud-btn" onClick={onOpenCloset}>きせかえ</button>
+          <span className="lc-hud-lv">★ LV.1</span>
+        </span>
       </div>
 
       <div className="lc-screen">
         {/* 大タイトル＋マスコット */}
         <div className="lc-titlewrap">
-          <PixelCat className="lc-mascot" />
+          <PixelCat className="lc-mascot" color={skin.color} belly={skin.belly} />
           <h1 className="lc-title">
             <span className="lc-title-learn">LEARN</span>
             <span className="lc-title-code">CODE</span>
@@ -404,7 +420,16 @@ function HomeStyles() {
         font-family:'Press Start 2P', monospace; font-size:11px; letter-spacing:1px;
       }
       .lc-hud-left { color:var(--green); }
-      .lc-hud-right { color:var(--yellow); }
+      .lc-hud-right { display:flex; align-items:center; gap:14px; }
+      .lc-hud-lv { color:var(--yellow); }
+      .lc-hud-btn {
+        font-family:'DotGothic16', sans-serif; font-size:13px; font-weight:bold; letter-spacing:1px;
+        color:var(--cyan); background:var(--bev-l); cursor:pointer; padding:6px 12px; border-radius:0;
+        border-top:2px solid var(--muted); border-left:2px solid var(--muted);
+        border-right:2px solid var(--bev-d); border-bottom:2px solid var(--bev-d);
+      }
+      .lc-hud-btn:hover { color:var(--white); background:#54528c; }
+      .lc-hud-btn:focus-visible { outline:2px dashed var(--cyan); outline-offset:2px; }
 
       /* 画面本体 */
       .lc-screen {
@@ -526,16 +551,102 @@ function HomeStyles() {
   )
 }
 
-// ── ルート：言語未選択ならトップ、選択後は学習画面 ────────────
+// ── ルート：home / closet / course を切替 ─────────────────────
 export default function App() {
   const [language, setLanguage] = useState(null)
+  const [screen, setScreen] = useState('home') // 'home' | 'closet'
+  const [skinId, setSkinId] = useState(() => {
+    try { return localStorage.getItem(SKIN_KEY) || 'orange' } catch { return 'orange' }
+  })
+  const skin = CAT_SKINS.find(sk => sk.id === skinId) ?? CAT_SKINS[0]
 
-  if (!language) return <Home onSelect={setLanguage} />
-  return <Course language={language} onBack={() => setLanguage(null)} />
+  function chooseSkin(id) {
+    setSkinId(id)
+    try { localStorage.setItem(SKIN_KEY, id) } catch { /* ignore */ }
+  }
+
+  if (language) return <Course language={language} skin={skin} onBack={() => setLanguage(null)} />
+  if (screen === 'closet') return <Closet skin={skin} onSelect={chooseSkin} onBack={() => setScreen('home')} />
+  return <Home skin={skin} onSelect={setLanguage} onOpenCloset={() => setScreen('closet')} />
+}
+
+// ── 着せ替え画面（クローゼット） ──────────────────────────────
+function Closet({ skin, onSelect, onBack }) {
+  return (
+    <div style={s.closetRoot}>
+      <ClosetStyles />
+
+      {/* HUD */}
+      <div style={s.closetHud}>
+        <button type="button" onClick={onBack} style={s.closetBack} aria-label="トップへもどる">← もどる</button>
+        <span style={s.closetTitle}>きせかえ</span>
+        <span style={{ width: 84 }} aria-hidden="true" />
+      </div>
+
+      <div style={s.closetBody}>
+        {/* プレビュー */}
+        <div className="lc-cl-stage">
+          <PixelCat size={160} color={skin.color} belly={skin.belly} />
+          <div className="lc-cl-name">コドにゃん（{skin.label}）</div>
+        </div>
+
+        {/* カラー選択 */}
+        <p style={s.closetGuide}>▼ カラーをえらぶ</p>
+        <div className="lc-cl-grid">
+          {CAT_SKINS.map(sk => (
+            <button
+              key={sk.id}
+              type="button"
+              onClick={() => onSelect(sk.id)}
+              aria-label={`${sk.label} にする`}
+              aria-pressed={sk.id === skin.id}
+              className={`lc-cl-card${sk.id === skin.id ? ' lc-cl-sel' : ''}`}
+            >
+              <PixelCat size={56} color={sk.color} belly={sk.belly} />
+              <span className="lc-cl-card-name">{sk.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ClosetStyles() {
+  return (
+    <style>{`
+      .lc-cl-stage {
+        display:flex; flex-direction:column; align-items:center; gap:14px;
+        padding:28px 48px; background:#2D2B52;
+        border-top:4px solid #46447A; border-left:4px solid #46447A;
+        border-right:4px solid #1A1930; border-bottom:4px solid #1A1930;
+      }
+      .lc-cl-stage svg { image-rendering:pixelated; }
+      .lc-cl-name { font-family:'DotGothic16', sans-serif; font-size:18px; color:#FFD93D; letter-spacing:1px; }
+
+      .lc-cl-grid {
+        display:grid; grid-template-columns:repeat(4, 92px); gap:14px; justify-content:center;
+      }
+      .lc-cl-card {
+        display:flex; flex-direction:column; align-items:center; gap:6px; padding:10px 8px;
+        background:#2D2B52; border:0; border-radius:0; cursor:pointer; font:inherit;
+        border-top:3px solid #46447A; border-left:3px solid #46447A;
+        border-right:3px solid #1A1930; border-bottom:3px solid #1A1930;
+      }
+      .lc-cl-card svg { image-rendering:pixelated; }
+      .lc-cl-card-name { font-family:'DotGothic16', sans-serif; font-size:13px; color:#EDEBFF; }
+      .lc-cl-card:hover { background:#363468; }
+      .lc-cl-sel { outline:4px solid #5DF15D; outline-offset:3px; }
+      .lc-cl-card:focus-visible { outline:3px dashed #51E5FF; outline-offset:3px; }
+
+      @media (max-width:520px) { .lc-cl-grid { grid-template-columns:repeat(3, 92px); } }
+      @media (max-width:392px) { .lc-cl-grid { grid-template-columns:repeat(2, 92px); } }
+    `}</style>
+  )
 }
 
 // ── 学習画面（言語ごと） ──────────────────────────────────────
-function Course({ language, onBack }) {
+function Course({ language, skin, onBack }) {
   const [problems, setProblems] = useState([])
   const [problem, setProblem] = useState(null)
   const [code, setCode] = useState('')
@@ -607,6 +718,7 @@ function Course({ language, onBack }) {
       {showClear && (
         <ClearOverlay
           result={result}
+          skin={skin}
           onContinue={() => { setShowClear(false); setShowModal(true) }}
         />
       )}
@@ -745,6 +857,14 @@ const s = {
   hintBtn: { ...pxBtn(c.yellow, c.bevD, '#FFE98A', '#B8950F'), fontSize: 10 },
   explanationBtn: { ...pxBtn(c.cyan, c.bevD, '#A6F2FF', '#1F9DB5'), fontSize: 10 },
   nextBtn: { ...pxBtn(c.pink, c.white, '#FF9CBC', '#C72E5C'), fontSize: 10 },
+
+  // 着せ替え（クローゼット）
+  closetRoot: { minHeight: '100vh', background: c.bg, color: c.ink, fontFamily: FONT_DOT, display: 'flex', flexDirection: 'column', imageRendering: 'pixelated' },
+  closetHud: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: `4px solid ${c.bevL}` },
+  closetBack: { ...pxBtn(c.bevL, c.green, c.muted, c.bevD), fontSize: 9 },
+  closetTitle: { fontFamily: FONT_PX, fontSize: 14, color: c.yellow, letterSpacing: 1 },
+  closetBody: { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 22, padding: '28px 20px', overflowY: 'auto' },
+  closetGuide: { fontFamily: FONT_DOT, fontSize: 15, color: c.yellow, letterSpacing: 1 },
 
   // 正解演出
   clearOverlay: { position: 'fixed', inset: 0, background: 'rgba(10,9,24,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: 16 },
