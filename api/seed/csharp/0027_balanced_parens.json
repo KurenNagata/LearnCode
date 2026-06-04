@@ -1,0 +1,19 @@
+{
+  "language": "csharp",
+  "level": "advanced",
+  "order": 27,
+  "title": "括弧の対応チェック",
+  "description": "`(` `)` `[` `]` `{` `}` だけからなる文字列が与えられます。すべての括弧が正しく対応し、入れ子も正しければ `Yes`、そうでなければ `No` を出力してください。\n\n**入力例：** `{[()]}`\n**出力例：** `Yes`\n\n**入力例：** `([)]`\n**出力例：** `No`",
+  "starter_code": "using System;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`Stack<char>` を使います。開き括弧は積み、閉じ括弧は一番上と対応するか確認します。\n\n```csharp\nvar stack = new Stack<char>();\nvar pairs = new Dictionary<char, char>();\npairs[')'] = '('; pairs[']'] = '['; pairs['}'] = '{';\nbool ok = true;\nforeach (char ch in s) {\n    if (ch == '(' || ch == '[' || ch == '{') stack.Push(ch);\n    else if (stack.Count == 0 || stack.Pop() != pairs[ch]) { ok = false; break; }\n}\nConsole.WriteLine(ok && stack.Count == 0 ? \"Yes\" : \"No\");\n```",
+  "explanation": "## 解説\n\n`Stack<char>` に開き括弧を積み、閉じ括弧が来たら一番上 (`Pop`) と対応するか確認します。途中で崩れる、または最後にスタックが空でなければ対応していません。\n\n```csharp\nvar stack = new Stack<char>();\nvar pairs = new Dictionary<char, char>();\npairs[')'] = '('; pairs[']'] = '['; pairs['}'] = '{';\nbool ok = true;\nforeach (char ch in s) {\n    if (ch == '(' || ch == '[' || ch == '{') stack.Push(ch);\n    else if (stack.Count == 0 || stack.Pop() != pairs[ch]) { ok = false; break; }\n}\nConsole.WriteLine(ok && stack.Count == 0 ? \"Yes\" : \"No\");\n```",
+  "answer_code": "using System;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        string s = Console.ReadLine();\n        var stack = new Stack<char>();\n        var pairs = new Dictionary<char, char>();\n        pairs[')'] = '('; pairs[']'] = '['; pairs['}'] = '{';\n        bool ok = true;\n        foreach (char ch in s) {\n            if (ch == '(' || ch == '[' || ch == '{') stack.Push(ch);\n            else if (stack.Count == 0 || stack.Pop() != pairs[ch]) { ok = false; break; }\n        }\n        Console.WriteLine(ok && stack.Count == 0 ? \"Yes\" : \"No\");\n    }\n}",
+  "test_cases": [
+    {"stdin": "()", "stdout": "Yes"},
+    {"stdin": "([])", "stdout": "Yes"},
+    {"stdin": "{[()]}", "stdout": "Yes"},
+    {"stdin": "([)]", "stdout": "No"},
+    {"stdin": "(()", "stdout": "No"},
+    {"stdin": ")(", "stdout": "No"}
+  ]
+}
