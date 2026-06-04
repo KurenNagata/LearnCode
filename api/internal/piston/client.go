@@ -46,11 +46,22 @@ type execResponse struct {
 	} `json:"run"`
 }
 
+// 言語IDごとのソースファイル拡張子（Piston / コンパイラが要求する形式）。
+var fileExt = map[string]string{
+	"python":     "py",
+	"javascript": "js",
+	"java":       "java",
+	"c":          "c",
+	"cpp":        "cpp",
+	"csharp":     "cs",
+}
+
 func (c *Client) Execute(ctx context.Context, req service.ExecuteRequest) (service.ExecuteResult, error) {
-	filename := "main.py"
-	if req.Language != "python" {
-		filename = "main." + req.Language
+	ext := fileExt[req.Language]
+	if ext == "" {
+		ext = req.Language
 	}
+	filename := "main." + ext
 
 	body := execRequest{
 		Language:    req.Language,
