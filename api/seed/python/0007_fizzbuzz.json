@@ -3,7 +3,7 @@
   "level": "beginner",
   "order": 7,
   "title": "FizzBuzz",
-  "description": "整数 n を受け取り、1 から n までの整数を順に出力してください。ただし：\n\n- 3 と 5 の **両方** の倍数のときは `FizzBuzz`\n- 3 の倍数のときは `Fizz`\n- 5 の倍数のときは `Buzz`\n- それ以外はその数\n\nを出力してください。",
+  "description": "整数 n を受け取り、1 から n まで 1 行ずつ出力してください。\nただし、以下のルールに従って数字の代わりに文字を出力することがあります（条件は上から順に優先されます）。\n\n| 優先順 | 条件 | 出力 |\n|--------|------|------|\n| 1 | 3 と 5 の両方の倍数（= 15 の倍数） | `FizzBuzz` |\n| 2 | 3 の倍数 | `Fizz` |\n| 3 | 5 の倍数 | `Buzz` |\n| 4 | それ以外 | その数字 |\n\n**入力例：** `15`\n**出力例：**\n```\n1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz\n```",
   "starter_code": "n = int(input())\nfor i in range(1, n + 1):\n    # ここにコードを書いてください\n    pass\n",
   "hint": "3 と 5 の**両方**の倍数の条件を最初に書くのがポイントです。\n\n```python\nif i % 15 == 0:\n    print(\"FizzBuzz\")\nelif i % 3 == 0:\n    ...\nelif i % 5 == 0:\n    ...\nelse:\n    ...\n```",
   "explanation": "## 解説\n\n3 と 5 の両方の倍数の条件を **先に** チェックするのがポイントです。\n\n```python\nn = int(input())\nfor i in range(1, n + 1):\n    if i % 15 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)\n```\n\n`range(1, n+1)` は 1 から n までの整数を生成します。`%` は余りを求める演算子で、`i % 3 == 0` は「3 で割り切れる」という条件です。",

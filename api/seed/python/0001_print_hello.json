@@ -3,7 +3,7 @@
   "level": "beginner",
   "order": 1,
   "title": "Hello, World!",
-  "description": "画面に `Hello, World!` と表示するプログラムを書いてください。",
+  "description": "Python で初めてのプログラムを書きましょう。\n\n画面に以下の文字列を **そのまま** 出力してください。大文字・小文字・記号（コンマ・感嘆符）も含めて正確に出力する必要があります。\n\n**出力：**\n```\nHello, World!\n```",
   "starter_code": "# ここにコードを書いてください\n",
   "hint": "Python では `print()` 関数を使います。\n\n```python\nprint(\"表示したい文字列\")\n```\n\n文字列はダブルクォート `\"` またはシングルクォート `'` で囲みます。",
   "explanation": "## 解説\n\nPython では `print()` 関数で文字列を出力できます。\n\n```python\nprint(\"Hello, World!\")\n```\n\n`print()` は引数として渡した値を標準出力に出力し、末尾に改行を追加します。",

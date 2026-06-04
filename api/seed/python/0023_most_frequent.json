@@ -3,7 +3,7 @@
   "level": "intermediate",
   "order": 23,
   "title": "最頻値",
-  "description": "最初の行に整数 n を受け取り、続く n 行にそれぞれ整数が 1 つ入力されます。最も多く出現する整数（最頻値）を出力してください。\n\n出現回数が同じ場合は、**値が小さい方**を出力してください。",
+  "description": "最初の行に整数 n を受け取ります。続く n 行に、それぞれ整数が 1 つずつ入力されます。\nn 個の整数の中で **最も多く登場する数（最頻値）** を出力してください。\n\n最頻値が複数ある（異なる数が同じ回数だけ登場する）場合は、その中で **最も小さい数** を出力してください。\n\n**入力例 1：**\n```\n6\n1\n2\n2\n3\n3\n2\n```\n**出力例 1：** `2`（2 が 3 回で最多）\n\n**入力例 2（同数の場合）：**\n```\n4\n5\n5\n3\n3\n```\n**出力例 2：** `3`（3 と 5 が各 2 回で同数。小さい方の 3 を出力）",
   "starter_code": "n = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\n# 辞書でカウントし、最頻値を求めてください\n",
   "hint": "① 辞書でカウントする\n```python\ncount = {}\nfor x in numbers:\n    count[x] = count.get(x, 0) + 1\n```\n\n② 最初の候補を `min(count)` で初期化して、より頻度が高い（または同じ頻度で小さい）キーを探します。",
   "explanation": "## 解説\n\n辞書でカウントし、最大頻度を持つ最小値を選びます。\n\n```python\nn = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\n\ncount = {}\nfor x in numbers:\n    count[x] = count.get(x, 0) + 1\n\nbest = min(count.keys())\nfor k in count:\n    if count[k] > count[best] or (count[k] == count[best] and k < best):\n        best = k\nprint(best)\n```\n\n`min(count.keys())` で最小のキーを初期値にすることで、同頻度のときに小さい値を選べます。",

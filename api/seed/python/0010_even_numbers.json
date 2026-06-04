@@ -3,7 +3,7 @@
   "level": "beginner",
   "order": 10,
   "title": "偶数の列挙",
-  "description": "整数 n を受け取り、1 から n までの偶数を改行区切りで出力してください。\n\n例：n = 10 のとき\n```\n2\n4\n6\n8\n10\n```\n\n偶数が 1 つもない場合は何も出力しません（n = 1 のとき）。",
+  "description": "整数 n を受け取り、1 から n の中にある偶数を、小さい順に 1 行ずつ出力してください。\n偶数が 1 つも存在しない場合（例：n = 1）は何も出力しません。\n\n**入力例：** `10`\n**出力例：**\n```\n2\n4\n6\n8\n10\n```\n\n**入力例：** `1`\n**出力例：**（何も出力しない）",
   "starter_code": "n = int(input())\n# ここにコードを書いてください\n",
   "hint": "2 通りの方法があります。\n\n① `range` のステップを使う\n```python\nfor i in range(2, n + 1, 2):\n    print(i)\n```\n\n② 余りで判定する\n```python\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        print(i)\n```",
   "explanation": "## 解説\n\n```python\nn = int(input())\nfor i in range(2, n + 1, 2):\n    print(i)\n```\n\n`range(2, n+1, 2)` は 2 から始まり、**2 ずつ増やして** n 以下の数を生成します。\n\nまたは余りで判定する方法：\n\n```python\nfor i in range(1, n + 1):\n    if i % 2 == 0:\n        print(i)\n```",

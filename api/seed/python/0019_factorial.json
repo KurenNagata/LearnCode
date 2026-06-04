@@ -3,7 +3,7 @@
   "level": "intermediate",
   "order": 19,
   "title": "再帰：階乗",
-  "description": "整数 n を受け取り、n の階乗（n!）を出力してください。**再帰関数**を使って実装してください。\n\n階乗の定義：\n- 0! = 1\n- n! = n × (n-1)!（n > 0 のとき）\n\n例：5! = 5 × 4 × 3 × 2 × 1 = 120",
+  "description": "整数 n を受け取り、n の階乗（n!）を出力してください。\n**再帰関数**（自分自身を呼び出す関数）を使って実装してください。\n\n**階乗の定義：**\n- 0! = 1（ベースケース）\n- n! = n × (n − 1)!（n が 1 以上のとき）\n\n**計算例：** 5! = 5 × 4 × 3 × 2 × 1 = 120\n\n**入力例 1：** `5` → **出力：** `120`\n**入力例 2：** `0` → **出力：** `1`\n**入力例 3：** `10` → **出力：** `3628800`",
   "starter_code": "def factorial(n):\n    # 再帰を使って実装してください\n    pass\n\nn = int(input())\nprint(factorial(n))\n",
   "hint": "再帰のポイントは「ベースケース（終了条件）」と「自分自身を呼び出す」の 2 点です。\n\n```python\ndef factorial(n):\n    if n == 0:       # ベースケース\n        return 1\n    return n * factorial(n - 1)  # 再帰呼び出し\n```",
   "explanation": "## 解説\n\n再帰関数は自分自身を呼び出す関数です。必ず「終了条件（ベースケース）」を設けます。\n\n```python\ndef factorial(n):\n    if n == 0:\n        return 1\n    return n * factorial(n - 1)\n\nn = int(input())\nprint(factorial(n))\n```\n\n展開例：`factorial(3)` → `3 * factorial(2)` → `3 * 2 * factorial(1)` → `3 * 2 * 1 * factorial(0)` → `3 * 2 * 1 * 1 = 6`\n\nベースケース（`n == 0` のとき `1` を返す）がないと無限ループになるので必ず設けます。",

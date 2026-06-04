@@ -3,7 +3,7 @@
   "level": "beginner",
   "order": 11,
   "title": "カウントダウン",
-  "description": "整数 n を受け取り、n から 1 まで 1 ずつ減らしながら出力し、最後に `Go!` を出力してください。`while` ループを使って実装してください。\n\n例：n = 5 のとき\n```\n5\n4\n3\n2\n1\nGo!\n```",
+  "description": "整数 n を受け取り、n から 1 まで 1 ずつ減らしながら 1 行ずつ出力し、最後に `Go!` を出力してください。\n`for` ではなく **`while` ループ** を使って実装してください。\n\n**入力例：** `5`\n**出力例：**\n```\n5\n4\n3\n2\n1\nGo!\n```",
   "starter_code": "n = int(input())\n# while ループを使って書いてください\n",
   "hint": "`while` は条件が真の間ループします。n を 1 ずつ減らして 0 になったら止まるようにします。\n\n```python\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint(\"Go!\")\n```",
   "explanation": "## 解説\n\n`while` ループは条件が真の間、繰り返します。\n\n```python\nn = int(input())\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint(\"Go!\")\n```\n\n`n -= 1` は `n = n - 1` の省略形です。ループの中で n を減らし続け、0 になったら条件が偽になり終了します。",

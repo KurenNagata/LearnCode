@@ -3,7 +3,7 @@
   "level": "beginner",
   "order": 6,
   "title": "大きい方を出力",
-  "description": "2つの整数 a, b を別々の行で受け取り、大きい方の値を出力してください。\n\n- 等しい場合はどちらの値を出力しても構いません。",
+  "description": "2 つの整数を 1 行ずつ受け取り、大きい方の値を出力してください。\n2 つが等しい場合は、その値をそのまま出力してください。\n\n**入力例 1：**\n```\n3\n7\n```\n**出力例 1：** `7`\n\n**入力例 2（等しい場合）：**\n```\n10\n10\n```\n**出力例 2：** `10`",
   "starter_code": "a = int(input())\nb = int(input())\n# ここにコードを書いてください\n",
   "hint": "`if / else` で比較するか、組み込み関数 `max()` が使えます。\n\n```python\nif a >= b:\n    print(a)\nelse:\n    print(b)\n```\n\nまたは `print(max(a, b))` の 1 行でも書けます。",
   "explanation": "## 解説\n\n`if / else` で比較するか、組み込み関数 `max()` を使う方法があります。\n\n```python\na = int(input())\nb = int(input())\nif a >= b:\n    print(a)\nelse:\n    print(b)\n```\n\nまたはシンプルに：\n\n```python\nprint(max(a, b))\n```\n\n`max()` は引数の中から最大値を返す組み込み関数です。",

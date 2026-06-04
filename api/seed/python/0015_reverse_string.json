@@ -3,7 +3,7 @@
   "level": "beginner",
   "order": 15,
   "title": "文字列の逆順",
-  "description": "文字列を 1 行受け取り、文字を逆順にして出力してください。\n\n例：`hello` → `olleh`",
+  "description": "文字列を 1 行受け取り、文字の並びを **逆順** にして出力してください。\n\n**入力例 1：** `hello` → **出力：** `olleh`\n**入力例 2：** `Python` → **出力：** `nohtyP`\n**入力例 3：** `racecar` → **出力：** `racecar`（前から読んでも後ろから読んでも同じ文字列の場合、そのまま出力）",
   "starter_code": "s = input()\n# ここにコードを書いてください\n",
   "hint": "Python のスライス記法 `[::-1]` を使うと文字列を逆順にできます。\n\n```python\nprint(s[::-1])\n```\n\n`[start:stop:step]` の step を `-1` にすると逆方向になります。",
   "explanation": "## 解説\n\nPython のスライスを使うと簡潔に逆順にできます。\n\n```python\ns = input()\nprint(s[::-1])\n```\n\n`s[::-1]` は「末尾から先頭へ 1 文字ずつ」というスライスです。`[start:stop:step]` の `step` を `-1` にすると逆方向になります。`start` と `stop` を省略すると全体を対象にします。",

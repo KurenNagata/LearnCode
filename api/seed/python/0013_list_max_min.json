@@ -3,7 +3,7 @@
   "level": "beginner",
   "order": 13,
   "title": "リストの最大値と最小値",
-  "description": "最初の行に整数 n を受け取り、続く n 行にそれぞれ整数が 1 つ入力されます。最大値と最小値を改行区切りで出力してください（最大値を先に）。\n\n例：\n```\n入力    出力\n4       4\n3       1\n1\n4\n2\n```",
+  "description": "最初の行に整数 n を受け取ります。続く n 行に、それぞれ整数が 1 つずつ入力されます。\nn 個の整数の中から **最大値** と **最小値** を求め、最大値・最小値の順に改行して出力してください。\n\n**入力例：**\n```\n4\n3\n1\n4\n2\n```\n**出力例：**\n```\n4\n1\n```\n（最大値 4、最小値 1）",
   "starter_code": "n = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\n# ここにコードを書いてください\n",
   "hint": "`max()` と `min()` にリストを渡すだけです。最大値を先に出力します。\n\n```python\nprint(max(numbers))\nprint(min(numbers))\n```",
   "explanation": "## 解説\n\nPython には `max()` と `min()` という組み込み関数があります。\n\n```python\nn = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\nprint(max(numbers))\nprint(min(numbers))\n```\n\nリストを引数に渡すと、その中の最大値・最小値を返してくれます。",
