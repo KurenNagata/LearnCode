@@ -439,14 +439,15 @@ function PixelCat({ size = 64, color = '#FFC06A', belly = '#FFE6C2', happy = fal
 }
 
 // ── レベル表示（LV＋称号＋XPバー） ───────────────────────────
-function LevelBadge({ info, width = 150 }) {
+// バーはテキスト幅に合わせて伸縮（width:100%）。minWidth で最小幅を確保。
+function LevelBadge({ info, minWidth = 150 }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-      <div style={{ display: 'flex', gap: 8, alignItems: 'baseline' }}>
+    <div style={{ display: 'inline-flex', flexDirection: 'column', gap: 5, minWidth, width: 'fit-content' }}>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'baseline', whiteSpace: 'nowrap' }}>
         <span style={{ fontFamily: FONT_PX, fontSize: 11, color: c.yellow }}>★LV.{info.level}</span>
         <span style={{ fontFamily: FONT_DOT, fontSize: 13, fontWeight: 'bold', color: c.ink }}>{info.rank}</span>
       </div>
-      <div style={{ width, height: 10, background: c.bevD, ...bevelIn(2) }}>
+      <div style={{ width: '100%', height: 10, background: c.bevD, ...bevelIn(2) }}>
         <div style={{ width: `${Math.round(info.progress * 100)}%`, height: '100%', background: c.green, transition: 'width .45s steps(8)' }} />
       </div>
     </div>
@@ -469,7 +470,7 @@ function Home({ onSelect, onOpenCloset, skin, accessory, xp, muted, onToggleMute
             {muted ? 'SE ✕' : 'SE ♪'}
           </button>
           <button type="button" className="lc-hud-btn" onClick={onOpenCloset}>きせかえ</button>
-          <LevelBadge info={xp} width={120} />
+          <LevelBadge info={xp} minWidth={120} />
         </span>
       </div>
 
@@ -715,6 +716,19 @@ export default function App() {
   const xp = xpInfo(clearedIds.length * XP_PER_CLEAR)
 
   useEffect(() => { sfx.setEnabled(!muted) }, [muted])
+
+  // 起動時にサーバの進捗（クリア済み問題）を取得。失敗時は localStorage を使う。
+  useEffect(() => {
+    fetch('/api/progress')
+      .then(r => (r.ok ? r.json() : null))
+      .then(data => {
+        if (data && Array.isArray(data.clearedProblemIds)) {
+          setClearedIds(data.clearedProblemIds)
+          try { localStorage.setItem(XP_KEY, JSON.stringify(data.clearedProblemIds)) } catch { /* ignore */ }
+        }
+      })
+      .catch(() => { /* オフライン: localStorage の値で継続 */ })
+  }, [])
 
   function chooseSkin(id) {
     setSkinId(id)
@@ -978,7 +992,7 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
       {/* サイドバー */}
       <aside style={s.sidebar}>
         <button onClick={onBack} style={s.backToHome}>← 言語選択へ戻る</button>
-        <div style={{ marginBottom: 14 }}><LevelBadge info={xp} width={200} /></div>
+        <div style={{ marginBottom: 14 }}><LevelBadge info={xp} minWidth={200} /></div>
         <button onClick={onToggleMute} style={{ ...s.backToHome, marginBottom: 14 }}>
           {muted ? 'SE: OFF ✕' : 'SE: ON ♪'}
         </button>
