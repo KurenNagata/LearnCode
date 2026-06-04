@@ -23,8 +23,11 @@ def normalize(s: str) -> str:
     return s.rstrip("\r\n").replace("！", "!")
 
 
+EXT = {"python": "py", "javascript": "js", "java": "java", "c": "c", "cpp": "cpp", "csharp": "cs"}
+
+
 def execute(language: str, code: str, stdin: str):
-    filename = "main.py" if language == "python" else f"main.{language}"
+    filename = f"main.{EXT.get(language, language)}"
     body = {
         "language": language,
         "version": "*",
