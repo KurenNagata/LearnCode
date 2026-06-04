@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 9,
+  "title": "母音の数",
+  "description": "1 行の文字列が与えられます（半角英小文字、空白なし）。含まれる **母音**（a, e, i, o, u）の個数を出力してください。\n\n**入力例：** `hello`\n**出力例：** `2`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "1 文字ずつ調べ、`\"aeiou\"` に含まれていれば数えます。\n\n```java\nint count = 0;\nfor (char c : s.toCharArray()) {\n    if (\"aeiou\".indexOf(c) >= 0) count++;\n}\nSystem.out.println(count);\n```",
+  "explanation": "## 解説\n\n`s.toCharArray()` で 1 文字ずつ取り出し、母音をまとめた文字列 `\"aeiou\"` に含まれるか `indexOf` で調べます。見つかれば（0 以上が返れば）母音です。\n\n```java\nint count = 0;\nfor (char c : s.toCharArray()) {\n    if (\"aeiou\".indexOf(c) >= 0) count++;\n}\nSystem.out.println(count);\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        int count = 0;\n        for (char c : s.toCharArray()) {\n            if (\"aeiou\".indexOf(c) >= 0) count++;\n        }\n        System.out.println(count);\n    }\n}",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "2"},
+    {"stdin": "aeiou", "stdout": "5"},
+    {"stdin": "xyz", "stdout": "0"},
+    {"stdin": "programming", "stdout": "3"}
+  ]
+}

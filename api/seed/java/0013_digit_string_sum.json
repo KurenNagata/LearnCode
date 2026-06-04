@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 13,
+  "title": "数字文字列の合計",
+  "description": "数字だけからなる文字列が与えられます。各桁の数字を合計して出力してください。\n\n**入力例：** `123`\n**出力例：** `6`（= 1+2+3）",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "文字 `'0'`〜`'9'` から `'0'` を引くと、その数字の値（0〜9）になります。\n\n```java\nint sum = 0;\nfor (char c : s.toCharArray()) {\n    sum += c - '0';\n}\nSystem.out.println(sum);\n```",
+  "explanation": "## 解説\n\n文字を数値に変換するには、文字コードの差を使います。例えば `'3' - '0'` は `3` になります。各文字をこの方法で数値にして足します。\n\n```java\nint sum = 0;\nfor (char c : s.toCharArray()) {\n    sum += c - '0';\n}\nSystem.out.println(sum);\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        int sum = 0;\n        for (char c : s.toCharArray()) {\n            sum += c - '0';\n        }\n        System.out.println(sum);\n    }\n}",
+  "test_cases": [
+    {"stdin": "123", "stdout": "6"},
+    {"stdin": "5", "stdout": "5"},
+    {"stdin": "9999", "stdout": "36"},
+    {"stdin": "1000", "stdout": "1"}
+  ]
+}

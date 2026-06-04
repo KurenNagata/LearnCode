@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 10,
+  "title": "単語数を数える",
+  "description": "スペース区切りの文が 1 行で与えられます。単語の個数を出力してください。\n\n**入力例：** `I love Java`\n**出力例：** `3`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String line = sc.nextLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`split` で空白ごとに分割すると、配列の長さが単語数になります。\n\n```java\nString[] words = line.trim().split(\"\\\\s+\");\nSystem.out.println(words.length);\n```",
+  "explanation": "## 解説\n\n`split(\"\\\\s+\")` は 1 個以上の空白で文字列を分割します。`trim()` で前後の空白を除いてから分割すると、単語数を正しく数えられます。\n\n```java\nString[] words = line.trim().split(\"\\\\s+\");\nSystem.out.println(words.length);\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String line = sc.nextLine();\n        String[] words = line.trim().split(\"\\\\s+\");\n        System.out.println(words.length);\n    }\n}",
+  "test_cases": [
+    {"stdin": "I love Java", "stdout": "3"},
+    {"stdin": "Hello", "stdout": "1"},
+    {"stdin": "a b c d", "stdout": "4"},
+    {"stdin": "one two", "stdout": "2"}
+  ]
+}

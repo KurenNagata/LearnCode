@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 16,
+  "title": "2進数に変換",
+  "description": "0 以上の整数 N が与えられます。N を **2 進数** に変換して出力してください。\n\n**入力例：** `5`\n**出力例：** `101`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`Integer.toBinaryString()` が 2 進数の文字列を返します。\n\n```java\nSystem.out.println(Integer.toBinaryString(n));\n```",
+  "explanation": "## 解説\n\nJava には整数を 2 進数の文字列に変換する `Integer.toBinaryString()` が用意されています。\n\n```java\nSystem.out.println(Integer.toBinaryString(n));\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        System.out.println(Integer.toBinaryString(n));\n    }\n}",
+  "test_cases": [
+    {"stdin": "5", "stdout": "101"},
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "10", "stdout": "1010"},
+    {"stdin": "255", "stdout": "11111111"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 12,
+  "title": "偶数の個数",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。そのうち **偶数** がいくつあるかを出力してください。\n\n**入力例：**\n```\n5\n1 2 3 4 6\n```\n**出力例：** `3`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "読み込んだ値を `% 2 == 0` で判定して数えます。\n\n```java\nint count = 0;\nfor (int i = 0; i < n; i++) {\n    int x = sc.nextInt();\n    if (x % 2 == 0) count++;\n}\nSystem.out.println(count);\n```",
+  "explanation": "## 解説\n\nN 個の整数を読みながら、`x % 2 == 0`（2 で割り切れる＝偶数）のものを数えます。\n\n```java\nint count = 0;\nfor (int i = 0; i < n; i++) {\n    int x = sc.nextInt();\n    if (x % 2 == 0) count++;\n}\nSystem.out.println(count);\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int count = 0;\n        for (int i = 0; i < n; i++) {\n            int x = sc.nextInt();\n            if (x % 2 == 0) count++;\n        }\n        System.out.println(count);\n    }\n}",
+  "test_cases": [
+    {"stdin": "5\n1 2 3 4 6", "stdout": "3"},
+    {"stdin": "3\n1 3 5", "stdout": "0"},
+    {"stdin": "4\n2 4 6 8", "stdout": "4"},
+    {"stdin": "5\n-2 -1 0 1 2", "stdout": "3"}
+  ]
+}

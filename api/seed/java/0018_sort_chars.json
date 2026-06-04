@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "intermediate",
+  "order": 18,
+  "title": "文字列を辞書順にソート",
+  "description": "1 行の文字列が与えられます（半角英小文字、空白なし）。文字を **辞書順（昇順）** に並べ替えて出力してください。\n\n**入力例：** `dcba`\n**出力例：** `abcd`",
+  "starter_code": "import java.util.Arrays;\nimport java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "文字配列にして `Arrays.sort` で並べ替え、文字列に戻します。\n\n```java\nchar[] cs = s.toCharArray();\nArrays.sort(cs);\nSystem.out.println(new String(cs));\n```",
+  "explanation": "## 解説\n\n`toCharArray()` で文字の配列にし、`Arrays.sort()` で昇順に並べ替えます。`new String(cs)` で配列を文字列に戻して出力します。\n\n```java\nchar[] cs = s.toCharArray();\nArrays.sort(cs);\nSystem.out.println(new String(cs));\n```",
+  "answer_code": "import java.util.Arrays;\nimport java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        char[] cs = s.toCharArray();\n        Arrays.sort(cs);\n        System.out.println(new String(cs));\n    }\n}",
+  "test_cases": [
+    {"stdin": "dcba", "stdout": "abcd"},
+    {"stdin": "banana", "stdout": "aaabnn"},
+    {"stdin": "hello", "stdout": "ehllo"},
+    {"stdin": "abc", "stdout": "abc"}
+  ]
+}

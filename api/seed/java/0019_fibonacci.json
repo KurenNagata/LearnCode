@@ -1,0 +1,18 @@
+{
+  "language": "java",
+  "level": "intermediate",
+  "order": 19,
+  "title": "再帰：フィボナッチ数",
+  "description": "0 以上の整数 N が与えられます。フィボナッチ数列の第 N 項を **再帰** で求めて出力してください。\n\n定義：`fib(0) = 0`、`fib(1) = 1`、`fib(n) = fib(n-1) + fib(n-2)`\n\n**入力例：** `6`\n**出力例：** `8`（0, 1, 1, 2, 3, 5, 8）",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    // ここに再帰メソッドを定義してください\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // メソッドを呼び出して結果を出力してください\n    }\n}\n",
+  "hint": "`n` が 1 以下ならそのまま `n` を返し、それ以外は前 2 項の和を返します。\n\n```java\nstatic long fib(int n) {\n    if (n <= 1) return n;\n    return fib(n - 1) + fib(n - 2);\n}\n```",
+  "explanation": "## 解説\n\nフィボナッチ数は `fib(n) = fib(n-1) + fib(n-2)` という再帰で定義されます。終了条件（0 と 1）を必ず用意します。値が大きくなるため `long` を使います。\n\n```java\nstatic long fib(int n) {\n    if (n <= 1) return n;\n    return fib(n - 1) + fib(n - 2);\n}\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    static long fib(int n) {\n        if (n <= 1) return n;\n        return fib(n - 1) + fib(n - 2);\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        System.out.println(fib(n));\n    }\n}",
+  "test_cases": [
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "6", "stdout": "8"},
+    {"stdin": "10", "stdout": "55"},
+    {"stdin": "15", "stdout": "610"}
+  ]
+}

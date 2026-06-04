@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "intermediate",
+  "order": 20,
+  "title": "最も多い文字",
+  "description": "1 行の文字列が与えられます（半角英小文字、空白なし）。最も多く出現する文字を出力してください。最多が複数あるときは、その中で **アルファベット順が最も早い** 文字を出力します。\n\n**入力例：** `banana`\n**出力例：** `a`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`int[26]` で各文字の出現回数を数え、最大の回数を持つ最初の文字を探します。\n\n```java\nint[] cnt = new int[26];\nfor (char c : s.toCharArray()) cnt[c - 'a']++;\nint best = 0;\nfor (int i = 1; i < 26; i++) {\n    if (cnt[i] > cnt[best]) best = i;\n}\nSystem.out.println((char) ('a' + best));\n```",
+  "explanation": "## 解説\n\n`cnt[c - 'a']` で各文字（a〜z）の出現回数を集計します。`>`（より大きい）で更新すると、同数のときは添字の小さい（＝アルファベット順が早い）文字が残ります。\n\n```java\nint[] cnt = new int[26];\nfor (char c : s.toCharArray()) cnt[c - 'a']++;\nint best = 0;\nfor (int i = 1; i < 26; i++) {\n    if (cnt[i] > cnt[best]) best = i;\n}\nSystem.out.println((char) ('a' + best));\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        int[] cnt = new int[26];\n        for (char c : s.toCharArray()) cnt[c - 'a']++;\n        int best = 0;\n        for (int i = 1; i < 26; i++) {\n            if (cnt[i] > cnt[best]) best = i;\n        }\n        System.out.println((char) ('a' + best));\n    }\n}",
+  "test_cases": [
+    {"stdin": "banana", "stdout": "a"},
+    {"stdin": "hello", "stdout": "l"},
+    {"stdin": "aabb", "stdout": "a"},
+    {"stdin": "z", "stdout": "z"}
+  ]
+}

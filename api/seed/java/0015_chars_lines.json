@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 15,
+  "title": "1文字ずつ改行",
+  "description": "1 行の文字列が与えられます（半角、空白なし）。1 文字ずつ、各行に分けて出力してください。\n\n**入力例：** `abc`\n**出力例：**\n```\na\nb\nc\n```",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "文字を 1 つずつ取り出して `println` で出力すると、自動で改行されます。\n\n```java\nfor (char c : s.toCharArray()) {\n    System.out.println(c);\n}\n```",
+  "explanation": "## 解説\n\n`s.toCharArray()` で 1 文字ずつ取り出し、`System.out.println(c)` で出力します。`println` は末尾に改行を付けるので、1 文字ごとに改行されます。\n\n```java\nfor (char c : s.toCharArray()) {\n    System.out.println(c);\n}\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        for (char c : s.toCharArray()) {\n            System.out.println(c);\n        }\n    }\n}",
+  "test_cases": [
+    {"stdin": "abc", "stdout": "a\nb\nc"},
+    {"stdin": "Hi", "stdout": "H\ni"},
+    {"stdin": "X", "stdout": "X"},
+    {"stdin": "1234", "stdout": "1\n2\n3\n4"}
+  ]
+}

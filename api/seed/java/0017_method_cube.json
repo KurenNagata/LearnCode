@@ -1,0 +1,18 @@
+{
+  "language": "java",
+  "level": "intermediate",
+  "order": 17,
+  "title": "メソッドの定義（3乗）",
+  "description": "整数 N が与えられます。「受け取った整数の 3 乗を返すメソッド」を自分で定義して使い、N の 3 乗を出力してください。\n\n**入力例：** `3`\n**出力例：** `27`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    // ここにメソッドを定義してください\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // メソッドを呼び出して結果を出力してください\n    }\n}\n",
+  "hint": "`main` と同じクラス内に `static` メソッドを定義します。\n\n```java\nstatic int cube(int x) {\n    return x * x * x;\n}\n```\n\n呼び出しは `cube(n)` と書きます。",
+  "explanation": "## 解説\n\n`static 戻り値の型 メソッド名(引数) { ... return 値; }` の形でメソッドを定義します。`main` から `cube(n)` と呼ぶと戻り値が使えます。\n\n```java\nclass Main {\n    static int cube(int x) {\n        return x * x * x;\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        System.out.println(cube(n));\n    }\n}\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    static int cube(int x) {\n        return x * x * x;\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        System.out.println(cube(n));\n    }\n}",
+  "test_cases": [
+    {"stdin": "3", "stdout": "27"},
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "2", "stdout": "8"},
+    {"stdin": "-2", "stdout": "-8"},
+    {"stdin": "5", "stdout": "125"}
+  ]
+}

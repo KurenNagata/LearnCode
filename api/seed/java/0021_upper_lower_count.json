@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "intermediate",
+  "order": 21,
+  "title": "大文字・小文字の数",
+  "description": "1 行の文字列が与えられます（半角英字、空白なし）。含まれる **大文字** の数と **小文字** の数を、空白区切りで「大文字数 小文字数」の順に出力してください。\n\n**入力例：** `HeLLo`\n**出力例：** `3 2`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`Character.isUpperCase` と `Character.isLowerCase` で判定します。\n\n```java\nint up = 0, lo = 0;\nfor (char c : s.toCharArray()) {\n    if (Character.isUpperCase(c)) up++;\n    else if (Character.isLowerCase(c)) lo++;\n}\nSystem.out.println(up + \" \" + lo);\n```",
+  "explanation": "## 解説\n\n`Character` クラスの `isUpperCase` / `isLowerCase` で 1 文字ずつ判定し、それぞれ数えます。出力は `+` で連結します。\n\n```java\nint up = 0, lo = 0;\nfor (char c : s.toCharArray()) {\n    if (Character.isUpperCase(c)) up++;\n    else if (Character.isLowerCase(c)) lo++;\n}\nSystem.out.println(up + \" \" + lo);\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        int up = 0, lo = 0;\n        for (char c : s.toCharArray()) {\n            if (Character.isUpperCase(c)) up++;\n            else if (Character.isLowerCase(c)) lo++;\n        }\n        System.out.println(up + \" \" + lo);\n    }\n}",
+  "test_cases": [
+    {"stdin": "HeLLo", "stdout": "3 2"},
+    {"stdin": "ABC", "stdout": "3 0"},
+    {"stdin": "abc", "stdout": "0 3"},
+    {"stdin": "JavaProgram", "stdout": "2 9"}
+  ]
+}

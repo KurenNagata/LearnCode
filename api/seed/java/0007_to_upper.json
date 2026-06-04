@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 7,
+  "title": "大文字に変換",
+  "description": "1 行の文字列が与えられます（半角英字、空白なし）。すべて **大文字** に変換して出力してください。\n\n**入力例：** `hello`\n**出力例：** `HELLO`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`String` の `.toUpperCase()` メソッドを使います。\n\n```java\nSystem.out.println(s.toUpperCase());\n```",
+  "explanation": "## 解説\n\n`String` には大文字化する `.toUpperCase()` メソッドが用意されています。\n\n```java\nString s = sc.next();\nSystem.out.println(s.toUpperCase());\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.next();\n        System.out.println(s.toUpperCase());\n    }\n}",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "HELLO"},
+    {"stdin": "Java", "stdout": "JAVA"},
+    {"stdin": "abcXYZ", "stdout": "ABCXYZ"},
+    {"stdin": "a", "stdout": "A"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "intermediate",
+  "order": 23,
+  "title": "クラスとオブジェクト（長方形）",
+  "description": "空白区切りで 幅 w と 高さ h が与えられます。長方形を表す `Rectangle` クラスを定義し、面積を返すメソッドを使って面積を出力してください。\n\n**入力例：** `3 4`\n**出力例：** `12`",
+  "starter_code": "import java.util.Scanner;\n\nclass Rectangle {\n    // フィールドとメソッドを定義してください\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int w = sc.nextInt();\n        int h = sc.nextInt();\n        // Rectangle オブジェクトを作って面積を出力してください\n    }\n}\n",
+  "hint": "フィールド（幅・高さ）、コンストラクタ、面積を返すメソッドを持つクラスを作ります。\n\n```java\nclass Rectangle {\n    int w, h;\n    Rectangle(int w, int h) { this.w = w; this.h = h; }\n    int area() { return w * h; }\n}\n```\n\n使うときは `new Rectangle(w, h).area()` です。",
+  "explanation": "## 解説\n\nクラスはデータ（フィールド）と振る舞い（メソッド）をまとめたものです。`new` でオブジェクトを作り、メソッドを呼び出します。\n\n```java\nclass Rectangle {\n    int w, h;\n    Rectangle(int w, int h) { this.w = w; this.h = h; }\n    int area() { return w * h; }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int w = sc.nextInt();\n        int h = sc.nextInt();\n        Rectangle r = new Rectangle(w, h);\n        System.out.println(r.area());\n    }\n}\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Rectangle {\n    int w, h;\n    Rectangle(int w, int h) {\n        this.w = w;\n        this.h = h;\n    }\n    int area() {\n        return w * h;\n    }\n}\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int w = sc.nextInt();\n        int h = sc.nextInt();\n        Rectangle r = new Rectangle(w, h);\n        System.out.println(r.area());\n    }\n}",
+  "test_cases": [
+    {"stdin": "3 4", "stdout": "12"},
+    {"stdin": "5 5", "stdout": "25"},
+    {"stdin": "1 10", "stdout": "10"},
+    {"stdin": "7 6", "stdout": "42"}
+  ]
+}

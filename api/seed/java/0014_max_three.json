@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 14,
+  "title": "3つの数の最大",
+  "description": "空白区切りで 3 つの整数 a, b, c が与えられます。最大値を出力してください。`Math.max` を使ってみましょう。\n\n**入力例：** `3 7 5`\n**出力例：** `7`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int a = sc.nextInt();\n        int b = sc.nextInt();\n        int c = sc.nextInt();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`Math.max` は 2 つの最大を返します。入れ子にすると 3 つの最大が求められます。\n\n```java\nint m = Math.max(a, Math.max(b, c));\nSystem.out.println(m);\n```",
+  "explanation": "## 解説\n\n`Math.max(x, y)` は 2 つの大きい方を返します。`Math.max(a, Math.max(b, c))` のように入れ子にすると 3 つの最大が得られます。\n\n```java\nint m = Math.max(a, Math.max(b, c));\nSystem.out.println(m);\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int a = sc.nextInt();\n        int b = sc.nextInt();\n        int c = sc.nextInt();\n        int m = Math.max(a, Math.max(b, c));\n        System.out.println(m);\n    }\n}",
+  "test_cases": [
+    {"stdin": "3 7 5", "stdout": "7"},
+    {"stdin": "10 2 8", "stdout": "10"},
+    {"stdin": "-1 -5 -3", "stdout": "-1"},
+    {"stdin": "4 4 4", "stdout": "4"}
+  ]
+}

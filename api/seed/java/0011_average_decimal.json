@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 11,
+  "title": "平均点（小数2桁）",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。平均値を **小数第 2 位まで**（四捨五入）出力してください。\n\n**入力例：**\n```\n4\n10 20 30 40\n```\n**出力例：** `25.00`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "合計を `double` で割り、`String.format` で桁数をそろえます。\n\n```java\ndouble avg = (double) sum / n;\nSystem.out.println(String.format(java.util.Locale.US, \"%.2f\", avg));\n```",
+  "explanation": "## 解説\n\n整数のまま割ると小数が出ないので、`(double)` で実数の割り算にします。`String.format(\"%.2f\", ...)` で小数第 2 位まで整えます（小数点記号を `.` に固定するため `Locale.US` を指定しています）。\n\n```java\nint sum = 0;\nfor (int i = 0; i < n; i++) sum += sc.nextInt();\ndouble avg = (double) sum / n;\nSystem.out.println(String.format(java.util.Locale.US, \"%.2f\", avg));\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int sum = 0;\n        for (int i = 0; i < n; i++) {\n            sum += sc.nextInt();\n        }\n        double avg = (double) sum / n;\n        System.out.println(String.format(java.util.Locale.US, \"%.2f\", avg));\n    }\n}",
+  "test_cases": [
+    {"stdin": "4\n10 20 30 40", "stdout": "25.00"},
+    {"stdin": "3\n1 2 3", "stdout": "2.00"},
+    {"stdin": "2\n1 2", "stdout": "1.50"},
+    {"stdin": "4\n10 20 30 45", "stdout": "26.25"}
+  ]
+}

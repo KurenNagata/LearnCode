@@ -1,0 +1,18 @@
+{
+  "language": "java",
+  "level": "intermediate",
+  "order": 25,
+  "title": "平均と成績評価（総合問題）",
+  "description": "1 行目に人数 N、2 行目に N 個の点数（0〜100）が空白区切りで与えられます。次の 2 行を出力してください。\n\n1. 平均点（小数点以下切り捨て）\n2. その平均点に対する評価（90 以上 `A`、70 以上 `B`、50 以上 `C`、それ未満 `D`）\n\n**入力例：**\n```\n3\n80 90 100\n```\n**出力例：**\n```\n90\nA\n```",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "合計してから N で割り（整数の割り算で切り捨て）、その値で評価を判定します。\n\n```java\nint sum = 0;\nfor (int i = 0; i < n; i++) sum += sc.nextInt();\nint avg = sum / n;\nSystem.out.println(avg);\n```\n\nそのあと `avg` を `if` / `else if` で A〜D に分けます。",
+  "explanation": "## 解説\n\nまず合計を求め、`sum / n`（整数の割り算なので切り捨て）で平均を出します。その平均点を、高い基準から順に `if` / `else if` で評価します。\n\n```java\nint sum = 0;\nfor (int i = 0; i < n; i++) sum += sc.nextInt();\nint avg = sum / n;\nSystem.out.println(avg);\nif (avg >= 90) System.out.println(\"A\");\nelse if (avg >= 70) System.out.println(\"B\");\nelse if (avg >= 50) System.out.println(\"C\");\nelse System.out.println(\"D\");\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int sum = 0;\n        for (int i = 0; i < n; i++) sum += sc.nextInt();\n        int avg = sum / n;\n        System.out.println(avg);\n        if (avg >= 90) System.out.println(\"A\");\n        else if (avg >= 70) System.out.println(\"B\");\n        else if (avg >= 50) System.out.println(\"C\");\n        else System.out.println(\"D\");\n    }\n}",
+  "test_cases": [
+    {"stdin": "3\n80 90 100", "stdout": "90\nA"},
+    {"stdin": "4\n60 70 80 90", "stdout": "75\nB"},
+    {"stdin": "2\n40 60", "stdout": "50\nC"},
+    {"stdin": "3\n10 20 30", "stdout": "20\nD"},
+    {"stdin": "1\n100", "stdout": "100\nA"}
+  ]
+}
