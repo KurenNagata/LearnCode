@@ -1,0 +1,15 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 2,
+  "title": "整数の四則演算",
+  "description": "2つの整数 a, b を別々の行で受け取り、以下の順に改行区切りで出力してください。\n\n1. a + b（和）\n2. a - b（差）\n3. a * b（積）\n4. a // b（商：整数除算）\n5. a % b（余り）",
+  "starter_code": "a = int(input())\nb = int(input())\n# ここにコードを書いてください\n",
+  "explanation": "## 解説\n\nPython の主な算術演算子です。\n\n| 演算子 | 意味 | 例 |\n|--------|------|----|\n| `+` | 和 | `3 + 2 = 5` |\n| `-` | 差 | `3 - 2 = 1` |\n| `*` | 積 | `3 * 2 = 6` |\n| `//` | 整数除算（商） | `7 // 2 = 3` |\n| `%` | 余り | `7 % 2 = 1` |\n\n```python\na = int(input())\nb = int(input())\nprint(a + b)\nprint(a - b)\nprint(a * b)\nprint(a // b)\nprint(a % b)\n```",
+  "answer_code": "a = int(input())\nb = int(input())\nprint(a + b)\nprint(a - b)\nprint(a * b)\nprint(a // b)\nprint(a % b)",
+  "test_cases": [
+    {"stdin": "15\n4", "stdout": "19\n11\n60\n3\n3"},
+    {"stdin": "7\n3", "stdout": "10\n4\n21\n2\n1"},
+    {"stdin": "10\n2", "stdout": "12\n8\n20\n5\n0"}
+  ]
+}

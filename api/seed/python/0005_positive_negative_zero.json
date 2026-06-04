@@ -1,0 +1,17 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 5,
+  "title": "正・負・ゼロの判定",
+  "description": "整数 n を受け取り、以下のルールで出力してください。\n\n- n が正の数なら `正`\n- n が負の数なら `負`\n- n が 0 なら `ゼロ`",
+  "starter_code": "n = int(input())\n# ここにコードを書いてください\n",
+  "explanation": "## 解説\n\n`if / elif / else` を使って条件によって処理を分けます。\n\n```python\nn = int(input())\nif n > 0:\n    print(\"正\")\nelif n < 0:\n    print(\"負\")\nelse:\n    print(\"ゼロ\")\n```\n\n`elif` は「そうでなければ、もし」という条件を追加するときに使います。条件は上から順に評価され、最初に当てはまったものだけ実行されます。",
+  "answer_code": "n = int(input())\nif n > 0:\n    print(\"正\")\nelif n < 0:\n    print(\"負\")\nelse:\n    print(\"ゼロ\")",
+  "test_cases": [
+    {"stdin": "5", "stdout": "正"},
+    {"stdin": "-3", "stdout": "負"},
+    {"stdin": "0", "stdout": "ゼロ"},
+    {"stdin": "100", "stdout": "正"},
+    {"stdin": "-1", "stdout": "負"}
+  ]
+}

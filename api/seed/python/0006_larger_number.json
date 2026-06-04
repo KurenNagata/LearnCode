@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 6,
+  "title": "大きい方を出力",
+  "description": "2つの整数 a, b を別々の行で受け取り、大きい方の値を出力してください。\n\n- 等しい場合はどちらの値を出力しても構いません。",
+  "starter_code": "a = int(input())\nb = int(input())\n# ここにコードを書いてください\n",
+  "explanation": "## 解説\n\n`if / else` で比較するか、組み込み関数 `max()` を使う方法があります。\n\n```python\na = int(input())\nb = int(input())\nif a >= b:\n    print(a)\nelse:\n    print(b)\n```\n\nまたはシンプルに：\n\n```python\nprint(max(a, b))\n```\n\n`max()` は引数の中から最大値を返す組み込み関数です。",
+  "answer_code": "a = int(input())\nb = int(input())\nprint(max(a, b))",
+  "test_cases": [
+    {"stdin": "3\n7", "stdout": "7"},
+    {"stdin": "10\n2", "stdout": "10"},
+    {"stdin": "10\n10", "stdout": "10"},
+    {"stdin": "-1\n-5", "stdout": "-1"}
+  ]
+}

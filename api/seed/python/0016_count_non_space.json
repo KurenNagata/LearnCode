@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 16,
+  "title": "スペースを除いた文字数",
+  "description": "文字列を 1 行受け取り、スペース（半角）を除いた文字数を出力してください。\n\n例：`hello world` → `10`",
+  "starter_code": "s = input()\n# ここにコードを書いてください\n",
+  "explanation": "## 解説\n\n`replace()` でスペースを除去してから `len()` で文字数を数えます。\n\n```python\ns = input()\nprint(len(s.replace(\" \", \"\")))\n```\n\n`s.replace(\" \", \"\")` はスペースを空文字に置き換えます（= 削除）。`len()` は文字列の長さを返します。\n\n別解：ループで数える方法もあります。\n\n```python\ncount = 0\nfor c in s:\n    if c != \" \":\n        count += 1\nprint(count)\n```",
+  "answer_code": "s = input()\nprint(len(s.replace(\" \", \"\")))",
+  "test_cases": [
+    {"stdin": "hello world", "stdout": "10"},
+    {"stdin": "Python", "stdout": "6"},
+    {"stdin": "a b c", "stdout": "3"},
+    {"stdin": "no spaces here", "stdout": "12"}
+  ]
+}

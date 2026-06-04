@@ -1,0 +1,15 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 9,
+  "title": "九九の一段",
+  "description": "1 以上 9 以下の整数 n を受け取り、n の段の九九を `\"n x i = 結果\"` の形式で 1 から 9 まで出力してください。\n\n例：n = 3 のとき\n```\n3 x 1 = 3\n3 x 2 = 6\n...\n3 x 9 = 27\n```",
+  "starter_code": "n = int(input())\nfor i in range(1, 10):\n    # ここにコードを書いてください\n    pass\n",
+  "explanation": "## 解説\n\n```python\nn = int(input())\nfor i in range(1, 10):\n    print(f\"{n} x {i} = {n * i}\")\n```\n\nf 文字列で `{n}`, `{i}`, `{n * i}` を埋め込んでいます。`{}` の中には式も書けます。`range(1, 10)` は 1〜9 の整数を生成します。",
+  "answer_code": "n = int(input())\nfor i in range(1, 10):\n    print(f\"{n} x {i} = {n * i}\")",
+  "test_cases": [
+    {"stdin": "3", "stdout": "3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27"},
+    {"stdin": "1", "stdout": "1 x 1 = 1\n1 x 2 = 2\n1 x 3 = 3\n1 x 4 = 4\n1 x 5 = 5\n1 x 6 = 6\n1 x 7 = 7\n1 x 8 = 8\n1 x 9 = 9"},
+    {"stdin": "9", "stdout": "9 x 1 = 9\n9 x 2 = 18\n9 x 3 = 27\n9 x 4 = 36\n9 x 5 = 45\n9 x 6 = 54\n9 x 7 = 63\n9 x 8 = 72\n9 x 9 = 81"}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 8,
+  "title": "1からNまでの合計",
+  "description": "整数 n を受け取り、1 から n までのすべての整数の合計を出力してください。\n\n例：n = 5 のとき、1 + 2 + 3 + 4 + 5 = **15**",
+  "starter_code": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    # ここにコードを書いてください\n    pass\nprint(total)\n",
+  "explanation": "## 解説\n\n`for` ループで 1 から n まで繰り返し、変数に足していきます。\n\n```python\nn = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\nprint(total)\n```\n\n`total += i` は `total = total + i` の省略形です。\n\nまた Python の組み込み関数を使う方法もあります：\n\n```python\nprint(sum(range(1, n + 1)))\n```",
+  "answer_code": "n = int(input())\ntotal = 0\nfor i in range(1, n + 1):\n    total += i\nprint(total)",
+  "test_cases": [
+    {"stdin": "5", "stdout": "15"},
+    {"stdin": "10", "stdout": "55"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "100", "stdout": "5050"}
+  ]
+}

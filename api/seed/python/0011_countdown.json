@@ -1,0 +1,15 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 11,
+  "title": "カウントダウン",
+  "description": "整数 n を受け取り、n から 1 まで 1 ずつ減らしながら出力し、最後に `Go!` を出力してください。`while` ループを使って実装してください。\n\n例：n = 5 のとき\n```\n5\n4\n3\n2\n1\nGo!\n```",
+  "starter_code": "n = int(input())\n# while ループを使って書いてください\n",
+  "explanation": "## 解説\n\n`while` ループは条件が真の間、繰り返します。\n\n```python\nn = int(input())\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint(\"Go!\")\n```\n\n`n -= 1` は `n = n - 1` の省略形です。ループの中で n を減らし続け、0 になったら条件が偽になり終了します。",
+  "answer_code": "n = int(input())\nwhile n >= 1:\n    print(n)\n    n -= 1\nprint(\"Go!\")",
+  "test_cases": [
+    {"stdin": "5", "stdout": "5\n4\n3\n2\n1\nGo!"},
+    {"stdin": "3", "stdout": "3\n2\n1\nGo!"},
+    {"stdin": "1", "stdout": "1\nGo!"}
+  ]
+}

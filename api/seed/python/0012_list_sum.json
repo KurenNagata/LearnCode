@@ -1,0 +1,16 @@
+{
+  "language": "python",
+  "level": "beginner",
+  "order": 12,
+  "title": "リストの合計",
+  "description": "最初の行に整数 n を受け取り、続く n 行にそれぞれ整数が 1 つ入力されます。これらすべての整数の合計を出力してください。\n\n例：\n```\n入力    出力\n4       10\n1\n2\n3\n4\n```",
+  "starter_code": "n = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\n# ここにコードを書いてください\n",
+  "explanation": "## 解説\n\nリストに数値を集めて `sum()` で合計します。\n\n```python\nn = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\nprint(sum(numbers))\n```\n\n`append()` はリストの末尾に要素を追加するメソッドです。`sum()` はリストの合計を返す組み込み関数です。`_` は「使わない変数」の慣習的な名前です。",
+  "answer_code": "n = int(input())\nnumbers = []\nfor _ in range(n):\n    numbers.append(int(input()))\nprint(sum(numbers))",
+  "test_cases": [
+    {"stdin": "4\n1\n2\n3\n4", "stdout": "10"},
+    {"stdin": "3\n-1\n2\n-3", "stdout": "-2"},
+    {"stdin": "1\n42", "stdout": "42"},
+    {"stdin": "5\n10\n20\n30\n40\n50", "stdout": "150"}
+  ]
+}
