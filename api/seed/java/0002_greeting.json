@@ -1,0 +1,16 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 2,
+  "title": "名前を受け取って挨拶",
+  "description": "キーボードから名前を 1 行で受け取り、以下の形式で挨拶文を出力してください。\n\n```\nこんにちは、〇〇!\n```\n\n`〇〇` には入力された名前をそのまま当てはめます。\n\n**入力例：** `Alice`\n**出力例：** `こんにちは、Alice!`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String name = sc.nextLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`+` で文字列を連結できます。\n\n```java\nSystem.out.println(\"こんにちは、\" + name + \"!\");\n```",
+  "explanation": "## 解説\n\n`Scanner` で標準入力を 1 行読み込み、`+` で文字列を連結します。\n\n```java\nimport java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String name = sc.nextLine();\n        System.out.println(\"こんにちは、\" + name + \"!\");\n    }\n}\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String name = sc.nextLine();\n        System.out.println(\"こんにちは、\" + name + \"!\");\n    }\n}",
+  "test_cases": [
+    {"stdin": "Alice", "stdout": "こんにちは、Alice!"},
+    {"stdin": "太郎", "stdout": "こんにちは、太郎!"},
+    {"stdin": "Java", "stdout": "こんにちは、Java!"}
+  ]
+}

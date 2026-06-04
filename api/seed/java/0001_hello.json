@@ -1,0 +1,14 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 1,
+  "title": "Hello, World!",
+  "description": "Java で初めてのプログラムを書きましょう。\n\n画面に以下の文字列を **そのまま** 出力してください。\n\n**出力：**\n```\nHello, World!\n```",
+  "starter_code": "class Main {\n    public static void main(String[] args) {\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`System.out.println()` で文字列を出力できます。\n\n```java\nSystem.out.println(\"表示したい文字列\");\n```\n\n文字列はダブルクォート `\"` で囲みます。",
+  "explanation": "## 解説\n\nJava では `System.out.println()` で文字列を出力し、末尾に改行を追加します。\n\n```java\nclass Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}\n```\n\n`main` メソッドがプログラムの入口です。",
+  "answer_code": "class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}",
+  "test_cases": [
+    {"stdin": "", "stdout": "Hello, World!"}
+  ]
+}
