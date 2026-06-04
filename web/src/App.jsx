@@ -244,8 +244,8 @@ function ClearStyles() {
 const LANGUAGES = [
   { id: 'python', label: 'Python', mono: 'Py', tileBg: '#4DA6FF', tileFg: '#FFFFFF', available: true, blurb: '読みやすく初心者に最適な定番言語' },
   { id: 'javascript', label: 'JavaScript', mono: 'JS', tileBg: '#FFD93D', tileFg: '#1A1930', available: false, blurb: 'Web を動かす言語' },
-  { id: 'java', label: 'Java', mono: 'Ja', tileBg: '#FF6B6B', tileFg: '#FFFFFF', available: false, blurb: '業務・Android で広く使われる' },
-  { id: 'c', label: 'C', mono: 'C', tileBg: '#FF9E54', tileFg: '#1A1930', available: false, blurb: 'コンピュータの基礎を学ぶ' },
+  { id: 'java', label: 'Java', mono: 'Ja', tileBg: '#FF6B6B', tileFg: '#FFFFFF', available: true, blurb: '業務・Android で広く使われる' },
+  { id: 'c', label: 'C', mono: 'C', tileBg: '#FF9E54', tileFg: '#1A1930', available: true, blurb: 'コンピュータの基礎を学ぶ' },
   { id: 'cpp', label: 'C++', mono: 'C++', tileBg: '#51E5FF', tileFg: '#1A1930', available: false, blurb: '高速・低レイヤーの定番' },
   { id: 'csharp', label: 'C#', mono: 'C#', tileBg: '#C77DFF', tileFg: '#FFFFFF', available: false, blurb: 'アプリ・ゲーム開発に' },
 ]
