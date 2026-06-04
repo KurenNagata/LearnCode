@@ -130,7 +130,15 @@ function HintModal({ problem, onClose }) {
 }
 
 // ── 正解演出（STAGE CLEAR! ＋ コドにゃんが喜ぶ） ──────────────
-function ClearOverlay({ result, skin, onContinue }) {
+function ClearOverlay({ result, skin, clearInfo, onContinue }) {
+  useEffect(() => {
+    sfx.clear()
+    if (clearInfo?.leveledUp) {
+      const t = setTimeout(() => sfx.levelUp(), 480)
+      return () => clearTimeout(t)
+    }
+  }, [])
+
   return (
     <div style={s.clearOverlay} role="dialog" aria-label="ステージクリア">
       <ClearStyles />
@@ -145,6 +153,16 @@ function ClearOverlay({ result, skin, onContinue }) {
         <div className="lc-clear-sub">
           ぜんぶ正解！{result ? ` ${result.passedTests}/${result.totalTests} テスト通過` : ''}
         </div>
+
+        {clearInfo && (
+          clearInfo.gained > 0
+            ? <div className="lc-clear-xp">＋{clearInfo.gained} XP</div>
+            : <div className="lc-clear-xp lc-clear-xp-dim">クリア済み（XPなし）</div>
+        )}
+        {clearInfo?.leveledUp && (
+          <div className="lc-clear-levelup">LEVEL UP！ LV.{clearInfo.level} {clearInfo.rank}</div>
+        )}
+
         <button type="button" className="lc-clear-btn" onClick={onContinue} autoFocus>
           ▶ つづける
         </button>
@@ -172,6 +190,17 @@ function ClearStyles() {
       .lc-clear-sub {
         font-family:'DotGothic16', sans-serif; font-size:clamp(14px, 2.6vw, 18px);
         color:#FFD93D; letter-spacing:1px;
+      }
+      .lc-clear-xp {
+        font-family:'Press Start 2P', monospace; font-size:14px; color:#51E5FF; letter-spacing:1px;
+      }
+      .lc-clear-xp-dim { color:#9D99C9; font-size:11px; }
+      .lc-clear-levelup {
+        font-family:'Press Start 2P', monospace; font-size:13px; color:#1A1930; letter-spacing:1px;
+        background:#FFD93D; padding:8px 14px;
+        border-top:3px solid #FFE98A; border-left:3px solid #FFE98A;
+        border-right:3px solid #B8950F; border-bottom:3px solid #B8950F;
+        animation:lc-pop .3s ease-out both;
       }
       .lc-clear-btn {
         margin-top:4px; font-family:'Press Start 2P', monospace; font-size:12px;
@@ -221,18 +250,79 @@ const LANGUAGES = [
   { id: 'csharp', label: 'C#', mono: 'C#', tileBg: '#C77DFF', tileFg: '#FFFFFF', available: false, blurb: 'アプリ・ゲーム開発に' },
 ]
 
-// ── コドにゃんの着せ替えスキン（色違い）。後で XP で解放予定 ──
+// ── コドにゃんの着せ替えスキン（色違い）。unlockLevel で解放 ──
 const CAT_SKINS = [
-  { id: 'orange', label: 'きほん', color: '#FFC06A', belly: '#FFE6C2' },
-  { id: 'gray', label: 'グレー', color: '#A9A6C9', belly: '#E6E4F5' },
-  { id: 'kuro', label: 'くろ', color: '#4A4866', belly: '#9D99C9' },
-  { id: 'shiro', label: 'しろ', color: '#EDEBFF', belly: '#FFFFFF' },
-  { id: 'mizu', label: 'みず', color: '#51E5FF', belly: '#BEF6FF' },
-  { id: 'momo', label: 'もも', color: '#FF8AAE', belly: '#FFD6E4' },
-  { id: 'midori', label: 'みどり', color: '#5DF15D', belly: '#BEF9BE' },
-  { id: 'kin', label: 'きん', color: '#FFD93D', belly: '#FFF1B0' },
+  { id: 'orange', label: 'きほん', color: '#FFC06A', belly: '#FFE6C2', unlockLevel: 1 },
+  { id: 'gray', label: 'グレー', color: '#A9A6C9', belly: '#E6E4F5', unlockLevel: 1 },
+  { id: 'kuro', label: 'くろ', color: '#4A4866', belly: '#9D99C9', unlockLevel: 2 },
+  { id: 'shiro', label: 'しろ', color: '#EDEBFF', belly: '#FFFFFF', unlockLevel: 3 },
+  { id: 'mizu', label: 'みず', color: '#51E5FF', belly: '#BEF6FF', unlockLevel: 4 },
+  { id: 'momo', label: 'もも', color: '#FF8AAE', belly: '#FFD6E4', unlockLevel: 5 },
+  { id: 'midori', label: 'みどり', color: '#5DF15D', belly: '#BEF9BE', unlockLevel: 7 },
+  { id: 'kin', label: 'きん', color: '#FFD93D', belly: '#FFF1B0', unlockLevel: 10 },
 ]
 const SKIN_KEY = 'lc-cat-skin'
+
+// ── XP / レベル（初心者→玄人）。今はローカル保存（後で DB 化可） ──
+const XP_KEY = 'lc-cleared'        // 初クリア済み問題ID（XP付与は1回だけ）
+const MUTE_KEY = 'lc-muted'        // 効果音ミュート設定
+const XP_PER_CLEAR = 50
+const XP_PER_LEVEL = 100
+const RANKS = [
+  { lv: 1, name: '初心者' },
+  { lv: 3, name: '見習いコーダー' },
+  { lv: 5, name: 'コーダー' },
+  { lv: 7, name: '中級プログラマ' },
+  { lv: 9, name: '上級プログラマ' },
+  { lv: 11, name: '達人' },
+  { lv: 13, name: '玄人' },
+]
+function rankFromLevel(level) {
+  let name = RANKS[0].name
+  for (const r of RANKS) if (level >= r.lv) name = r.name
+  return name
+}
+function xpInfo(totalXp) {
+  const level = Math.floor(totalXp / XP_PER_LEVEL) + 1
+  const into = totalXp % XP_PER_LEVEL
+  return { totalXp, level, rank: rankFromLevel(level), into, need: XP_PER_LEVEL, progress: into / XP_PER_LEVEL }
+}
+
+// ── 8bit 効果音（Web Audio で生成・音源ファイル不要） ─────────
+const sfx = (() => {
+  let actx = null
+  let enabled = true
+  function ctx() {
+    if (!actx) {
+      const AC = window.AudioContext || window.webkitAudioContext
+      if (AC) { try { actx = new AC() } catch { actx = null } }
+    }
+    if (actx && actx.state === 'suspended') actx.resume()
+    return actx
+  }
+  // 矩形波（ファミコン風）1音
+  function blip(freq, start, dur, vol = 0.14) {
+    const ac = ctx(); if (!ac) return
+    const o = ac.createOscillator(); const g = ac.createGain()
+    o.type = 'square'; o.frequency.value = freq
+    o.connect(g); g.connect(ac.destination)
+    const t0 = ac.currentTime + start
+    g.gain.setValueAtTime(0.0001, t0)
+    g.gain.exponentialRampToValueAtTime(vol, t0 + 0.01)
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur)
+    o.start(t0); o.stop(t0 + dur + 0.02)
+  }
+  function arp(notes, step, dur, vol) {
+    if (!enabled) return
+    notes.forEach((f, i) => blip(f, i * step, dur, vol))
+  }
+  return {
+    setEnabled(b) { enabled = b },
+    resume() { ctx() },
+    clear() { arp([523.25, 659.25, 783.99, 1046.5], 0.09, 0.12, 0.14) },      // ド ミ ソ ド↑
+    levelUp() { arp([659.25, 783.99, 987.77, 1318.51], 0.08, 0.15, 0.17) },   // 上昇ファンファーレ
+  }
+})()
 
 // ── ドット絵風の南京錠アイコン（インライン SVG） ──────────────
 function PixelLock() {
@@ -312,8 +402,23 @@ function PixelCat({ size = 64, color = '#FFC06A', belly = '#FFE6C2', happy = fal
   )
 }
 
+// ── レベル表示（LV＋称号＋XPバー） ───────────────────────────
+function LevelBadge({ info, width = 150 }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'baseline' }}>
+        <span style={{ fontFamily: FONT_PX, fontSize: 11, color: c.yellow }}>★LV.{info.level}</span>
+        <span style={{ fontFamily: FONT_DOT, fontSize: 13, fontWeight: 'bold', color: c.ink }}>{info.rank}</span>
+      </div>
+      <div style={{ width, height: 10, background: c.bevD, ...bevelIn(2) }}>
+        <div style={{ width: `${Math.round(info.progress * 100)}%`, height: '100%', background: c.green, transition: 'width .45s steps(8)' }} />
+      </div>
+    </div>
+  )
+}
+
 // ── トップページ（8bit アーケード風タイトル画面） ─────────────
-function Home({ onSelect, onOpenCloset, skin }) {
+function Home({ onSelect, onOpenCloset, skin, xp, muted, onToggleMute }) {
   const start = () => onSelect('python')
 
   return (
@@ -324,8 +429,11 @@ function Home({ onSelect, onOpenCloset, skin }) {
       <div className="lc-hud">
         <span className="lc-hud-left">■ LEARNCODE.EXE</span>
         <span className="lc-hud-right">
+          <button type="button" className="lc-hud-btn" onClick={onToggleMute} aria-label={muted ? '効果音をオンにする' : '効果音をオフにする'}>
+            {muted ? 'SE ✕' : 'SE ♪'}
+          </button>
           <button type="button" className="lc-hud-btn" onClick={onOpenCloset}>きせかえ</button>
-          <span className="lc-hud-lv">★ LV.1</span>
+          <LevelBadge info={xp} width={120} />
         </span>
       </div>
 
@@ -558,20 +666,56 @@ export default function App() {
   const [skinId, setSkinId] = useState(() => {
     try { return localStorage.getItem(SKIN_KEY) || 'orange' } catch { return 'orange' }
   })
+  const [clearedIds, setClearedIds] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(XP_KEY) || '[]') } catch { return [] }
+  })
+  const [muted, setMuted] = useState(() => {
+    try { return localStorage.getItem(MUTE_KEY) === '1' } catch { return false }
+  })
   const skin = CAT_SKINS.find(sk => sk.id === skinId) ?? CAT_SKINS[0]
+  const xp = xpInfo(clearedIds.length * XP_PER_CLEAR)
+
+  useEffect(() => { sfx.setEnabled(!muted) }, [muted])
 
   function chooseSkin(id) {
     setSkinId(id)
     try { localStorage.setItem(SKIN_KEY, id) } catch { /* ignore */ }
   }
+  function recordClear(id) {
+    setClearedIds(prev => {
+      if (prev.includes(id)) return prev
+      const next = [...prev, id]
+      try { localStorage.setItem(XP_KEY, JSON.stringify(next)) } catch { /* ignore */ }
+      return next
+    })
+  }
+  function toggleMute() {
+    setMuted(m => {
+      const next = !m
+      try { localStorage.setItem(MUTE_KEY, next ? '1' : '0') } catch { /* ignore */ }
+      if (!next) sfx.resume()
+      return next
+    })
+  }
 
-  if (language) return <Course language={language} skin={skin} onBack={() => setLanguage(null)} />
-  if (screen === 'closet') return <Closet skin={skin} onSelect={chooseSkin} onBack={() => setScreen('home')} />
-  return <Home skin={skin} onSelect={setLanguage} onOpenCloset={() => setScreen('closet')} />
+  if (language) return (
+    <Course
+      language={language} skin={skin} xp={xp} clearedIds={clearedIds}
+      muted={muted} onToggleMute={toggleMute}
+      onClear={recordClear} onBack={() => setLanguage(null)}
+    />
+  )
+  if (screen === 'closet') return <Closet skin={skin} xp={xp} onSelect={chooseSkin} onBack={() => setScreen('home')} />
+  return (
+    <Home
+      skin={skin} xp={xp} muted={muted} onToggleMute={toggleMute}
+      onSelect={setLanguage} onOpenCloset={() => setScreen('closet')}
+    />
+  )
 }
 
 // ── 着せ替え画面（クローゼット） ──────────────────────────────
-function Closet({ skin, onSelect, onBack }) {
+function Closet({ skin, xp, onSelect, onBack }) {
   return (
     <div style={s.closetRoot}>
       <ClosetStyles />
@@ -580,7 +724,7 @@ function Closet({ skin, onSelect, onBack }) {
       <div style={s.closetHud}>
         <button type="button" onClick={onBack} style={s.closetBack} aria-label="トップへもどる">← もどる</button>
         <span style={s.closetTitle}>きせかえ</span>
-        <span style={{ width: 84 }} aria-hidden="true" />
+        <span style={{ ...s.closetTitle, color: c.ink, fontSize: 10 }}>LV.{xp.level}</span>
       </div>
 
       <div style={s.closetBody}>
@@ -591,21 +735,28 @@ function Closet({ skin, onSelect, onBack }) {
         </div>
 
         {/* カラー選択 */}
-        <p style={s.closetGuide}>▼ カラーをえらぶ</p>
+        <p style={s.closetGuide}>▼ カラーをえらぶ（レベルで解放）</p>
         <div className="lc-cl-grid">
-          {CAT_SKINS.map(sk => (
-            <button
-              key={sk.id}
-              type="button"
-              onClick={() => onSelect(sk.id)}
-              aria-label={`${sk.label} にする`}
-              aria-pressed={sk.id === skin.id}
-              className={`lc-cl-card${sk.id === skin.id ? ' lc-cl-sel' : ''}`}
-            >
-              <PixelCat size={56} color={sk.color} belly={sk.belly} />
-              <span className="lc-cl-card-name">{sk.label}</span>
-            </button>
-          ))}
+          {CAT_SKINS.map(sk => {
+            const locked = xp.level < sk.unlockLevel
+            return (
+              <button
+                key={sk.id}
+                type="button"
+                disabled={locked}
+                onClick={() => !locked && onSelect(sk.id)}
+                aria-label={locked ? `${sk.label}（LV.${sk.unlockLevel} で解放）` : `${sk.label} にする`}
+                aria-pressed={sk.id === skin.id}
+                className={`lc-cl-card${sk.id === skin.id ? ' lc-cl-sel' : ''}${locked ? ' lc-cl-locked' : ''}`}
+              >
+                <PixelCat size={56} color={sk.color} belly={sk.belly} />
+                <span className="lc-cl-card-name">{sk.label}</span>
+                {locked && (
+                  <span className="lc-cl-locktag"><PixelLock /> LV.{sk.unlockLevel}</span>
+                )}
+              </button>
+            )
+          })}
         </div>
       </div>
     </div>
@@ -638,6 +789,12 @@ function ClosetStyles() {
       .lc-cl-card:hover { background:#363468; }
       .lc-cl-sel { outline:4px solid #5DF15D; outline-offset:3px; }
       .lc-cl-card:focus-visible { outline:3px dashed #51E5FF; outline-offset:3px; }
+      .lc-cl-locked { opacity:0.5; cursor:not-allowed; }
+      .lc-cl-locked:hover { background:#2D2B52; }
+      .lc-cl-locktag {
+        display:flex; align-items:center; gap:4px;
+        font-family:'Press Start 2P', monospace; font-size:8px; color:#9D99C9; letter-spacing:1px;
+      }
 
       @media (max-width:520px) { .lc-cl-grid { grid-template-columns:repeat(3, 92px); } }
       @media (max-width:392px) { .lc-cl-grid { grid-template-columns:repeat(2, 92px); } }
@@ -646,7 +803,7 @@ function ClosetStyles() {
 }
 
 // ── 学習画面（言語ごと） ──────────────────────────────────────
-function Course({ language, skin, onBack }) {
+function Course({ language, skin, xp, clearedIds, muted, onToggleMute, onClear, onBack }) {
   const [problems, setProblems] = useState([])
   const [problem, setProblem] = useState(null)
   const [code, setCode] = useState('')
@@ -656,6 +813,7 @@ function Course({ language, skin, onBack }) {
   const [showModal, setShowModal] = useState(false)
   const [showHint, setShowHint] = useState(false)
   const [showClear, setShowClear] = useState(false)
+  const [clearInfo, setClearInfo] = useState(null)
 
   const langLabel = LANGUAGES.find(l => l.id === language)?.label ?? language
 
@@ -704,7 +862,15 @@ function Course({ language, skin, onBack }) {
       }
       const data = await res.json()
       setResult(data)
-      if (data.passed) setShowClear(true)
+      if (data.passed) {
+        const first = !clearedIds.includes(problem.id)
+        const gained = first ? XP_PER_CLEAR : 0
+        const after = xpInfo(xp.totalXp + gained)
+        const leveledUp = first && after.level > xp.level
+        setClearInfo({ gained, leveledUp, level: after.level, rank: after.rank })
+        if (first) onClear(problem.id)
+        setShowClear(true)
+      }
     } catch (e) {
       setError('通信エラー: ' + e.message)
     } finally {
@@ -719,6 +885,7 @@ function Course({ language, skin, onBack }) {
         <ClearOverlay
           result={result}
           skin={skin}
+          clearInfo={clearInfo}
           onContinue={() => { setShowClear(false); setShowModal(true) }}
         />
       )}
@@ -741,16 +908,25 @@ function Course({ language, skin, onBack }) {
       {/* サイドバー */}
       <aside style={s.sidebar}>
         <button onClick={onBack} style={s.backToHome}>← 言語選択へ戻る</button>
+        <div style={{ marginBottom: 14 }}><LevelBadge info={xp} width={200} /></div>
+        <button onClick={onToggleMute} style={{ ...s.backToHome, marginBottom: 14 }}>
+          {muted ? 'SE: OFF ✕' : 'SE: ON ♪'}
+        </button>
         <div style={s.sidebarTitle}>{langLabel} の問題</div>
-        {problems.map(p => (
-          <div
-            key={p.id}
-            onClick={() => select(p)}
-            style={{ ...s.sidebarItem, ...(problem?.id === p.id ? s.sidebarItemActive : {}) }}
-          >
-            {p.order}. {p.title}
-          </div>
-        ))}
+        {problems.map(p => {
+          const cleared = clearedIds.includes(p.id)
+          const active = problem?.id === p.id
+          return (
+            <div
+              key={p.id}
+              onClick={() => select(p)}
+              style={{ ...s.sidebarItem, ...(active ? s.sidebarItemActive : {}), display: 'flex', justifyContent: 'space-between', gap: 6 }}
+            >
+              <span>{p.order}. {p.title}</span>
+              {cleared && <span style={{ color: active ? c.bevD : c.green, fontWeight: 'bold' }}>✓</span>}
+            </div>
+          )
+        })}
       </aside>
 
       {/* メイン */}

@@ -30,6 +30,14 @@ func NewJudgeService(problemRepo ProblemRepository, progressRepo ProgressReposit
 	}
 }
 
+// normalizeOutput は出力比較前の正規化を行う。
+// 末尾の改行を除去し、全角・半角の感嘆符（！↔!）のゆらぎを吸収する。
+func normalizeOutput(s string) string {
+	s = strings.TrimRight(s, "\r\n")
+	s = strings.ReplaceAll(s, "！", "!")
+	return s
+}
+
 func (s *JudgeService) Judge(ctx context.Context, problemID int64, language, code string) (JudgeResult, error) {
 	testCases, err := s.problemRepo.GetTestCasesByProblemID(ctx, problemID)
 	if err != nil {
@@ -49,8 +57,8 @@ func (s *JudgeService) Judge(ctx context.Context, problemID int64, language, cod
 			return JudgeResult{}, err
 		}
 
-		actual := strings.TrimRight(result.Stdout, "\r\n")
-		expected := strings.TrimRight(tc.Stdout, "\r\n")
+		actual := normalizeOutput(result.Stdout)
+		expected := normalizeOutput(tc.Stdout)
 		if actual == expected && result.ExitCode == 0 && !result.TimedOut {
 			passed++
 		}

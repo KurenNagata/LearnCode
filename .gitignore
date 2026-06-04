@@ -2,6 +2,7 @@ bin/
 node_modules/
 typespec/node_modules/
 typespec/tsp-output/
+web/dist/
 .env
 *.log
 *.test
