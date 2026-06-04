@@ -88,10 +88,10 @@ tasks:
       - go run ./cmd/seed
 
   build:
-    desc: Build API server binary to bin/server
+    desc: Build API server binary to bin/server.exe
     dir: api
     cmds:
-      - go build -o ../bin/server ./cmd/server
+      - go build -o ../bin/server.exe ./cmd/server
 
   run:
     desc: Build and run the API server
