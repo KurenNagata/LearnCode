@@ -129,6 +129,87 @@ function HintModal({ problem, onClose }) {
   )
 }
 
+// ── 正解演出（STAGE CLEAR! ＋ コドにゃんが喜ぶ） ──────────────
+function ClearOverlay({ result, onContinue }) {
+  return (
+    <div style={s.clearOverlay} role="dialog" aria-label="ステージクリア">
+      <ClearStyles />
+      <div className="lc-clear-box">
+        <span className="lc-star lc-star1">★</span>
+        <span className="lc-star lc-star2">✦</span>
+        <span className="lc-star lc-star3">★</span>
+        <span className="lc-star lc-star4">✦</span>
+
+        <div className="lc-clear-title">STAGE CLEAR!</div>
+        <PixelCat size={104} happy className="lc-clear-cat" />
+        <div className="lc-clear-sub">
+          ぜんぶ正解！{result ? ` ${result.passedTests}/${result.totalTests} テスト通過` : ''}
+        </div>
+        <button type="button" className="lc-clear-btn" onClick={onContinue} autoFocus>
+          ▶ つづける
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function ClearStyles() {
+  return (
+    <style>{`
+      .lc-clear-box {
+        position:relative; display:flex; flex-direction:column; align-items:center;
+        gap:16px; padding:36px 44px; text-align:center; background:#2D2B52;
+        border-top:4px solid #46447A; border-left:4px solid #46447A;
+        border-right:4px solid #1A1930; border-bottom:4px solid #1A1930;
+        animation:lc-pop .28s ease-out both;
+      }
+      .lc-clear-title {
+        font-family:'Press Start 2P', monospace; font-size:clamp(20px, 5vw, 34px);
+        color:#5DF15D; letter-spacing:2px;
+      }
+      .lc-clear-cat { width:104px; height:104px; image-rendering:pixelated;
+        animation:lc-jump .6s ease-in-out infinite; }
+      .lc-clear-sub {
+        font-family:'DotGothic16', sans-serif; font-size:clamp(14px, 2.6vw, 18px);
+        color:#FFD93D; letter-spacing:1px;
+      }
+      .lc-clear-btn {
+        margin-top:4px; font-family:'Press Start 2P', monospace; font-size:12px;
+        color:#1A1930; background:#5DF15D; padding:11px 22px; cursor:pointer; letter-spacing:1px;
+        border-top:3px solid #9CFF9C; border-left:3px solid #9CFF9C;
+        border-right:3px solid #2FA02F; border-bottom:3px solid #2FA02F;
+      }
+      .lc-clear-btn:focus-visible { outline:3px dashed #51E5FF; outline-offset:4px; }
+
+      .lc-star { position:absolute; font-size:22px; animation:lc-spark 1s steps(2) infinite; }
+      .lc-star1 { top:-14px; left:18px; color:#FFD93D; }
+      .lc-star2 { top:-10px; right:24px; color:#51E5FF; animation-delay:.15s; }
+      .lc-star3 { bottom:46px; left:-12px; color:#FF5C8A; animation-delay:.3s; }
+      .lc-star4 { bottom:60px; right:-12px; color:#5DF15D; animation-delay:.45s; }
+
+      @keyframes lc-pop {
+        0% { transform:scale(.6); opacity:0; }
+        60% { transform:scale(1.08); }
+        100% { transform:scale(1); opacity:1; }
+      }
+      @keyframes lc-jump {
+        0%,100% { transform:translateY(0); }
+        30% { transform:translateY(-12px); }
+        60% { transform:translateY(0); }
+      }
+      @keyframes lc-spark {
+        0% { transform:scale(.4); opacity:.3; }
+        50% { transform:scale(1.2); opacity:1; }
+        100% { transform:scale(.6); opacity:.4; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .lc-clear-box, .lc-clear-cat, .lc-star { animation:none; }
+        .lc-clear-box { opacity:1; transform:none; }
+      }
+    `}</style>
+  )
+}
+
 // ── 対応言語（v1 は Python のみ。UI は複数言語前提） ──────────
 // tileBg / tileFg = キャラセレ用モノグラムタイルの配色
 const LANGUAGES = [
@@ -157,6 +238,67 @@ function PixelLock() {
   )
 }
 
+// ── マスコット「コドにゃん」（ドット絵ネコ・インライン SVG） ──
+// color / belly を差し替えるとコスメ（色違いアバター）になる土台。
+const CAT_PIXELS = [
+  // 耳（とがった三角・内耳ピンク）
+  [3, 1, 1, 1, 'o'], [3, 2, 2, 1, 'o'], [3, 3, 3, 1, 'o'],     // 左耳
+  [12, 1, 1, 1, 'o'], [11, 2, 2, 1, 'o'], [10, 3, 3, 1, 'o'],  // 右耳
+  [4, 3, 1, 1, 'i'], [11, 3, 1, 1, 'i'],                       // 内耳
+  // 頭（四隅を削って丸く）
+  [4, 3, 8, 1, 'o'],
+  [3, 4, 10, 1, 'o'],
+  [2, 5, 12, 5, 'o'],
+  [3, 10, 10, 1, 'o'],
+  [4, 11, 8, 1, 'o'],
+  // 口まわりの明るいパッチ
+  [6, 9, 4, 2, 'f'],
+  // ヒゲ（長め・上下に広げる）
+  [0, 8, 3, 1, 'wh'], [1, 10, 2, 1, 'wh'],
+  [13, 8, 3, 1, 'wh'], [13, 10, 2, 1, 'wh'],
+  // ほっぺ（チーク）
+  [3, 9, 2, 1, 'b'], [11, 9, 2, 1, 'b'],
+  // 鼻・小さな口
+  [7, 9, 2, 1, 'n'], [7, 10, 2, 1, 'p'],
+  // 体（小さめ）・お腹・足
+  [5, 12, 6, 2, 'o'], [6, 12, 3, 1, 'f'],
+  [5, 14, 2, 1, 'o'], [9, 14, 2, 1, 'o'],
+  // しっぽ（右にピンと立ててカール）
+  [11, 13, 1, 1, 'o'], [12, 13, 1, 1, 'o'], [13, 13, 1, 1, 'o'],
+  [13, 12, 1, 1, 'o'], [13, 11, 1, 1, 'o'], [13, 10, 1, 1, 'o'], [12, 10, 1, 1, 'o'],
+]
+
+// 目（通常＝大きい目＋キャッチライト / happy＝閉じた ^^ ）
+const CAT_EYES_NORMAL = [
+  [4, 6, 2, 3, 'p'], [10, 6, 2, 3, 'p'],
+  [4, 6, 1, 1, 'w'], [10, 6, 1, 1, 'w'],
+]
+const CAT_EYES_HAPPY = [
+  [4, 7, 1, 1, 'p'], [5, 6, 1, 1, 'p'], [6, 7, 1, 1, 'p'],   // 左 ^
+  [9, 7, 1, 1, 'p'], [10, 6, 1, 1, 'p'], [11, 7, 1, 1, 'p'], // 右 ^
+]
+
+function PixelCat({ size = 64, color = '#FFC06A', belly = '#FFE6C2', happy = false, className, title = 'コドにゃん（LearnCode のマスコット）' }) {
+  const fill = { o: color, i: '#FF8AAE', p: '#2B2A45', w: '#FFFFFF', n: '#FF6FA0', b: '#FF9EC4', f: belly, wh: '#F0DDB0' }
+  const pixels = [...CAT_PIXELS, ...(happy ? CAT_EYES_HAPPY : CAT_EYES_NORMAL)]
+  return (
+    <svg
+      className={className}
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      shapeRendering="crispEdges"
+      style={{ imageRendering: 'pixelated' }}
+      role="img"
+      aria-label={title}
+    >
+      {pixels.map(([x, y, w, h, k], i) => (
+        <rect key={i} x={x} y={y} width={w} height={h} fill={fill[k]} />
+      ))}
+    </svg>
+  )
+}
+
 // ── トップページ（8bit アーケード風タイトル画面） ─────────────
 function Home({ onSelect }) {
   const start = () => onSelect('python')
@@ -172,11 +314,14 @@ function Home({ onSelect }) {
       </div>
 
       <div className="lc-screen">
-        {/* 大タイトル */}
-        <h1 className="lc-title">
-          <span className="lc-title-learn">LEARN</span>
-          <span className="lc-title-code">CODE</span>
-        </h1>
+        {/* 大タイトル＋マスコット */}
+        <div className="lc-titlewrap">
+          <PixelCat className="lc-mascot" />
+          <h1 className="lc-title">
+            <span className="lc-title-learn">LEARN</span>
+            <span className="lc-title-code">CODE</span>
+          </h1>
+        </div>
 
         {/* 使い方の軽い紹介 */}
         <p className="lc-tagline">
@@ -268,7 +413,16 @@ function HomeStyles() {
         padding:clamp(12px, 2.5vh, 28px) 20px; text-align:center;
       }
 
-      /* タイトル */
+      /* タイトル＋マスコット */
+      .lc-titlewrap {
+        display:flex; align-items:center; justify-content:center;
+        gap:clamp(10px, 2vw, 22px); flex-wrap:wrap;
+      }
+      .lc-mascot {
+        width:clamp(48px, 9vw, 76px); height:auto; image-rendering:pixelated;
+        animation:lc-bob 1.4s ease-in-out infinite;
+      }
+      @keyframes lc-bob { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
       .lc-title {
         font-family:'Press Start 2P', monospace; font-size:clamp(28px, 7vw, 64px);
         line-height:1.1; letter-spacing:2px;
@@ -364,9 +518,9 @@ function HomeStyles() {
         .lc-grid { grid-template-columns:1fr; }
       }
 
-      /* 動きを減らす設定では点滅を止める */
+      /* 動きを減らす設定では点滅・バウンドを止める */
       @media (prefers-reduced-motion: reduce) {
-        .lc-pushstart { animation:none; }
+        .lc-pushstart, .lc-mascot { animation:none; }
       }
     `}</style>
   )
@@ -390,6 +544,7 @@ function Course({ language, onBack }) {
   const [submitting, setSubmitting] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [showHint, setShowHint] = useState(false)
+  const [showClear, setShowClear] = useState(false)
 
   const langLabel = LANGUAGES.find(l => l.id === language)?.label ?? language
 
@@ -410,6 +565,7 @@ function Course({ language, onBack }) {
     setError(null)
     setShowModal(false)
     setShowHint(false)
+    setShowClear(false)
   }
 
   const currentIdx = problems.findIndex(p => p.id === problem?.id)
@@ -437,7 +593,7 @@ function Course({ language, onBack }) {
       }
       const data = await res.json()
       setResult(data)
-      if (data.passed) setShowModal(true)
+      if (data.passed) setShowClear(true)
     } catch (e) {
       setError('通信エラー: ' + e.message)
     } finally {
@@ -447,6 +603,14 @@ function Course({ language, onBack }) {
 
   return (
     <div style={s.root}>
+      {/* 正解演出（STAGE CLEAR!） */}
+      {showClear && (
+        <ClearOverlay
+          result={result}
+          onContinue={() => { setShowClear(false); setShowModal(true) }}
+        />
+      )}
+
       {/* 解説モーダル */}
       {showModal && problem && (
         <ExplanationModal
@@ -581,6 +745,9 @@ const s = {
   hintBtn: { ...pxBtn(c.yellow, c.bevD, '#FFE98A', '#B8950F'), fontSize: 10 },
   explanationBtn: { ...pxBtn(c.cyan, c.bevD, '#A6F2FF', '#1F9DB5'), fontSize: 10 },
   nextBtn: { ...pxBtn(c.pink, c.white, '#FF9CBC', '#C72E5C'), fontSize: 10 },
+
+  // 正解演出
+  clearOverlay: { position: 'fixed', inset: 0, background: 'rgba(10,9,24,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: 16 },
 
   // modal
   modalOverlay: { position: 'fixed', inset: 0, background: 'rgba(10,9,24,0.78)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 16 },
