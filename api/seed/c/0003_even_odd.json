@@ -1,0 +1,18 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 3,
+  "title": "偶数か奇数か",
+  "description": "整数が 1 つ与えられます。偶数なら `偶数`、奇数なら `奇数` を出力してください。\n\n**入力例：** `4`\n**出力例：** `偶数`\n\n**入力例：** `7`\n**出力例：** `奇数`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "`%`（剰余）で 2 で割った余りを調べます。余りが 0 なら偶数です。\n\n```c\nif (n % 2 == 0) {\n    printf(\"偶数\\n\");\n} else {\n    printf(\"奇数\\n\");\n}\n```",
+  "explanation": "## 解説\n\n`n % 2` は「n を 2 で割った余り」です。0 なら偶数、そうでなければ奇数です（負の数でも判定できます）。\n\n```c\nif (n % 2 == 0) {\n    printf(\"偶数\\n\");\n} else {\n    printf(\"奇数\\n\");\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    if (n % 2 == 0) {\n        printf(\"偶数\\n\");\n    } else {\n        printf(\"奇数\\n\");\n    }\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "4", "stdout": "偶数"},
+    {"stdin": "7", "stdout": "奇数"},
+    {"stdin": "0", "stdout": "偶数"},
+    {"stdin": "-3", "stdout": "奇数"},
+    {"stdin": "-8", "stdout": "偶数"}
+  ]
+}

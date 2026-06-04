@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 5,
+  "title": "配列の最大値",
+  "description": "1 行目に個数 `N`、2 行目に `N` 個の整数が空白区切りで与えられます。その中の **最大値** を出力してください。\n\n**入力例：**\n```\n4\n3 1 4 1\n```\n**出力例：** `4`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "最初の 1 個を最大値とし、残りを順に読みながら大きければ更新します。\n\n```c\nint max;\nscanf(\"%d\", &max);\nfor (int i = 1; i < n; i++) {\n    int x;\n    scanf(\"%d\", &x);\n    if (x > max) max = x;\n}\nprintf(\"%d\\n\", max);\n```",
+  "explanation": "## 解説\n\n1 個目を仮の最大値として読み込み、残り `N-1` 個を順に比較して、より大きければ更新します。\n\n```c\nint max;\nscanf(\"%d\", &max);\nfor (int i = 1; i < n; i++) {\n    int x;\n    scanf(\"%d\", &x);\n    if (x > max) max = x;\n}\nprintf(\"%d\\n\", max);\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int n;\n    scanf(\"%d\", &n);\n    int max;\n    scanf(\"%d\", &max);\n    for (int i = 1; i < n; i++) {\n        int x;\n        scanf(\"%d\", &x);\n        if (x > max) max = x;\n    }\n    printf(\"%d\\n\", max);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "4\n3 1 4 1", "stdout": "4"},
+    {"stdin": "5\n10 20 5 30 25", "stdout": "30"},
+    {"stdin": "1\n7", "stdout": "7"},
+    {"stdin": "3\n-5 -2 -9", "stdout": "-2"}
+  ]
+}

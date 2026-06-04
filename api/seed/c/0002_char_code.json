@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 2,
+  "title": "文字コード",
+  "description": "半角の文字が 1 つ与えられます。その文字の **ASCII コード（番号）** を出力してください。\n\n**入力例：** `A`\n**出力例：** `65`\n\n**入力例：** `a`\n**出力例：** `97`",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    char c;\n    scanf(\"%c\", &c);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "C では `char` は数値（文字コード）として扱えます。`%d` で出力するとコードになります。\n\n```c\nprintf(\"%d\\n\", c);\n```",
+  "explanation": "## 解説\n\nC 言語の `char` は中身が文字コード（整数）です。`%c` で出力すれば文字、`%d` で出力すればコード番号になります。\n\n```c\n#include <stdio.h>\n\nint main(void) {\n    char c;\n    scanf(\"%c\", &c);\n    printf(\"%d\\n\", c);\n    return 0;\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    char c;\n    scanf(\"%c\", &c);\n    printf(\"%d\\n\", c);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "A", "stdout": "65"},
+    {"stdin": "a", "stdout": "97"},
+    {"stdin": "0", "stdout": "48"},
+    {"stdin": "z", "stdout": "122"}
+  ]
+}

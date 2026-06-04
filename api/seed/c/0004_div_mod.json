@@ -1,0 +1,17 @@
+{
+  "language": "c",
+  "level": "beginner",
+  "order": 4,
+  "title": "商と余り",
+  "description": "空白区切りで 2 つの正の整数 `a`, `b` が与えられます。`a` を `b` で割った **商** と **余り** を、空白区切りで 1 行に出力してください。\n\n**入力例：** `17 5`\n**出力例：** `3 2`（17 ÷ 5 = 商 3 あまり 2）",
+  "starter_code": "#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    // ここにコードを書いてください\n    return 0;\n}\n",
+  "hint": "整数同士の `/` が商、`%` が余りです。\n\n```c\nprintf(\"%d %d\\n\", a / b, a % b);\n```",
+  "explanation": "## 解説\n\nC 言語では整数同士の `/` は小数を切り捨てた「商」になり、`%` が「余り」になります。\n\n```c\n#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    printf(\"%d %d\\n\", a / b, a % b);\n    return 0;\n}\n```",
+  "answer_code": "#include <stdio.h>\n\nint main(void) {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    printf(\"%d %d\\n\", a / b, a % b);\n    return 0;\n}",
+  "test_cases": [
+    {"stdin": "17 5", "stdout": "3 2"},
+    {"stdin": "10 2", "stdout": "5 0"},
+    {"stdin": "7 3", "stdout": "2 1"},
+    {"stdin": "100 7", "stdout": "14 2"}
+  ]
+}
