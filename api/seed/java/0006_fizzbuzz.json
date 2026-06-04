@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 6,
+  "title": "FizzBuzz",
+  "description": "整数 N が与えられます。1 から N まで、各行に次のルールで出力してください。\n\n- 3 の倍数 → `Fizz`\n- 5 の倍数 → `Buzz`\n- 3 と 5 の両方の倍数 → `FizzBuzz`\n- それ以外 → その数字\n\n**入力例：** `5`\n**出力例：**\n```\n1\n2\nFizz\n4\nBuzz\n```",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "両方の倍数（15 の倍数）を先に判定するのがポイントです。\n\n```java\nfor (int i = 1; i <= n; i++) {\n    if (i % 15 == 0) System.out.println(\"FizzBuzz\");\n    else if (i % 3 == 0) System.out.println(\"Fizz\");\n    else if (i % 5 == 0) System.out.println(\"Buzz\");\n    else System.out.println(i);\n}\n```",
+  "explanation": "## 解説\n\nループの中で割り切れるかを `%`（剰余）で判定します。`FizzBuzz`（15 の倍数）を最初に調べないと、`Fizz` や `Buzz` の条件に先に入ってしまうので注意します。\n\n```java\nfor (int i = 1; i <= n; i++) {\n    if (i % 15 == 0) System.out.println(\"FizzBuzz\");\n    else if (i % 3 == 0) System.out.println(\"Fizz\");\n    else if (i % 5 == 0) System.out.println(\"Buzz\");\n    else System.out.println(i);\n}\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        for (int i = 1; i <= n; i++) {\n            if (i % 15 == 0) System.out.println(\"FizzBuzz\");\n            else if (i % 3 == 0) System.out.println(\"Fizz\");\n            else if (i % 5 == 0) System.out.println(\"Buzz\");\n            else System.out.println(i);\n        }\n    }\n}",
+  "test_cases": [
+    {"stdin": "5", "stdout": "1\n2\nFizz\n4\nBuzz"},
+    {"stdin": "3", "stdout": "1\n2\nFizz"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "15", "stdout": "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz"}
+  ]
+}

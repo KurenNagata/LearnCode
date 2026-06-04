@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 2,
+  "title": "文字列の長さ",
+  "description": "1 行の文字列が与えられます（半角英数字のみ）。その **文字数（長さ）** を出力してください。\n\n**入力例：** `Hello`\n**出力例：** `5`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`String` の `.length()` メソッドで文字数が得られます。\n\n```java\nSystem.out.println(s.length());\n```",
+  "explanation": "## 解説\n\nJava の `String` は `.length()` メソッドで文字数を返します。\n\n```java\nString s = sc.nextLine();\nSystem.out.println(s.length());\n```\n\nメソッドは `変数.メソッド名()` の形で呼び出します。",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        System.out.println(s.length());\n    }\n}",
+  "test_cases": [
+    {"stdin": "Hello", "stdout": "5"},
+    {"stdin": "Java", "stdout": "4"},
+    {"stdin": "abcdef", "stdout": "6"},
+    {"stdin": "a", "stdout": "1"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "language": "java",
+  "level": "beginner",
+  "order": 3,
+  "title": "文字列の反転",
+  "description": "1 行の文字列が与えられます（半角英数字のみ）。その文字列を **逆順** にして出力してください。\n\n**入力例：** `abc`\n**出力例：** `cba`",
+  "starter_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        // ここにコードを書いてください\n    }\n}\n",
+  "hint": "`StringBuilder` の `reverse()` を使うと簡単です。\n\n```java\nString r = new StringBuilder(s).reverse().toString();\nSystem.out.println(r);\n```",
+  "explanation": "## 解説\n\n`StringBuilder` に文字列を入れて `reverse()` を呼ぶと、逆順の文字列が作れます。\n\n```java\nString s = sc.nextLine();\nString r = new StringBuilder(s).reverse().toString();\nSystem.out.println(r);\n```",
+  "answer_code": "import java.util.Scanner;\n\nclass Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        System.out.println(new StringBuilder(s).reverse().toString());\n    }\n}",
+  "test_cases": [
+    {"stdin": "abc", "stdout": "cba"},
+    {"stdin": "Hello", "stdout": "olleH"},
+    {"stdin": "12345", "stdout": "54321"},
+    {"stdin": "A", "stdout": "A"}
+  ]
+}
