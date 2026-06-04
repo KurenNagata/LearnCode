@@ -1,0 +1,19 @@
+{
+  "language": "javascript",
+  "level": "advanced",
+  "order": 27,
+  "title": "括弧の対応チェック",
+  "description": "`(` `)` `[` `]` `{` `}` だけからなる文字列が与えられます。すべての括弧が正しく対応し、入れ子も正しければ `Yes`、そうでなければ `No` を出力してください。\n\n**入力例：** `{[()]}`\n**出力例：** `Yes`\n\n**入力例：** `([)]`\n**出力例：** `No`",
+  "starter_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\n// ここにコードを書いてください\n",
+  "hint": "スタックを使います。開き括弧は積み、閉じ括弧はスタックの一番上と対応するか確認します。\n\n```js\nconst pairs = { ')': '(', ']': '[', '}': '{' };\nconst stack = [];\nlet ok = true;\nfor (const ch of s) {\n  if (ch === '(' || ch === '[' || ch === '{') stack.push(ch);\n  else if (stack.pop() !== pairs[ch]) { ok = false; break; }\n}\nconsole.log(ok && stack.length === 0 ? \"Yes\" : \"No\");\n```",
+  "explanation": "## 解説\n\nスタックに開き括弧を積み、閉じ括弧が来たら一番上と対応するか確認します。途中で崩れる、または最後にスタックが空でなければ対応していません。\n\n```js\nconst pairs = { ')': '(', ']': '[', '}': '{' };\nconst stack = [];\nlet ok = true;\nfor (const ch of s) {\n  if (ch === '(' || ch === '[' || ch === '{') stack.push(ch);\n  else if (stack.pop() !== pairs[ch]) { ok = false; break; }\n}\nconsole.log(ok && stack.length === 0 ? \"Yes\" : \"No\");\n```",
+  "answer_code": "const s = require('fs').readFileSync(0, 'utf8').trim();\nconst pairs = { ')': '(', ']': '[', '}': '{' };\nconst stack = [];\nlet ok = true;\nfor (const ch of s) {\n  if (ch === '(' || ch === '[' || ch === '{') stack.push(ch);\n  else if (stack.pop() !== pairs[ch]) { ok = false; break; }\n}\nconsole.log(ok && stack.length === 0 ? \"Yes\" : \"No\");",
+  "test_cases": [
+    {"stdin": "()", "stdout": "Yes"},
+    {"stdin": "([])", "stdout": "Yes"},
+    {"stdin": "{[()]}", "stdout": "Yes"},
+    {"stdin": "([)]", "stdout": "No"},
+    {"stdin": "(()", "stdout": "No"},
+    {"stdin": ")(", "stdout": "No"}
+  ]
+}
