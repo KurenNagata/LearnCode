@@ -50,12 +50,24 @@ tasks:
     cmds:
       - curl -s -X POST http://localhost:2000/api/v2/packages -H "Content-Type:application/json" -d "{\"language\":\"gcc\",\"version\":\"10.2.0\"}"
 
+  piston:install:js:
+    desc: Install JavaScript (Node) runtime in Piston
+    cmds:
+      - curl -s -X POST http://localhost:2000/api/v2/packages -H "Content-Type:application/json" -d "{\"language\":\"node\",\"version\":\"20.11.1\"}"
+
+  piston:install:csharp:
+    desc: Install C# (Mono) runtime in Piston
+    cmds:
+      - curl -s -X POST http://localhost:2000/api/v2/packages -H "Content-Type:application/json" -d "{\"language\":\"mono\",\"version\":\"6.12.0\"}"
+
   piston:install:all:
-    desc: Install Python, Java, C runtimes in Piston (run once after infra:up)
+    desc: Install all language runtimes in Piston (run once after infra:up)
     cmds:
       - task: piston:install
       - task: piston:install:java
       - task: piston:install:c
+      - task: piston:install:js
+      - task: piston:install:csharp
 
   gen:
     desc: TypeSpec -> OpenAPI -> Go codegen
