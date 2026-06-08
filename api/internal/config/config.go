@@ -15,6 +15,7 @@ type Config struct {
 	DefaultUserID string
 	JWTSecret     string
 	Env           string
+	StaticDir     string
 }
 
 func Load() *Config {
@@ -38,6 +39,9 @@ func Load() *Config {
 		DefaultUserID: getEnv("DEFAULT_USER_ID", "00000000-0000-0000-0000-000000000001"),
 		JWTSecret:     jwtSecret,
 		Env:           env,
+		// STATIC_DIR を指定すると、API と同一オリジンでフロントの静的ファイルを配信する
+		// （本番=Docker では /app/web）。未指定なら API のみ（ローカル開発は Vite が配信）。
+		StaticDir: os.Getenv("STATIC_DIR"),
 	}
 }
 

@@ -1,0 +1,10 @@
+# ビルドに不要なものはコンテキストから除外（ビルド高速化・秘密情報の混入防止）
+.git
+.env
+*.log
+bin/
+**/node_modules/
+web/dist/
+typespec/tsp-output/
+.claude/
+docs/

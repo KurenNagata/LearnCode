@@ -1,0 +1,17 @@
+# Oracle Cloud VM 上で Piston だけを動かすための compose。
+# セキュリティ: ポート 2000 はクラウドのファイアウォール（セキュリティリスト）で
+# Render のアウトバウンド IP からのみ許可する。VM 内では Go バックエンドからのみ叩く想定。
+services:
+  piston:
+    image: ghcr.io/engineer-man/piston
+    restart: unless-stopped
+    ports:
+      - "2000:2000"
+    volumes:
+      - piston_packages:/piston/packages
+    tmpfs:
+      - /piston/jobs
+    privileged: true
+
+volumes:
+  piston_packages:
