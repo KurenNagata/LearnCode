@@ -8,9 +8,9 @@ import (
 
 	"learning_language/api/internal/config"
 	"learning_language/api/internal/domain"
+	"learning_language/api/internal/glot"
 	"learning_language/api/internal/handler"
 	"learning_language/api/internal/openapi"
-	"learning_language/api/internal/piston"
 	"learning_language/api/internal/repository"
 	"learning_language/api/internal/service"
 )
@@ -28,10 +28,10 @@ func main() {
 	problemRepo := repository.NewProblemRepo(db)
 	progressRepo := repository.NewProgressRepo(db)
 	userRepo := repository.NewUserRepo(db)
-	pistonClient := piston.NewClient(cfg.PistonURL)
+	executor := glot.NewClient(cfg.GlotURL, cfg.GlotToken)
 
 	problemSvc := service.NewProblemService(problemRepo)
-	judgeSvc := service.NewJudgeService(problemRepo, progressRepo, pistonClient)
+	judgeSvc := service.NewJudgeService(problemRepo, progressRepo, executor)
 	progressSvc := service.NewProgressService(progressRepo)
 	authSvc := service.NewAuthService(userRepo, cfg.JWTSecret)
 
@@ -50,8 +50,12 @@ func main() {
 		log.Printf("serving frontend from %s", cfg.StaticDir)
 	}
 
+	// 別オリジン（Cloudflare Workers のフロント）からの fetch を許可するため
+	// CORS を最外層に置き、プリフライトを認証より先に処理する。
+	root := handler.CORS(cfg.AllowedOrigins, mux)
+
 	log.Printf("server listening on :%s", cfg.Port)
-	if err := http.ListenAndServe(":"+cfg.Port, mux); err != nil {
+	if err := http.ListenAndServe(":"+cfg.Port, root); err != nil {
 		log.Fatal(err)
 	}
 }

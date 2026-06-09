@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"learning_language/api/internal/service"
@@ -77,7 +78,10 @@ func (c *Client) Execute(ctx context.Context, req service.ExecuteRequest) (servi
 		return service.ExecuteResult{}, fmt.Errorf("marshal: %w", err)
 	}
 
-	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/api/v2/execute", bytes.NewReader(data))
+	// PISTON_URL は Piston v2 API のベースURL（自己ホスト: http://host:2000/api/v2、
+	// 公開API: https://emkc.org/api/v2/piston）。ここに /execute を足して実行する。
+	execURL := strings.TrimRight(c.baseURL, "/") + "/execute"
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, execURL, bytes.NewReader(data))
 	if err != nil {
 		return service.ExecuteResult{}, fmt.Errorf("new request: %w", err)
 	}

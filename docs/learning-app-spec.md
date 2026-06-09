@@ -1,14 +1,16 @@
-# プログラミング学習アプリ 仕様書（v0.3）
+# プログラミング学習アプリ 仕様書（v0.5）
 
-> 技術スタック・構成・運用方針をすべて確定した版。エディタ＝Monaco、PaaS＝Render、「環境構築を学ぶ」章は当面見送り、を反映。
+> 技術スタック・構成・運用方針をすべて確定した版。エディタ＝Monaco、「環境構築を学ぶ」章は当面見送り、を反映。
+> v0.4: コード実行エンジンを「Oracle VM 上の自己ホスト Piston」から **glot.io（外部 Run API）** に変更（公開 Piston API のホワイトリスト化と Oracle サインアップ難航のため）。自己ホスト Piston 用コードは将来の差し戻し用に残置。
+> v0.5: デプロイ構成を **フロント=Cloudflare Workers / API=Cloud Run / DB=Neon / 実行=glot.io** の分離構成に変更（Render での同一オリジン配信をやめた）。別オリジンになるため API 側に CORS を追加。
 
 ## 0. 確定した主要方針
 - **フロント**: React
 - **エディタ**: Monaco Editor（VS Code の編集体験を埋め込む。`@monaco-editor/react`）
 - **DB**: PostgreSQL に統一（ローカルも Docker で Postgres、本番も Postgres）。SQLite は使わない。
 - **バックエンド**: Go（API ファースト: TypeSpec → OpenAPI → Go）
-- **実行エンジン**: Piston を自己ホスト（Docker）
-- **構成**: 分離構成（B）。Go＋Postgres は Render、Piston は別 VPS（Oracle Cloud Always Free）
+- **実行エンジン**: glot.io（外部 Run API。無料・トークンのみ。自前 VM 不要）
+- **構成**: フロント=Cloudflare Workers、API=Cloud Run、DB=Neon、コード実行=glot.io（分離構成・別オリジン＝CORS）
 - **対象言語**: ユーザーが選択（言語ごとにコース）。v1 は Python。
 - **課金**: 当面なし。
 - **公開**: 当面は人に渡さない（自分専用・学習用）。
@@ -40,7 +42,7 @@
 - 言語選択（v1 は Python のみだが、UI と内部構造は複数言語前提で作る）
 - 問題表示（タイトル・説明・難易度・対象言語）
 - コードエディタ（**Monaco** を埋め込み）
-- コード実行（Go 経由で Piston へ）
+- コード実行（Go 経由で glot.io へ）
 - 自動判定（隠しテストケース全通過で「正解」）
 - 実行結果の表示（標準出力・エラー・落ちたテストの最小情報）
 - 解説・解答例の表示
@@ -70,28 +72,32 @@
 - **パフォーマンス**: 1 提出あたり数秒以内に判定。実行に時間・メモリ・出力サイズの制限。
 - **可用性**: 自分用フェーズでは厳密な SLA は不要。
 
-## 7. システム構成（確定：分離構成 B）
+## 7. システム構成（確定）
 
-連携の流れ: フロント（React＋Monaco・ブラウザ） → Go バックエンド（Render） → Piston（Oracle VPS）
+連携の流れ: フロント（Cloudflare Workers） → Go バックエンド（Cloud Run） → glot.io（外部 Run API）／ Neon（DB）
 
-- **フロントエンド**: React ＋ Monaco Editor。ブラウザで動作。
-- **バックエンド**: Go。**Render** にデプロイ。役割は問題配信・提出受付・実行制御・判定・進捗管理。
+- **フロントエンド**: React ＋ Monaco Editor。**Cloudflare Workers** で静的配信（`web/dist`）。
+  API は別オリジン（Cloud Run）を `VITE_API_BASE` で指して fetch する。
+- **バックエンド**: Go。**Cloud Run** にデプロイ（Docker）。役割は問題配信・提出受付・実行制御・判定・進捗管理。
   **隠しテストケースはサーバー側にのみ置き、クライアントには渡さない。**
   API は **TypeSpec → OpenAPI → Go** の API ファーストで設計。
-  - 留意: Render の無料 Web サービスはアイドルでスリープし、復帰に数十秒かかる（自分用なら許容範囲）。
-- **DB**: **PostgreSQL**。本番は Render の Postgres、または無料枠の広い Neon / Supabase を併用。ローカルは Docker で Postgres を立て、本番と環境を揃える。
-- **実行エンジン**: **Piston** を **Oracle Cloud Always Free の VM（ARM 4コア / 24GB）** に Docker で自己ホスト。
-  Piston はインターネットに直接公開せず、Go バックエンドからのみアクセス可能にする。
+  フロントが別オリジンになるため **CORS** を実装（許可オリジンは `ALLOWED_ORIGINS`）。
+  - 留意: Cloud Run はゼロスケールするため、アイドル後の初回アクセスにコールドスタートがかかる（自分用なら許容範囲）。
+- **DB**: **PostgreSQL**。本番は **Neon**（サーバーレス Postgres）。ローカルは Docker で Postgres を立て、本番と環境を揃える。
+- **実行エンジン**: **glot.io** の Run API（`https://glot.io/api/run/{language}/latest`）。API トークン（`GLOT_TOKEN`）で認証。
+  自前 VM を持たず、Go バックエンドからのみ呼び出す。実装は `api/internal/glot/client.go`。
+  - 補足: 旧構成（Oracle VM 上の自己ホスト Piston）のコードは `api/internal/piston/` 等に残してあり、差し戻し可能。
 
-**判定の流れ**: 提出コード → Go が各隠しテストの入力を stdin で渡して Piston 実行 → 標準出力を期待値と比較 → 全件一致で「正解」。
+**判定の流れ**: 提出コード → Go が各隠しテストの入力を stdin で渡して glot.io で実行 → 標準出力を期待値と比較 → 全件一致で「正解」。
+**期待値（隠しテストの正解出力）は外部 API に送らず、Go 側でのみ比較する**（外部に渡すのは提出コードと stdin のみ）。
 
 ## 8. セキュリティ要件（重要）
-コード実行エンジンを持つため、未公開でも以下を必須とする。
-- Piston を直接インターネットに晒さず、必ず Go バックエンド経由にする。
-- ファイアウォールで Piston のポートは Go バックエンドからのみ許可する。
-- 実行ごとに時間・メモリ・出力サイズの上限を設定する。
-- レート制限を設ける。
-- VPS は SSH 等を含め最小限の開放にとどめ、OS・Docker をこまめに更新する。
+コード実行を外部 API に委ねるため、以下を必須とする。
+- **隠しテストの期待値は外部 API に送らない**。glot.io に渡すのは提出コードと stdin のみで、期待値比較は Go 側で行う。
+- 実行ごとに時間・出力サイズの上限を設ける（glot.io 側のタイムアウトに加え、Go 側でも HTTP タイムアウトを設定）。
+- 提出にレート制限を設ける。
+- `GLOT_TOKEN`・`JWT_SECRET` は秘密値として扱い、リポジトリにコミットしない（Cloud Run 環境変数・ローカル `.env` で管理）。
+- **CORS** は `ALLOWED_ORIGINS` で許可オリジンを絞る（既定 `*` のままにしない）。認証は Bearer トークンで Cookie は使わない。
 
 ## 9. データモデル案
 
@@ -105,16 +111,16 @@
 - `userId`（v1 は固定値） / `problemId` / `status`（未着手 / 挑戦中 / クリア） / `clearedAt`
 
 ## 10. MVP の最小ゴール（ウォーキングスケルトン）
-**「Python の問題1問が、Monaco で書く → Go 経由で Piston 実行 → 隠しテスト判定 → クリアで次へ」まで通る** 状態。
+**「Python の問題1問が、Monaco で書く → Go 経由で glot.io 実行 → 隠しテスト判定 → クリアで次へ」まで通る** 状態。
 これが通ってから問題数・難易度・言語を足していく。
 
 ## 11. 段階的ロードマップ
-1. ローカルに Docker で Piston と Postgres を立て、Go から Python 実行・DB 接続を確認
+1. ローカルに Docker で Postgres を立て、glot.io トークンを設定して Go から Python 実行・DB 接続を確認
 2. 問題データ形式を決め、1 問用意
 3. React に Monaco＋実行ボタン＋結果表示を作る
 4. 判定（隠しテスト全通過）と「次へ」を実装
 5. 問題を 10〜20 問に増やし、コース進行と進捗保存を入れる
-6. 分離構成へデプロイ（Piston → Oracle VPS、Go＋Postgres → Render）
+6. クラウドへデプロイ（DB → Neon、コード実行 → glot.io、API → Cloud Run、フロント → Cloudflare Workers）
 7. （将来）言語追加（JS/TS …）・「環境構築を学ぶ」章・公開時の認証/クラウド同期
 
 ## 12. 確定状況

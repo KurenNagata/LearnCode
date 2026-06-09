@@ -1,0 +1,10 @@
+# Cloudflare Workers（静的アセット配信）でフロントをホストする設定。
+# `npm run build` で ./dist を生成 → `npx wrangler deploy` で公開。
+# Worker スクリプトは持たず、静的アセットのみを配信する（SPA フォールバック有効）。
+name = "learncode"
+compatibility_date = "2025-09-01"
+
+[assets]
+directory = "./dist"
+# 未知パスは index.html を返す（React のクライアントルーティング用）。
+not_found_handling = "single-page-application"

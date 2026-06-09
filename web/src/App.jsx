@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import Editor from '@monaco-editor/react'
 
+// API のベースURL。別オリジン配信（Cloudflare Workers → Cloud Run）では
+// ビルド時に VITE_API_BASE=https://<cloud-run-url> を設定する。
+// 空（ローカル開発）のときは相対パスで、Vite の proxy 経由で 8080 に届く。
+const API_BASE = import.meta.env.VITE_API_BASE || ''
+
 // ── 簡易 Markdown レンダラー ──────────────────────────────────
 function renderInline(text) {
   const parts = text.split(/`([^`]+)`/)
@@ -731,7 +736,7 @@ function AuthScreen({ skin, onAuthed }) {
     setBusy(true)
     setError('')
     try {
-      const res = await fetch(`/api/auth/${mode}`, {
+      const res = await fetch(`${API_BASE}/api/auth/${mode}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -816,7 +821,7 @@ function AccountModal({ username, onAuthed, onClose }) {
     setError('')
     setMsg('')
     try {
-      const res = await fetch('/api/account/update', {
+      const res = await fetch(`${API_BASE}/api/account/update`, {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
@@ -923,7 +928,7 @@ export default function App() {
   // ログイン後にサーバの進捗（クリア済み問題）を取得。
   useEffect(() => {
     if (!auth.token) return
-    fetch('/api/progress', { headers: authHeaders() })
+    fetch(`${API_BASE}/api/progress`, { headers: authHeaders() })
       .then(r => (r.ok ? r.json() : null))
       .then(data => {
         if (data && Array.isArray(data.clearedProblemIds)) {
@@ -1129,7 +1134,7 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
   const langLabel = LANGUAGES.find(l => l.id === language)?.label ?? language
 
   useEffect(() => {
-    fetch(`/api/problems?language=${encodeURIComponent(language)}`)
+    fetch(`${API_BASE}/api/problems?language=${encodeURIComponent(language)}`)
       .then(r => r.json())
       .then(data => {
         setProblems(data.problems)
@@ -1161,7 +1166,7 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
     setResult(null)
     setError(null)
     try {
-      const res = await fetch(`/api/problems/${problem.id}/submit`, {
+      const res = await fetch(`${API_BASE}/api/problems/${problem.id}/submit`, {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ language, code }),
