@@ -1,0 +1,14 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 1,
+  "title": "Hello, World!",
+  "description": "Go で画面に以下の文字列を **そのまま** 出力してください。\n\n**出力：**\n```\nHello, World!\n```",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`fmt.Println` で出力できます。末尾に改行が自動で付きます。\n\n```go\nfmt.Println(\"文字列\")\n```",
+  "explanation": "## 解説\n\nGo では標準ライブラリ `fmt` の `Println` で文字列を出力します。末尾に改行が付きます。プログラムは必ず `package main` と `func main()` から始まります。\n\n```go\npackage main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello, World!\")\n}\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello, World!\")\n}",
+  "test_cases": [
+    {"stdin": "", "stdout": "Hello, World!"}
+  ]
+}

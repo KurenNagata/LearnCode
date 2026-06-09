@@ -1,0 +1,18 @@
+{
+  "language": "go",
+  "level": "intermediate",
+  "order": 20,
+  "title": "最大公約数",
+  "description": "空白区切りで 2 つの正の整数 a, b が与えられます。最大公約数（GCD）をユークリッドの互除法で求めて出力してください。\n\n**入力例：** `12 18`\n**出力例：** `6`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar a, b int\n\tfmt.Scan(&a, &b)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`b` が 0 になるまで、`a` を `b`、`b` を `a % b` に置き換えます。Go の多重代入で 1 行で書けます。\n\n```go\nfor b != 0 {\n\ta, b = b, a%b\n}\nfmt.Println(a)\n```",
+  "explanation": "## 解説\n\nユークリッドの互除法は「a と b の GCD は b と a%b の GCD に等しい」を使います。Go の多重代入 `a, b = b, a%b` で右辺がすべて評価されてから代入されるため、一時変数なしに更新できます。`b` が 0 になったときの `a` が答えです。\n\n```go\nfor b != 0 {\n\ta, b = b, a%b\n}\nfmt.Println(a)\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar a, b int\n\tfmt.Scan(&a, &b)\n\tfor b != 0 {\n\t\ta, b = b, a%b\n\t}\n\tfmt.Println(a)\n}",
+  "test_cases": [
+    {"stdin": "12 18", "stdout": "6"},
+    {"stdin": "17 5", "stdout": "1"},
+    {"stdin": "100 80", "stdout": "20"},
+    {"stdin": "7 7", "stdout": "7"},
+    {"stdin": "48 36", "stdout": "12"}
+  ]
+}

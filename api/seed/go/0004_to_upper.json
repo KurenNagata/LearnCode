@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 4,
+  "title": "大文字に変換",
+  "description": "1 行の文字列（半角英字、空白なし）をすべて大文字にして出力してください。\n\n**入力例：** `hello`\n**出力例：** `HELLO`",
+  "starter_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`strings` パッケージの `ToUpper` を使います。\n\n```go\nfmt.Println(strings.ToUpper(s))\n```",
+  "explanation": "## 解説\n\n標準ライブラリ `strings` の `ToUpper` は文字列をすべて大文字に変換した新しい文字列を返します。\n\n```go\nfmt.Println(strings.ToUpper(s))\n```",
+  "answer_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\tfmt.Println(strings.ToUpper(s))\n}",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "HELLO"},
+    {"stdin": "Golang", "stdout": "GOLANG"},
+    {"stdin": "abcXYZ", "stdout": "ABCXYZ"},
+    {"stdin": "a", "stdout": "A"}
+  ]
+}

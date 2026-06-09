@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 3,
+  "title": "文字列の反転",
+  "description": "1 行の文字列（半角、空白なし）を逆順にして出力してください。\n\n**入力例：** `abc`\n**出力例：** `cba`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "文字列を `[]rune` に変換し、両端から入れ替えていきます。Go では多重代入で swap できます。\n\n```go\nr := []rune(s)\nfor i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {\n\tr[i], r[j] = r[j], r[i]\n}\nfmt.Println(string(r))\n```",
+  "explanation": "## 解説\n\n文字列は不変なので、`[]rune` に変換してから両端の文字を入れ替えます。Go の多重代入 `r[i], r[j] = r[j], r[i]` で一時変数なしに swap できます。最後に `string(r)` で文字列に戻します。\n\n```go\nr := []rune(s)\nfor i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {\n\tr[i], r[j] = r[j], r[i]\n}\nfmt.Println(string(r))\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\tr := []rune(s)\n\tfor i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {\n\t\tr[i], r[j] = r[j], r[i]\n\t}\n\tfmt.Println(string(r))\n}",
+  "test_cases": [
+    {"stdin": "abc", "stdout": "cba"},
+    {"stdin": "Hello", "stdout": "olleH"},
+    {"stdin": "12345", "stdout": "54321"},
+    {"stdin": "A", "stdout": "A"}
+  ]
+}

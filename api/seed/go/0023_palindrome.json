@@ -1,0 +1,18 @@
+{
+  "language": "go",
+  "level": "intermediate",
+  "order": 23,
+  "title": "回文判定",
+  "description": "文字列（半角英数字、空白なし）が与えられます。前から読んでも後ろから読んでも同じ（回文）なら `Yes`、そうでなければ `No` を出力してください。\n\n**入力例：** `level`\n**出力例：** `Yes`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`[]rune` にして両端から突き合わせます。1 つでも違えば回文ではありません。\n\n```go\nr := []rune(s)\nisPal := true\nfor i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {\n\tif r[i] != r[j] {\n\t\tisPal = false\n\t\tbreak\n\t}\n}\n```",
+  "explanation": "## 解説\n\n文字列を `[]rune` に変換し、両端 `i`（先頭）と `j`（末尾）を内側へ動かしながら比較します。1 つでも一致しなければ回文ではありません。\n\n```go\nr := []rune(s)\nisPal := true\nfor i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {\n\tif r[i] != r[j] {\n\t\tisPal = false\n\t\tbreak\n\t}\n}\nif isPal {\n\tfmt.Println(\"Yes\")\n} else {\n\tfmt.Println(\"No\")\n}\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\tr := []rune(s)\n\tisPal := true\n\tfor i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {\n\t\tif r[i] != r[j] {\n\t\t\tisPal = false\n\t\t\tbreak\n\t\t}\n\t}\n\tif isPal {\n\t\tfmt.Println(\"Yes\")\n\t} else {\n\t\tfmt.Println(\"No\")\n\t}\n}",
+  "test_cases": [
+    {"stdin": "level", "stdout": "Yes"},
+    {"stdin": "hello", "stdout": "No"},
+    {"stdin": "abcba", "stdout": "Yes"},
+    {"stdin": "a", "stdout": "Yes"},
+    {"stdin": "ab", "stdout": "No"}
+  ]
+}

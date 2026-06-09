@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 15,
+  "title": "各要素を2倍",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。各要素を 2 倍にして、空白区切りで出力してください。\n\n**入力例：**\n```\n4\n1 2 3 4\n```\n**出力例：** `2 4 6 8`",
+  "starter_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "読み込んだ値を 2 倍して文字列にし、`strings.Join` で空白連結します。\n\n```go\nparts := make([]string, n)\nfor i := 0; i < n; i++ {\n\tvar x int\n\tfmt.Scan(&x)\n\tparts[i] = strconv.Itoa(x * 2)\n}\nfmt.Println(strings.Join(parts, \" \"))\n```",
+  "explanation": "## 解説\n\n各値を `x * 2` にして `strconv.Itoa` で文字列化し、`strings.Join` で空白区切りにまとめます。\n\n```go\nparts := make([]string, n)\nfor i := 0; i < n; i++ {\n\tvar x int\n\tfmt.Scan(&x)\n\tparts[i] = strconv.Itoa(x * 2)\n}\nfmt.Println(strings.Join(parts, \" \"))\n```",
+  "answer_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tparts := make([]string, n)\n\tfor i := 0; i < n; i++ {\n\t\tvar x int\n\t\tfmt.Scan(&x)\n\t\tparts[i] = strconv.Itoa(x * 2)\n\t}\n\tfmt.Println(strings.Join(parts, \" \"))\n}",
+  "test_cases": [
+    {"stdin": "4\n1 2 3 4", "stdout": "2 4 6 8"},
+    {"stdin": "1\n5", "stdout": "10"},
+    {"stdin": "3\n0 -1 -2", "stdout": "0 -2 -4"},
+    {"stdin": "2\n100 250", "stdout": "200 500"}
+  ]
+}

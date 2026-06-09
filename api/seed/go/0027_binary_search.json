@@ -1,0 +1,18 @@
+{
+  "language": "go",
+  "level": "advanced",
+  "order": 27,
+  "title": "二分探索",
+  "description": "1 行目に個数 N、2 行目に **昇順に並んだ** N 個の整数、3 行目に探す値 target が与えられます。target が配列の何番目か（0 から数えた添字）を出力してください。見つからなければ `-1` を出力します。\n\n**入力例：**\n```\n5\n1 3 5 7 9\n5\n```\n**出力例：** `2`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tv := make([]int, n)\n\tfor i := range v {\n\t\tfmt.Scan(&v[i])\n\t}\n\tvar target int\n\tfmt.Scan(&target)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "中央の要素と target を比べ、探す範囲を半分に絞ります。\n\n```go\nlo, hi, ans := 0, n-1, -1\nfor lo <= hi {\n\tmid := (lo + hi) / 2\n\tif v[mid] == target {\n\t\tans = mid\n\t\tbreak\n\t} else if v[mid] < target {\n\t\tlo = mid + 1\n\t} else {\n\t\thi = mid - 1\n\t}\n}\nfmt.Println(ans)\n```",
+  "explanation": "## 解説\n\n二分探索は、ソート済み配列の中央と比較して探索範囲を毎回半分にします。一致したらその添字、最後まで見つからなければ -1 を返します（標準ライブラリの `slices.BinarySearch` でも実現できます）。\n\n```go\nlo, hi, ans := 0, n-1, -1\nfor lo <= hi {\n\tmid := (lo + hi) / 2\n\tif v[mid] == target {\n\t\tans = mid\n\t\tbreak\n\t} else if v[mid] < target {\n\t\tlo = mid + 1\n\t} else {\n\t\thi = mid - 1\n\t}\n}\nfmt.Println(ans)\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tv := make([]int, n)\n\tfor i := range v {\n\t\tfmt.Scan(&v[i])\n\t}\n\tvar target int\n\tfmt.Scan(&target)\n\tlo, hi, ans := 0, n-1, -1\n\tfor lo <= hi {\n\t\tmid := (lo + hi) / 2\n\t\tif v[mid] == target {\n\t\t\tans = mid\n\t\t\tbreak\n\t\t} else if v[mid] < target {\n\t\t\tlo = mid + 1\n\t\t} else {\n\t\t\thi = mid - 1\n\t\t}\n\t}\n\tfmt.Println(ans)\n}",
+  "test_cases": [
+    {"stdin": "5\n1 3 5 7 9\n5", "stdout": "2"},
+    {"stdin": "5\n1 3 5 7 9\n1", "stdout": "0"},
+    {"stdin": "5\n1 3 5 7 9\n9", "stdout": "4"},
+    {"stdin": "5\n1 3 5 7 9\n4", "stdout": "-1"},
+    {"stdin": "1\n10\n10", "stdout": "0"}
+  ]
+}

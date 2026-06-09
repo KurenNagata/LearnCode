@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "intermediate",
+  "order": 22,
+  "title": "文字の出現回数",
+  "description": "1 行目に文字列 s（半角英数字、空白なし）、2 行目に 1 文字 c が与えられます。s の中に c が何回現れるかを出力してください。\n\n**入力例：**\n```\nbanana\na\n```\n**出力例：** `3`",
+  "starter_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar s, c string\n\tfmt.Scan(&s, &c)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`strings.Count(s, c)` で部分文字列 c の出現回数が得られます。\n\n```go\nfmt.Println(strings.Count(s, c))\n```",
+  "explanation": "## 解説\n\n`fmt.Scan(&s, &c)` は空白・改行区切りで 2 つの値を読むので、文字列 s と 1 文字 c を続けて受け取れます。`strings.Count(s, c)` は s の中に c が現れる回数を返します。\n\n```go\nfmt.Println(strings.Count(s, c))\n```",
+  "answer_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar s, c string\n\tfmt.Scan(&s, &c)\n\tfmt.Println(strings.Count(s, c))\n}",
+  "test_cases": [
+    {"stdin": "banana\na", "stdout": "3"},
+    {"stdin": "hello\nl", "stdout": "2"},
+    {"stdin": "abcabc\nc", "stdout": "2"},
+    {"stdin": "xyz\na", "stdout": "0"}
+  ]
+}

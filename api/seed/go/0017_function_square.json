@@ -1,0 +1,18 @@
+{
+  "language": "go",
+  "level": "intermediate",
+  "order": 17,
+  "title": "関数の定義（2乗）",
+  "description": "整数 N が与えられます。「受け取った整数の 2 乗を返す関数」を定義して使い、N の 2 乗を出力してください。\n\n**入力例：** `4`\n**出力例：** `16`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\n// ここに関数を定義してください\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// 関数を呼び出して出力してください\n}\n",
+  "hint": "`func 関数名(引数 型) 戻り値の型 { ... }` の形で定義します。\n\n```go\nfunc square(x int) int {\n\treturn x * x\n}\n```\n\n呼び出しは `square(n)` です。",
+  "explanation": "## 解説\n\nGo の関数は `func 名前(引数 型) 戻り値の型 { ... }` の形で書きます。引数や戻り値の型は名前の後ろに置くのが Go の特徴です。`main` から `square(n)` で呼び出します。\n\n```go\nfunc square(x int) int {\n\treturn x * x\n}\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tfmt.Println(square(n))\n}\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc square(x int) int {\n\treturn x * x\n}\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tfmt.Println(square(n))\n}",
+  "test_cases": [
+    {"stdin": "4", "stdout": "16"},
+    {"stdin": "0", "stdout": "0"},
+    {"stdin": "9", "stdout": "81"},
+    {"stdin": "-3", "stdout": "9"},
+    {"stdin": "12", "stdout": "144"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 9,
+  "title": "文字列の長さ",
+  "description": "1 行の文字列（半角、空白なし）の文字数を出力してください。\n\n**入力例：** `Hello`\n**出力例：** `5`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "半角文字なら `len(s)` がそのまま文字数です。\n\n```go\nfmt.Println(len(s))\n```",
+  "explanation": "## 解説\n\n`len(s)` は文字列の **バイト数** を返します。半角（ASCII）文字は 1 文字 1 バイトなので、そのまま文字数になります。日本語など多バイト文字を正しく数えたい場合は `utf8.RuneCountInString(s)` を使います。\n\n```go\nfmt.Println(len(s))\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\tfmt.Println(len(s))\n}",
+  "test_cases": [
+    {"stdin": "Hello", "stdout": "5"},
+    {"stdin": "abcdef", "stdout": "6"},
+    {"stdin": "programming", "stdout": "11"},
+    {"stdin": "a", "stdout": "1"}
+  ]
+}

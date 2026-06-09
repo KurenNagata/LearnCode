@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 16,
+  "title": "平均（小数2桁）",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。平均値を **小数第 2 位まで** 出力してください。\n\n**入力例：**\n```\n4\n10 20 30 40\n```\n**出力例：** `25.00`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "合計を `float64` に変換して割り、`fmt.Printf` の `%.2f` で小数 2 桁にします。改行 `\\n` を忘れずに。\n\n```go\nsum := 0\nfor i := 0; i < n; i++ {\n\tvar x int\n\tfmt.Scan(&x)\n\tsum += x\n}\nfmt.Printf(\"%.2f\\n\", float64(sum)/float64(n))\n```",
+  "explanation": "## 解説\n\n整数同士の割り算は切り捨てになるため、`float64(sum)` と `float64(n)` に変換してから割ります。`fmt.Printf` の書式 `%.2f` で小数第 2 位までそろえて出力します。\n\n```go\nfmt.Printf(\"%.2f\\n\", float64(sum)/float64(n))\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tsum := 0\n\tfor i := 0; i < n; i++ {\n\t\tvar x int\n\t\tfmt.Scan(&x)\n\t\tsum += x\n\t}\n\tfmt.Printf(\"%.2f\\n\", float64(sum)/float64(n))\n}",
+  "test_cases": [
+    {"stdin": "4\n10 20 30 40", "stdout": "25.00"},
+    {"stdin": "3\n1 2 3", "stdout": "2.00"},
+    {"stdin": "2\n1 2", "stdout": "1.50"},
+    {"stdin": "4\n10 20 30 45", "stdout": "26.25"}
+  ]
+}

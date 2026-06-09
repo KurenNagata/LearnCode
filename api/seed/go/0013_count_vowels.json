@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 13,
+  "title": "母音の数",
+  "description": "1 行の文字列（半角英小文字、空白なし）に含まれる母音（a, e, i, o, u）の個数を出力してください。\n\n**入力例：** `hello`\n**出力例：** `2`",
+  "starter_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`for _, ch := range s` で 1 文字ずつ取り出し、母音集合に含まれるか `strings.ContainsRune` で調べます。\n\n```go\ncount := 0\nfor _, ch := range s {\n\tif strings.ContainsRune(\"aeiou\", ch) {\n\t\tcount++\n\t}\n}\nfmt.Println(count)\n```",
+  "explanation": "## 解説\n\n文字列を `range` で回すと、各要素は `rune`（文字）として得られます。`strings.ContainsRune(\"aeiou\", ch)` で母音かどうかを判定して数えます。\n\n```go\ncount := 0\nfor _, ch := range s {\n\tif strings.ContainsRune(\"aeiou\", ch) {\n\t\tcount++\n\t}\n}\nfmt.Println(count)\n```",
+  "answer_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar s string\n\tfmt.Scan(&s)\n\tcount := 0\n\tfor _, ch := range s {\n\t\tif strings.ContainsRune(\"aeiou\", ch) {\n\t\t\tcount++\n\t\t}\n\t}\n\tfmt.Println(count)\n}",
+  "test_cases": [
+    {"stdin": "hello", "stdout": "2"},
+    {"stdin": "aeiou", "stdout": "5"},
+    {"stdin": "xyz", "stdout": "0"},
+    {"stdin": "programming", "stdout": "3"}
+  ]
+}

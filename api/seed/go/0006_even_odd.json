@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 6,
+  "title": "偶数か奇数か",
+  "description": "整数が 1 つ与えられます。偶数なら `even`、奇数なら `odd` を出力してください。\n\n**入力例：** `4`\n**出力例：** `even`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`n % 2` が 0 なら偶数です。`if`/`else` で出力を分けます。\n\n```go\nif n%2 == 0 {\n\tfmt.Println(\"even\")\n} else {\n\tfmt.Println(\"odd\")\n}\n```",
+  "explanation": "## 解説\n\n`n % 2 == 0` で偶数を判定します。Go では負の数の剰余は符号が残る（例: `-3 % 2 == -1`）ため、`== 0` での偶数判定は正負どちらでも正しく動きます。\n\n```go\nif n%2 == 0 {\n\tfmt.Println(\"even\")\n} else {\n\tfmt.Println(\"odd\")\n}\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tif n%2 == 0 {\n\t\tfmt.Println(\"even\")\n\t} else {\n\t\tfmt.Println(\"odd\")\n\t}\n}",
+  "test_cases": [
+    {"stdin": "4", "stdout": "even"},
+    {"stdin": "7", "stdout": "odd"},
+    {"stdin": "0", "stdout": "even"},
+    {"stdin": "-3", "stdout": "odd"}
+  ]
+}

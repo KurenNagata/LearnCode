@@ -1,0 +1,18 @@
+{
+  "language": "go",
+  "level": "intermediate",
+  "order": 25,
+  "title": "平均と成績評価（総合問題）",
+  "description": "1 行目に人数 N、2 行目に N 個の点数（0〜100）が空白区切りで与えられます。次の 2 行を出力してください。\n\n1. 平均点（小数点以下切り捨て）\n2. 評価（90 以上 `A`、70 以上 `B`、50 以上 `C`、それ未満 `D`）\n\n**入力例：**\n```\n3\n80 90 100\n```\n**出力例：**\n```\n90\nA\n```",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "整数の割り算で切り捨て平均を出し、`switch`（式なし）で評価を決めます。2 行に分けて出力します。\n\n```go\navg := sum / n\nvar grade string\nswitch {\ncase avg >= 90:\n\tgrade = \"A\"\ncase avg >= 70:\n\tgrade = \"B\"\ncase avg >= 50:\n\tgrade = \"C\"\ndefault:\n\tgrade = \"D\"\n}\nfmt.Println(avg)\nfmt.Println(grade)\n```",
+  "explanation": "## 解説\n\n合計を N で割ると（整数同士なので）小数点以下切り捨ての平均になります。その平均を高い基準から `switch` で判定して評価を決め、平均と評価を 2 行で出力します。\n\n```go\navg := sum / n\nvar grade string\nswitch {\ncase avg >= 90:\n\tgrade = \"A\"\ncase avg >= 70:\n\tgrade = \"B\"\ncase avg >= 50:\n\tgrade = \"C\"\ndefault:\n\tgrade = \"D\"\n}\nfmt.Println(avg)\nfmt.Println(grade)\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tsum := 0\n\tfor i := 0; i < n; i++ {\n\t\tvar x int\n\t\tfmt.Scan(&x)\n\t\tsum += x\n\t}\n\tavg := sum / n\n\tvar grade string\n\tswitch {\n\tcase avg >= 90:\n\t\tgrade = \"A\"\n\tcase avg >= 70:\n\t\tgrade = \"B\"\n\tcase avg >= 50:\n\t\tgrade = \"C\"\n\tdefault:\n\t\tgrade = \"D\"\n\t}\n\tfmt.Println(avg)\n\tfmt.Println(grade)\n}",
+  "test_cases": [
+    {"stdin": "3\n80 90 100", "stdout": "90\nA"},
+    {"stdin": "4\n60 70 80 90", "stdout": "75\nB"},
+    {"stdin": "2\n40 60", "stdout": "50\nC"},
+    {"stdin": "3\n10 20 30", "stdout": "20\nD"},
+    {"stdin": "1\n100", "stdout": "100\nA"}
+  ]
+}

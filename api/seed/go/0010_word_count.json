@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 10,
+  "title": "単語数を数える",
+  "description": "スペース区切りの文が 1 行で与えられます。単語の個数を出力してください。\n\n**入力例：** `I love Go`\n**出力例：** `3`",
+  "starter_code": "package main\n\nimport (\n\t\"bufio\"\n\t\"fmt\"\n\t\"os\"\n\t\"strings\"\n)\n\nfunc main() {\n\tsc := bufio.NewScanner(os.Stdin)\n\tsc.Scan()\n\tline := sc.Text()\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`strings.Fields` は連続する空白をまとめて分割し、単語のスライスを返します。その長さが単語数です。\n\n```go\nwords := strings.Fields(line)\nfmt.Println(len(words))\n```",
+  "explanation": "## 解説\n\n空白を含む 1 行は `fmt.Scan` では途中までしか読めないため、`bufio.Scanner` で 1 行まるごと読みます。`strings.Fields` は連続した空白も 1 区切りとして扱い、空要素を含まない単語スライスを返すので、その長さが単語数です。\n\n```go\nwords := strings.Fields(line)\nfmt.Println(len(words))\n```",
+  "answer_code": "package main\n\nimport (\n\t\"bufio\"\n\t\"fmt\"\n\t\"os\"\n\t\"strings\"\n)\n\nfunc main() {\n\tsc := bufio.NewScanner(os.Stdin)\n\tsc.Scan()\n\tline := sc.Text()\n\twords := strings.Fields(line)\n\tfmt.Println(len(words))\n}",
+  "test_cases": [
+    {"stdin": "I love Go", "stdout": "3"},
+    {"stdin": "Hello", "stdout": "1"},
+    {"stdin": "a b c d", "stdout": "4"},
+    {"stdin": "one two", "stdout": "2"}
+  ]
+}

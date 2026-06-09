@@ -1,0 +1,18 @@
+{
+  "language": "go",
+  "level": "intermediate",
+  "order": 18,
+  "title": "素数判定",
+  "description": "2 以上の整数 N が与えられます。N が素数なら `prime`、そうでなければ `not prime` を出力してください。\n\n**入力例：** `7`\n**出力例：** `prime`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "2 から √N まで（`i*i <= n`）割り切れるか調べます。\n\n```go\nisPrime := n >= 2\nfor i := 2; i*i <= n; i++ {\n\tif n%i == 0 {\n\t\tisPrime = false\n\t\tbreak\n\t}\n}\nif isPrime {\n\tfmt.Println(\"prime\")\n} else {\n\tfmt.Println(\"not prime\")\n}\n```",
+  "explanation": "## 解説\n\n約数は √N までに必ず現れるため、`i*i <= n` の範囲だけ調べれば十分です。1 つでも割り切れたら素数ではありません。\n\n```go\nisPrime := n >= 2\nfor i := 2; i*i <= n; i++ {\n\tif n%i == 0 {\n\t\tisPrime = false\n\t\tbreak\n\t}\n}\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tisPrime := n >= 2\n\tfor i := 2; i*i <= n; i++ {\n\t\tif n%i == 0 {\n\t\t\tisPrime = false\n\t\t\tbreak\n\t\t}\n\t}\n\tif isPrime {\n\t\tfmt.Println(\"prime\")\n\t} else {\n\t\tfmt.Println(\"not prime\")\n\t}\n}",
+  "test_cases": [
+    {"stdin": "7", "stdout": "prime"},
+    {"stdin": "2", "stdout": "prime"},
+    {"stdin": "4", "stdout": "not prime"},
+    {"stdin": "9", "stdout": "not prime"},
+    {"stdin": "17", "stdout": "prime"}
+  ]
+}

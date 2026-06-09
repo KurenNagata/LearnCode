@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 7,
+  "title": "FizzBuzz",
+  "description": "整数 N が与えられます。1 から N まで、各行に次のルールで出力してください。\n\n- 3 の倍数 → `Fizz`\n- 5 の倍数 → `Buzz`\n- 3 と 5 の両方の倍数 → `FizzBuzz`\n- それ以外 → その数字\n\n**入力例：** `5`\n**出力例：**\n```\n1\n2\nFizz\n4\nBuzz\n```",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "条件分岐は `switch`（式なし）が読みやすいです。15 の倍数を最初に判定します。\n\n```go\nfor i := 1; i <= n; i++ {\n\tswitch {\n\tcase i%15 == 0:\n\t\tfmt.Println(\"FizzBuzz\")\n\tcase i%3 == 0:\n\t\tfmt.Println(\"Fizz\")\n\tcase i%5 == 0:\n\t\tfmt.Println(\"Buzz\")\n\tdefault:\n\t\tfmt.Println(i)\n\t}\n}\n```",
+  "explanation": "## 解説\n\nGo の `switch`（条件式を書かない形）は `if`/`else if` の連なりを読みやすく書けます。`FizzBuzz`（15 の倍数）を最初に判定するのがポイントです。\n\n```go\nfor i := 1; i <= n; i++ {\n\tswitch {\n\tcase i%15 == 0:\n\t\tfmt.Println(\"FizzBuzz\")\n\tcase i%3 == 0:\n\t\tfmt.Println(\"Fizz\")\n\tcase i%5 == 0:\n\t\tfmt.Println(\"Buzz\")\n\tdefault:\n\t\tfmt.Println(i)\n\t}\n}\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tfor i := 1; i <= n; i++ {\n\t\tswitch {\n\t\tcase i%15 == 0:\n\t\t\tfmt.Println(\"FizzBuzz\")\n\t\tcase i%3 == 0:\n\t\t\tfmt.Println(\"Fizz\")\n\t\tcase i%5 == 0:\n\t\t\tfmt.Println(\"Buzz\")\n\t\tdefault:\n\t\t\tfmt.Println(i)\n\t\t}\n\t}\n}",
+  "test_cases": [
+    {"stdin": "5", "stdout": "1\n2\nFizz\n4\nBuzz"},
+    {"stdin": "3", "stdout": "1\n2\nFizz"},
+    {"stdin": "1", "stdout": "1"},
+    {"stdin": "15", "stdout": "1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz"}
+  ]
+}

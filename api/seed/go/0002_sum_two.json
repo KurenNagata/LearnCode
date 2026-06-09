@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 2,
+  "title": "2つの整数の和",
+  "description": "空白区切りで 2 つの整数が与えられます。その和を出力してください。\n\n**入力例：** `3 5`\n**出力例：** `8`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar a, b int\n\tfmt.Scan(&a, &b)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`fmt.Scan` は空白や改行で区切って複数の値を読み込めます。和を `fmt.Println` で出力します。\n\n```go\nfmt.Println(a + b)\n```",
+  "explanation": "## 解説\n\n`fmt.Scan(&a, &b)` は標準入力から空白・改行区切りで 2 つの整数を読み込み、変数のアドレス（`&`）に格納します。和を出力します。\n\n```go\nfmt.Println(a + b)\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar a, b int\n\tfmt.Scan(&a, &b)\n\tfmt.Println(a + b)\n}",
+  "test_cases": [
+    {"stdin": "3 5", "stdout": "8"},
+    {"stdin": "10 20", "stdout": "30"},
+    {"stdin": "-4 4", "stdout": "0"},
+    {"stdin": "100 250", "stdout": "350"}
+  ]
+}

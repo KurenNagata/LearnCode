@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 14,
+  "title": "偶数だけ抽出",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。偶数だけを、元の順番のまま空白区切りで出力してください。\n\n**入力例：**\n```\n6\n1 2 3 4 5 6\n```\n**出力例：** `2 4 6`",
+  "starter_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "偶数のときだけ結果スライスに追加し、最後に `strings.Join` で空白連結します。偶数が無ければ空行になります。\n\n```go\nvar parts []string\nfor i := 0; i < n; i++ {\n\tvar x int\n\tfmt.Scan(&x)\n\tif x%2 == 0 {\n\t\tparts = append(parts, strconv.Itoa(x))\n\t}\n}\nfmt.Println(strings.Join(parts, \" \"))\n```",
+  "explanation": "## 解説\n\n読み込んだ値が偶数のときだけ `append` で結果に加えます。`strings.Join` は空のスライスに対しては空文字を返すので、偶数が無い場合は空行が出力されます。\n\n```go\nvar parts []string\nfor i := 0; i < n; i++ {\n\tvar x int\n\tfmt.Scan(&x)\n\tif x%2 == 0 {\n\t\tparts = append(parts, strconv.Itoa(x))\n\t}\n}\nfmt.Println(strings.Join(parts, \" \"))\n```",
+  "answer_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tvar parts []string\n\tfor i := 0; i < n; i++ {\n\t\tvar x int\n\t\tfmt.Scan(&x)\n\t\tif x%2 == 0 {\n\t\t\tparts = append(parts, strconv.Itoa(x))\n\t\t}\n\t}\n\tfmt.Println(strings.Join(parts, \" \"))\n}",
+  "test_cases": [
+    {"stdin": "6\n1 2 3 4 5 6", "stdout": "2 4 6"},
+    {"stdin": "3\n1 3 5", "stdout": ""},
+    {"stdin": "4\n2 4 6 8", "stdout": "2 4 6 8"},
+    {"stdin": "5\n-2 -1 0 1 2", "stdout": "-2 0 2"}
+  ]
+}

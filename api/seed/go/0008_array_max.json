@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 8,
+  "title": "配列の最大値",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。最大値を出力してください。\n\n**入力例：**\n```\n4\n3 1 4 1\n```\n**出力例：** `4`",
+  "starter_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"slices\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tv := make([]int, n)\n\tfor i := range v {\n\t\tfmt.Scan(&v[i])\n\t}\n\t// ここにコードを書いてください\n}\n",
+  "hint": "標準ライブラリ `slices` の `Max` がスライスの最大値を返します。\n\n```go\nfmt.Println(slices.Max(v))\n```",
+  "explanation": "## 解説\n\n`make([]int, n)` で長さ N のスライスを作り、`for i := range v` で各要素を読み込みます。`slices.Max`（Go 1.21 以降）でスライスの最大値が得られます。\n\n```go\nfmt.Println(slices.Max(v))\n```",
+  "answer_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"slices\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tv := make([]int, n)\n\tfor i := range v {\n\t\tfmt.Scan(&v[i])\n\t}\n\tfmt.Println(slices.Max(v))\n}",
+  "test_cases": [
+    {"stdin": "4\n3 1 4 1", "stdout": "4"},
+    {"stdin": "5\n10 20 5 30 25", "stdout": "30"},
+    {"stdin": "1\n7", "stdout": "7"},
+    {"stdin": "3\n-5 -2 -9", "stdout": "-2"}
+  ]
+}

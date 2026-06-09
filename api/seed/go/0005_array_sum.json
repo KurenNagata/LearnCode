@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 5,
+  "title": "配列の合計",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。合計を出力してください。\n\n**入力例：**\n```\n3\n10 20 30\n```\n**出力例：** `60`",
+  "starter_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`fmt.Scan` を N 回呼んで 1 つずつ読み、足し込みます。\n\n```go\nsum := 0\nfor i := 0; i < n; i++ {\n\tvar x int\n\tfmt.Scan(&x)\n\tsum += x\n}\nfmt.Println(sum)\n```",
+  "explanation": "## 解説\n\n`fmt.Scan` は呼ぶたびに次の値（空白・改行区切り）を 1 つ読み込みます。N 回ループして合計します。\n\n```go\nsum := 0\nfor i := 0; i < n; i++ {\n\tvar x int\n\tfmt.Scan(&x)\n\tsum += x\n}\nfmt.Println(sum)\n```",
+  "answer_code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tsum := 0\n\tfor i := 0; i < n; i++ {\n\t\tvar x int\n\t\tfmt.Scan(&x)\n\t\tsum += x\n\t}\n\tfmt.Println(sum)\n}",
+  "test_cases": [
+    {"stdin": "3\n10 20 30", "stdout": "60"},
+    {"stdin": "5\n1 2 3 4 5", "stdout": "15"},
+    {"stdin": "1\n100", "stdout": "100"},
+    {"stdin": "4\n-1 -2 -3 -4", "stdout": "-10"}
+  ]
+}

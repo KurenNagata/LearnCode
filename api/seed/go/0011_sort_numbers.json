@@ -1,0 +1,17 @@
+{
+  "language": "go",
+  "level": "beginner",
+  "order": 11,
+  "title": "数値を昇順にソート",
+  "description": "1 行目に個数 N、2 行目に N 個の整数が空白区切りで与えられます。昇順に並べ替えて、空白区切りで 1 行に出力してください。\n\n**入力例：**\n```\n5\n5 2 4 1 3\n```\n**出力例：** `1 2 3 4 5`",
+  "starter_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"slices\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tv := make([]int, n)\n\tfor i := range v {\n\t\tfmt.Scan(&v[i])\n\t}\n\t// ここにコードを書いてください\n}\n",
+  "hint": "`slices.Sort` で昇順に並べ替え、各数値を文字列にして `strings.Join` で空白連結します。\n\n```go\nslices.Sort(v)\nparts := make([]string, n)\nfor i, x := range v {\n\tparts[i] = strconv.Itoa(x)\n}\nfmt.Println(strings.Join(parts, \" \"))\n```",
+  "explanation": "## 解説\n\n`slices.Sort` は既定で昇順に並べ替えます。整数スライスをそのまま空白連結はできないので、`strconv.Itoa` で各要素を文字列に変換し、`strings.Join` で空白区切りにまとめます。\n\n```go\nslices.Sort(v)\nparts := make([]string, n)\nfor i, x := range v {\n\tparts[i] = strconv.Itoa(x)\n}\nfmt.Println(strings.Join(parts, \" \"))\n```",
+  "answer_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"slices\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tv := make([]int, n)\n\tfor i := range v {\n\t\tfmt.Scan(&v[i])\n\t}\n\tslices.Sort(v)\n\tparts := make([]string, n)\n\tfor i, x := range v {\n\t\tparts[i] = strconv.Itoa(x)\n\t}\n\tfmt.Println(strings.Join(parts, \" \"))\n}",
+  "test_cases": [
+    {"stdin": "5\n5 2 4 1 3", "stdout": "1 2 3 4 5"},
+    {"stdin": "3\n3 1 2", "stdout": "1 2 3"},
+    {"stdin": "1\n7", "stdout": "7"},
+    {"stdin": "4\n10 2 33 4", "stdout": "2 4 10 33"}
+  ]
+}

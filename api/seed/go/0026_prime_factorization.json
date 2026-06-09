@@ -1,0 +1,18 @@
+{
+  "language": "go",
+  "level": "advanced",
+  "order": 26,
+  "title": "素因数分解",
+  "description": "2 以上の整数 N が与えられます。素因数分解し、素因数を小さい順に空白区切りで出力してください。同じ素因数は出現回数だけ繰り返します。\n\n**入力例：** `12`\n**出力例：** `2 2 3`",
+  "starter_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\t// ここにコードを書いてください\n}\n",
+  "hint": "2 から順に割り切れる間は割り続け、その都度結果に追加します。最後に残った N が 1 より大きければそれも素因数です。\n\n```go\nvar parts []string\nfor d := 2; d*d <= n; d++ {\n\tfor n%d == 0 {\n\t\tparts = append(parts, strconv.Itoa(d))\n\t\tn /= d\n\t}\n}\nif n > 1 {\n\tparts = append(parts, strconv.Itoa(n))\n}\nfmt.Println(strings.Join(parts, \" \"))\n```",
+  "explanation": "## 解説\n\n小さい数 `d` で割り切れる回数だけ `d` を結果に加えます。`d*d <= n` まで調べ、最後に残った N が 1 より大きければ、それ自体が（最大の）素因数です。\n\n```go\nvar parts []string\nfor d := 2; d*d <= n; d++ {\n\tfor n%d == 0 {\n\t\tparts = append(parts, strconv.Itoa(d))\n\t\tn /= d\n\t}\n}\nif n > 1 {\n\tparts = append(parts, strconv.Itoa(n))\n}\nfmt.Println(strings.Join(parts, \" \"))\n```",
+  "answer_code": "package main\n\nimport (\n\t\"fmt\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nfunc main() {\n\tvar n int\n\tfmt.Scan(&n)\n\tvar parts []string\n\tfor d := 2; d*d <= n; d++ {\n\t\tfor n%d == 0 {\n\t\t\tparts = append(parts, strconv.Itoa(d))\n\t\t\tn /= d\n\t\t}\n\t}\n\tif n > 1 {\n\t\tparts = append(parts, strconv.Itoa(n))\n\t}\n\tfmt.Println(strings.Join(parts, \" \"))\n}",
+  "test_cases": [
+    {"stdin": "12", "stdout": "2 2 3"},
+    {"stdin": "2", "stdout": "2"},
+    {"stdin": "17", "stdout": "17"},
+    {"stdin": "60", "stdout": "2 2 3 5"},
+    {"stdin": "100", "stdout": "2 2 5 5"}
+  ]
+}
