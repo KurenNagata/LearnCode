@@ -4,6 +4,9 @@ typespec/node_modules/
 typespec/tsp-output/
 web/dist/
 .env
+web/.env.production
+.wrangler/
+web/.wrangler/
 *.log
 *.test
 *.out
