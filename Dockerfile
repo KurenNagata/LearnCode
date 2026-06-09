@@ -16,8 +16,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /out/server ./cmd/server \
 FROM alpine:3.20
 RUN apk add --no-cache ca-certificates
 WORKDIR /app
-# バイナリ（server / migrate / seed）
-COPY --from=api /out/ /app/
+# バイナリ（server / migrate / seed）は bin/ に置く。
+# データディレクトリ seed/ とバイナリ seed の名前衝突を避けるため /app 直下には置かない。
+COPY --from=api /out/ /app/bin/
 # migrate/seed が相対パスで参照する（workdir=/app）
 COPY api/migrations/ /app/migrations/
 COPY api/seed/       /app/seed/
