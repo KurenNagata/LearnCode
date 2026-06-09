@@ -130,6 +130,24 @@ tasks:
     cmds:
       - node node_modules/vite/bin/vite.js
 
+  web:build:
+    desc: Build frontend for production (reads web/.env.production for VITE_API_BASE)
+    dir: web
+    cmds:
+      - npm run build
+
+  web:deploy:
+    desc: Deploy frontend to Cloudflare Workers (build first)
+    dir: web
+    cmds:
+      - npm run build
+      - npx wrangler deploy
+
+  deploy:api:
+    desc: Deploy Go API to Cloud Run from source (set GCP project/region first)
+    cmds:
+      - gcloud run deploy learncode-api --source . --region asia-northeast1 --allow-unauthenticated
+
   check:
     desc: Smoke test the API (server must be running in another terminal)
     cmds:
