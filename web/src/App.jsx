@@ -640,12 +640,12 @@ function HomeStyles() {
 
       /* キャラクターセレクト */
       .lc-grid {
-        display:grid; grid-template-columns:repeat(3, minmax(140px, 190px));
-        gap:clamp(10px, 1.6vh, 16px); margin-top:2px; max-width:680px; width:100%;
-        justify-content:center;
+        display:flex; flex-wrap:wrap; justify-content:center; align-content:center;
+        gap:clamp(10px, 1.6vh, 16px); margin-top:2px; max-width:760px; width:100%;
       }
       .lc-card {
         position:relative; display:flex; flex-direction:column; align-items:center;
+        flex:0 0 168px;
         gap:8px; padding:12px 12px 12px; background:var(--panel); color:var(--white);
         border:0; border-radius:0; cursor:pointer; font:inherit;
         border-top:4px solid var(--bev-l); border-left:4px solid var(--bev-l);
