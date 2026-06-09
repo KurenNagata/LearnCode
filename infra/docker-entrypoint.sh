@@ -4,10 +4,10 @@
 set -e
 
 echo "[entrypoint] running migrations..."
-/app/migrate
+/app/bin/migrate
 
 echo "[entrypoint] seeding problems..."
-/app/seed
+/app/bin/seed
 
 echo "[entrypoint] starting server..."
-exec /app/server
+exec /app/bin/server
