@@ -91,8 +91,11 @@ lerning_langeage/
 - `task check` … 提出APIのスモークテスト
 
 ## 現在のフェーズ
-ローカルのバックエンド縦スライス（コード提出 → Piston 実行 → 隠しテスト判定）まで。
-React+Monaco フロント（`web/`）と、Render / Oracle へのデプロイは未着手（将来）。
+バックエンド縦スライス＋React+Monaco フロントまで完成。コード実行は **glot.io**（外部 Run API）に変更済み（旧 Piston コードは差し戻し用に残置）。
+デプロイ構成は **フロント=Cloudflare Workers / API=Cloud Run / DB=Neon / 実行=glot.io** の分離構成（別オリジン＝CORS あり）。手順は `docs/deploy.md`。
+進捗: ① Neon 完了 → ② glot.io トークン取得 → ③ Cloud Run → ④ Cloudflare Workers（②以降を進行中）。
+
+
 
 
 
@@ -105,7 +108,7 @@ React+Monaco フロント（`web/`）と、Render / Oracle へのデプロイは
 
 ### MCP & Skills awareness (Cloude Code ToolBox)
 
-_Last synced: 2026-06-08T12:38:44.542Z._
+_Last synced: 2026-06-09T06:04:01.342Z._
 
 - **Full report:** `.claude/cloude-code-toolbox-mcp-skills-awareness.md` in this workspace (auto-overwritten on each scan). Use it as ground truth for configured servers and skill folders.
 - **MCP:** For **live tools** in Claude Code, enable the matching server via `/mcp`. Servers are configured in `~/.claude.json` (user) and `.mcp.json` (project).
@@ -114,7 +117,7 @@ _Last synced: 2026-06-08T12:38:44.542Z._
 
 #### Workspace MCP
 
-- `c:\Users\xxxxx\learning_language\.mcp.json` _(workspace: learning_language)_ — _file missing_
+- `c:\Users\xxxxx\LearnCode\.mcp.json` _(workspace: LearnCode)_ — _file missing_
 
 _No active workspace servers in mcp.json._
 
