@@ -61,6 +61,7 @@ var fileName = map[string]string{
 	"c":          "main.c",
 	"cpp":        "main.cpp",
 	"csharp":     "main.cs",
+	"go":         "main.go",
 }
 
 func (c *Client) Execute(ctx context.Context, req service.ExecuteRequest) (service.ExecuteResult, error) {

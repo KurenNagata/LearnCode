@@ -253,6 +253,7 @@ const LANGUAGES = [
   { id: 'c', label: 'C', mono: 'C', tileBg: '#FF9E54', tileFg: '#1A1930', available: true, blurb: 'コンピュータの基礎を学ぶ' },
   { id: 'cpp', label: 'C++', mono: 'C++', tileBg: '#51E5FF', tileFg: '#1A1930', available: true, blurb: '高速・低レイヤーの定番' },
   { id: 'csharp', label: 'C#', mono: 'C#', tileBg: '#C77DFF', tileFg: '#FFFFFF', available: true, blurb: 'アプリ・ゲーム開発に' },
+  { id: 'go', label: 'Go', mono: 'Go', tileBg: '#00ADD8', tileFg: '#FFFFFF', available: true, blurb: 'Google 製のシンプルで高速な言語' },
 ]
 
 // ── コドにゃんの着せ替えスキン（色違い）。unlockLevel で解放 ──
