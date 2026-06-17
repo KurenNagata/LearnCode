@@ -1131,17 +1131,50 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
   const [showHint, setShowHint] = useState(false)
   const [showClear, setShowClear] = useState(false)
   const [clearInfo, setClearInfo] = useState(null)
+  const [loading, setLoading] = useState(true)      // 問題一覧の読み込み中
+  const [loadError, setLoadError] = useState(null)  // 一覧取得の失敗（再試行可能）
 
   const langLabel = LANGUAGES.find(l => l.id === language)?.label ?? language
 
-  useEffect(() => {
-    fetch(`${API_BASE}/api/problems?language=${encodeURIComponent(language)}`)
-      .then(r => r.json())
-      .then(data => {
-        setProblems(data.problems)
-        if (data.problems.length > 0) select(data.problems[0])
+  // 問題一覧を取得。初回は Cloud Run のコールドスタートで数十秒かかることがあるため、
+  // タイムアウト（45秒）と再試行を用意し、待機中は必ずローディング表示を出す。
+  // 返り値の AbortController で呼び出し側（effect のクリーンアップ）が中断できる。
+  function loadProblems() {
+    setLoading(true)
+    setLoadError(null)
+    const ctrl = new AbortController()
+    const timeout = setTimeout(() => ctrl.abort('timeout'), 45000)
+    fetch(`${API_BASE}/api/problems?language=${encodeURIComponent(language)}`, { signal: ctrl.signal })
+      .then(r => {
+        if (!r.ok) throw new Error(`サーバーエラー (${r.status})`)
+        return r.json()
       })
-      .catch(e => setError('API サーバーに接続できません: ' + e.message))
+      .then(data => {
+        const list = data.problems ?? []
+        setProblems(list)
+        if (list.length > 0) select(list[0])
+        else setProblem(null)
+      })
+      .catch(e => {
+        if (e.name === 'AbortError') {
+          // 言語切替などで中断した場合は再取得が走るのでエラー表示しない。
+          if (ctrl.signal.reason === 'timeout') {
+            setLoadError('サーバーの応答がありません（初回起動中の可能性があります）。もう一度お試しください。')
+          }
+        } else {
+          setLoadError('問題を読み込めませんでした: ' + e.message)
+        }
+      })
+      .finally(() => {
+        clearTimeout(timeout)
+        setLoading(false)
+      })
+    return ctrl
+  }
+
+  useEffect(() => {
+    const ctrl = loadProblems()
+    return () => ctrl.abort()
   }, [language])
 
   function select(p) {
@@ -1249,23 +1282,40 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
 
       {/* メイン */}
       <main style={s.main}>
-        {problem && (
-          <div style={s.problemArea}>
-            <h2 style={s.problemTitle}>{problem.title}</h2>
-            <p style={s.problemDesc}>{problem.description}</p>
+        {loading ? (
+          <div style={s.centerPanel}>
+            <PixelCat size={72} color={skin.color} belly={skin.belly} accessory={accessory} />
+            <div style={s.centerTitle}>問題を読み込み中…</div>
+            <div style={s.centerSub}>初回はサーバーの起動に少し時間がかかることがあります</div>
           </div>
-        )}
+        ) : loadError ? (
+          <div style={s.centerPanel}>
+            <div style={{ ...s.centerTitle, color: c.pink }}>⚠ 読み込みに失敗しました</div>
+            <div style={s.centerSub}>{loadError}</div>
+            <button onClick={() => loadProblems()} style={s.retryBtn}>↻ 再試行</button>
+          </div>
+        ) : !problem ? (
+          <div style={s.centerPanel}>
+            <div style={s.centerTitle}>この言語の問題はまだありません</div>
+            <button onClick={onBack} style={s.retryBtn}>← 言語選択へ戻る</button>
+          </div>
+        ) : (
+          <>
+            <div style={s.problemArea}>
+              <h2 style={s.problemTitle}>{problem.title}</h2>
+              <p style={s.problemDesc}>{problem.description}</p>
+            </div>
 
-        <div style={s.editorArea}>
-          <Editor
-            height="100%"
-            language={language}
-            value={code}
-            onChange={v => setCode(v ?? '')}
-            theme="vs-dark"
-            options={{ fontSize: 14, minimap: { enabled: false }, scrollBeyondLastLine: false }}
-          />
-        </div>
+            <div style={s.editorArea}>
+              <Editor
+                height="100%"
+                language={language}
+                value={code}
+                onChange={v => setCode(v ?? '')}
+                theme="vs-dark"
+                options={{ fontSize: 14, minimap: { enabled: false }, scrollBeyondLastLine: false }}
+              />
+            </div>
 
         <div style={s.bar}>
           <button onClick={submit} disabled={submitting} style={s.submitBtn}>
@@ -1300,7 +1350,9 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
               次の問題へ →
             </button>
           )}
-        </div>
+            </div>
+          </>
+        )}
       </main>
     </div>
   )
@@ -1342,6 +1394,10 @@ const s = {
   sidebarItem: { padding: '9px 10px', marginBottom: 6, borderRadius: 0, cursor: 'pointer', background: '#252346', color: c.ink, fontSize: 14, ...bevel(2) },
   sidebarItemActive: { background: c.green, color: c.bevD, fontWeight: 'bold' },
   main: { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' },
+  centerPanel: { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, padding: 24, textAlign: 'center' },
+  centerTitle: { fontFamily: FONT_DOT, fontWeight: 'bold', fontSize: 18, color: c.white, letterSpacing: 1 },
+  centerSub: { fontFamily: FONT_DOT, fontSize: 14, color: c.muted, lineHeight: 1.8, maxWidth: 420 },
+  retryBtn: { ...pxBtn(c.green, c.bevD, '#9CFF9C', '#2FA02F'), fontSize: 11, padding: '11px 22px' },
   problemArea: { padding: '16px 24px', borderBottom: `4px solid ${c.bevD}`, maxHeight: '30vh', overflowY: 'auto', background: c.panel },
   problemTitle: { fontFamily: FONT_DOT, fontSize: 19, marginBottom: 10, color: c.white, letterSpacing: 1 },
   problemDesc: { fontFamily: FONT_DOT, fontSize: 15, lineHeight: 1.9, whiteSpace: 'pre-wrap', color: c.ink },
