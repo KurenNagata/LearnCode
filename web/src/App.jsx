@@ -6,6 +6,57 @@ import Editor from '@monaco-editor/react'
 // 空（ローカル開発）のときは相対パスで、Vite の proxy 経由で 8080 に届く。
 const API_BASE = import.meta.env.VITE_API_BASE || ''
 
+// ── コールドスタートを吸収する fetch ──────────────────────────
+// Cloud Run はアクセスがないとインスタンスが 0 に縮み、Neon も無料プランでは
+// アイドル中コンピュートが停止する。どちらも次のリクエストで自動復帰するが、
+// 復帰後の「最初の1回」だけ数秒〜数十秒かかり、ネットワークエラーで落ちることもある。
+// ここでタイムアウトと再試行を挟み、利用者には「起こしている最中」だと見せる。
+//
+// HTTP 応答が返った時点でサーバーは起きているので、4xx/5xx は再試行せずそのまま返す
+// （401 = パスワード違いなどを何度も投げ直さないため）。再試行するのは通信断のみ。
+const API_TIMEOUT_MS = 25000   // 1回あたりの上限（コールドスタート想定で長め）
+const API_ATTEMPTS = 3         // 通信断のときの試行回数
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms))
+
+async function apiFetch(path, opts = {}, onSlow) {
+  const external = opts.signal   // 呼び出し側の中断（言語切替など）
+  let lastErr
+
+  for (let attempt = 1; attempt <= API_ATTEMPTS; attempt++) {
+    if (external?.aborted) throw new DOMException('aborted', 'AbortError')
+
+    const ctrl = new AbortController()
+    const relay = () => ctrl.abort('external')
+    external?.addEventListener('abort', relay)
+    const timer = setTimeout(() => ctrl.abort('timeout'), API_TIMEOUT_MS)
+    // すぐ返らなければ寝起きとみなし、呼び出し側にローディングを出させる。
+    const slowTimer = setTimeout(() => onSlow?.(), 2000)
+
+    try {
+      return await fetch(`${API_BASE}${path}`, { ...opts, signal: ctrl.signal })
+    } catch (err) {
+      lastErr = err
+      // 呼び出し側が中断したなら再試行しない（画面を離れている）。
+      if (ctrl.signal.reason === 'external') throw err
+      if (attempt < API_ATTEMPTS) {
+        onSlow?.()
+        await sleep(1000 * attempt)   // 1秒 → 2秒と間隔を空けて待つ
+      }
+    } finally {
+      clearTimeout(timer)
+      clearTimeout(slowTimer)
+      external?.removeEventListener('abort', relay)
+    }
+  }
+
+  // 全部ダメだった＝サーバーが起きてこない。呼び出し側で文言を出せるよう印を付ける。
+  const err = new Error('サーバーに接続できませんでした')
+  err.isColdStartFailure = true
+  err.cause = lastErr
+  throw err
+}
+
 // ── 簡易 Markdown レンダラー ──────────────────────────────────
 function renderInline(text) {
   const parts = text.split(/`([^`]+)`/)
@@ -453,6 +504,90 @@ function PixelCat({ size = 64, color = '#FFC06A', belly = '#FFE6C2', happy = fal
   )
 }
 
+// ── ローディング演出「コドにゃんが走る」 ─────────────────────
+// サーバーの寝起き（Cloud Run / Neon のアイドル復帰）を待つ数秒〜数十秒、
+// 画面が固まったように見せないための表示。経過秒で文言を切り替え、
+// 「壊れた」ではなく「起こしている最中」だと伝えるのが目的。
+const WAKE_MESSAGES = [
+  { at: 0, title: 'コドにゃんが走ってるにゃ…', sub: 'サーバーに問題を取りに行っています。' },
+  { at: 4, title: 'サーバーを起こしています…', sub: 'しばらく使われていないと、サーバーは眠って休んでいます。\n起こしているので、もう少しだけ待ってね。' },
+  { at: 12, title: 'まだ起こしています…', sub: '久しぶりのアクセスだと、最初の1回だけ時間がかかります（長くて1分ほど）。\nこのまま待っていれば自動でつながるので、閉じないでね。' },
+]
+
+function RunningCat({ skin, accessory, size = 72, messages = WAKE_MESSAGES }) {
+  const [sec, setSec] = useState(0)
+  useEffect(() => {
+    const id = setInterval(() => setSec(v => v + 1), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  // 経過秒を過ぎたものの中でいちばん新しい文言を採用する。
+  const msg = messages.filter(m => sec >= m.at).pop() ?? messages[0]
+
+  return (
+    <div style={s.runPanel}>
+      <RunningCatStyles />
+      <div style={s.runStage} aria-hidden="true">
+        <div className="lc-runner">
+          <PixelCat size={size} color={skin.color} belly={skin.belly} accessory={accessory} />
+        </div>
+        <div className="lc-dust lc-dust1" />
+        <div className="lc-dust lc-dust2" />
+        <div className="lc-road" />
+      </div>
+      <div style={s.centerTitle} role="status" aria-live="polite">{msg.title}</div>
+      <div style={{ ...s.centerSub, whiteSpace: 'pre-line' }}>{msg.sub}</div>
+      <div className="lc-load-dots" style={s.runDots}>
+        <span>●</span><span>●</span><span>●</span>
+      </div>
+    </div>
+  )
+}
+
+function RunningCatStyles() {
+  return (
+    <style>{`
+      /* 走っている感：上下の跳ね＋前傾の揺れ。専用スプライトは持たず PixelCat を動かす。 */
+      .lc-runner { animation: lc-run .42s steps(2, end) infinite; transform-origin: 50% 90%; }
+      @keyframes lc-run {
+        0%   { transform: translateY(0)    rotate(-5deg); }
+        25%  { transform: translateY(-8px) rotate(0deg); }
+        50%  { transform: translateY(0)    rotate(5deg); }
+        75%  { transform: translateY(-5px) rotate(0deg); }
+        100% { transform: translateY(0)    rotate(-5deg); }
+      }
+      /* 地面を左に流して、走って前進しているように見せる。 */
+      .lc-road {
+        position: absolute; left: 0; right: 0; bottom: 0; height: 6px;
+        background: repeating-linear-gradient(90deg, ${c.bevL} 0 8px, transparent 8px 16px);
+        animation: lc-road .28s linear infinite;
+      }
+      @keyframes lc-road { from { background-position: 0 0; } to { background-position: -16px 0; } }
+      /* 足元の土ぼこり */
+      .lc-dust {
+        position: absolute; bottom: 6px; width: 7px; height: 7px; background: ${c.dim};
+        animation: lc-dust .6s linear infinite;
+      }
+      .lc-dust1 { left: 50%; margin-left: -6px; }
+      .lc-dust2 { left: 50%; margin-left: 2px; animation-delay: .3s; }
+      @keyframes lc-dust {
+        0%   { opacity: .85; transform: translate(0, 0) scale(1); }
+        100% { opacity: 0;   transform: translate(-26px, -10px) scale(.3); }
+      }
+      /* 「…」を順番に光らせて、処理が続いていることを示す。 */
+      .lc-load-dots span { animation: lc-load-dots 1.2s infinite; }
+      .lc-load-dots span:nth-child(2) { animation-delay: .2s; }
+      .lc-load-dots span:nth-child(3) { animation-delay: .4s; }
+      @keyframes lc-load-dots { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+
+      @media (prefers-reduced-motion: reduce) {
+        .lc-runner, .lc-road, .lc-dust, .lc-load-dots span { animation: none; }
+        .lc-dust { display: none; }
+      }
+    `}</style>
+  )
+}
+
 // ── レベル表示（LV＋称号＋XPバー） ───────────────────────────
 // バーはテキスト幅に合わせて伸縮（width:100%）。minWidth で最小幅を確保。
 function LevelBadge({ info, minWidth = 150 }) {
@@ -730,18 +865,22 @@ function AuthScreen({ skin, onAuthed }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
+  const [waking, setWaking] = useState(false)   // サーバーの寝起きを待っている
 
   async function submit(e) {
     e.preventDefault()
     if (busy) return
     setBusy(true)
+    setWaking(false)
     setError('')
     try {
-      const res = await fetch(`${API_BASE}/api/auth/${mode}`, {
+      // ログインはこの画面から出る最初の API 呼び出しなので、眠っていたサーバーを
+      // 起こす役を必ず引く。apiFetch が待ちと再試行を引き受ける。
+      const res = await apiFetch(`/api/auth/${mode}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
-      })
+      }, () => setWaking(true))
       if (!res.ok) {
         const byStatus = {
           400: 'ユーザー名は3文字以上、パスワードは4文字以上にしてください',
@@ -754,9 +893,12 @@ function AuthScreen({ skin, onAuthed }) {
       const data = await res.json()
       onAuthed(data.token, data.username)
     } catch (err) {
-      setError('通信エラー: ' + err.message)
+      setError(err.isColdStartFailure
+        ? 'サーバーに接続できませんでした。眠っているサーバーが起きてこないようです。1分ほど待ってから、もう一度お試しください。'
+        : '通信エラー: ' + err.message)
     } finally {
       setBusy(false)
+      setWaking(false)
     }
   }
 
@@ -766,15 +908,34 @@ function AuthScreen({ skin, onAuthed }) {
     border: 0, borderRadius: 0, borderBottom: `3px solid ${mode === m ? c.green : c.bevD}`,
   })
 
+  const header = (
+    <>
+      <div style={s.authTitleWrap}>
+        <PixelCat size={52} color={skin.color} belly={skin.belly} />
+        <h1 style={s.authTitle}>
+          <span style={{ color: c.green }}>LEARN</span><span style={{ color: c.pink }}>CODE</span>
+        </h1>
+      </div>
+    </>
+  )
+
+  // サーバーが眠っていて待たされている間は、フォームごと差し替えて待機画面にする。
+  // 「押したのに何も起きない」に見えるのを防ぐのが目的。
+  if (busy && waking) {
+    return (
+      <div style={s.authRoot}>
+        <div style={s.authBox}>
+          {header}
+          <RunningCat skin={skin} size={64} />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div style={s.authRoot}>
       <form style={s.authBox} onSubmit={submit}>
-        <div style={s.authTitleWrap}>
-          <PixelCat size={52} color={skin.color} belly={skin.belly} />
-          <h1 style={s.authTitle}>
-            <span style={{ color: c.green }}>LEARN</span><span style={{ color: c.pink }}>CODE</span>
-          </h1>
-        </div>
+        {header}
         <p style={s.authLead}>ログインしてスタート！</p>
 
         <div style={s.authTabs}>
@@ -1136,15 +1297,14 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
 
   const langLabel = LANGUAGES.find(l => l.id === language)?.label ?? language
 
-  // 問題一覧を取得。初回は Cloud Run のコールドスタートで数十秒かかることがあるため、
-  // タイムアウト（45秒）と再試行を用意し、待機中は必ずローディング表示を出す。
-  // 返り値の AbortController で呼び出し側（effect のクリーンアップ）が中断できる。
+  // 問題一覧を取得。眠っていたサーバーの復帰待ち（数秒〜数十秒）は apiFetch が
+  // タイムアウトと再試行で吸収する。返り値の AbortController で呼び出し側
+  // （effect のクリーンアップ＝言語切替や画面離脱）が中断できる。
   function loadProblems() {
     setLoading(true)
     setLoadError(null)
     const ctrl = new AbortController()
-    const timeout = setTimeout(() => ctrl.abort('timeout'), 45000)
-    fetch(`${API_BASE}/api/problems?language=${encodeURIComponent(language)}`, { signal: ctrl.signal })
+    apiFetch(`/api/problems?language=${encodeURIComponent(language)}`, { signal: ctrl.signal })
       .then(r => {
         if (!r.ok) throw new Error(`サーバーエラー (${r.status})`)
         return r.json()
@@ -1154,19 +1314,14 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
         setProblems(list)
         if (list.length > 0) select(list[0])
         else setProblem(null)
+        setLoading(false)
       })
       .catch(e => {
-        if (e.name === 'AbortError') {
-          // 言語切替などで中断した場合は再取得が走るのでエラー表示しない。
-          if (ctrl.signal.reason === 'timeout') {
-            setLoadError('サーバーの応答がありません（初回起動中の可能性があります）。もう一度お試しください。')
-          }
-        } else {
-          setLoadError('問題を読み込めませんでした: ' + e.message)
-        }
-      })
-      .finally(() => {
-        clearTimeout(timeout)
+        // 中断（言語切替など）は再取得が走るのでエラー表示しない。ローディングも解除しない。
+        if (e.name === 'AbortError') return
+        setLoadError(e.isColdStartFailure
+          ? 'サーバーが起きてきませんでした。1分ほど待ってから、もう一度お試しください。'
+          : '問題を読み込めませんでした: ' + e.message)
         setLoading(false)
       })
     return ctrl
@@ -1284,9 +1439,7 @@ function Course({ language, skin, accessory, xp, clearedIds, muted, onToggleMute
       <main style={s.main}>
         {loading ? (
           <div style={s.centerPanel}>
-            <PixelCat size={72} color={skin.color} belly={skin.belly} accessory={accessory} />
-            <div style={s.centerTitle}>問題を読み込み中…</div>
-            <div style={s.centerSub}>初回はサーバーの起動に少し時間がかかることがあります</div>
+            <RunningCat skin={skin} accessory={accessory} />
           </div>
         ) : loadError ? (
           <div style={s.centerPanel}>
@@ -1398,6 +1551,11 @@ const s = {
   centerTitle: { fontFamily: FONT_DOT, fontWeight: 'bold', fontSize: 18, color: c.white, letterSpacing: 1 },
   centerSub: { fontFamily: FONT_DOT, fontSize: 14, color: c.muted, lineHeight: 1.8, maxWidth: 420 },
   retryBtn: { ...pxBtn(c.green, c.bevD, '#9CFF9C', '#2FA02F'), fontSize: 11, padding: '11px 22px' },
+
+  // ローディング演出（走るコドにゃん）
+  runPanel: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, padding: '8px 4px', textAlign: 'center' },
+  runStage: { position: 'relative', width: 200, height: 96, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', overflow: 'hidden' },
+  runDots: { fontFamily: FONT_DOT, fontSize: 12, color: c.green, letterSpacing: 6 },
   problemArea: { padding: '16px 24px', borderBottom: `4px solid ${c.bevD}`, maxHeight: '30vh', overflowY: 'auto', background: c.panel },
   problemTitle: { fontFamily: FONT_DOT, fontSize: 19, marginBottom: 10, color: c.white, letterSpacing: 1 },
   problemDesc: { fontFamily: FONT_DOT, fontSize: 15, lineHeight: 1.9, whiteSpace: 'pre-wrap', color: c.ink },
